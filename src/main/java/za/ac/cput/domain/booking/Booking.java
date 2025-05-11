@@ -1,3 +1,8 @@
+/*Booking.java
+ * Booking model class
+ * Author: Adaeze Princess Ugbobuaku
+ * Date: 11 May 2025*/
+
 package za.ac.cput.domain.booking;
 
 import java.time.LocalDateTime;
