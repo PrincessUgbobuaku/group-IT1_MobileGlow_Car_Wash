@@ -1,6 +1,7 @@
 package za.ac.cput.domain.user.employee;
 
 public class Accountant {
+
     private String accountantID;
     private boolean hasTaxFillingAuthority;
 
@@ -28,6 +29,5 @@ public class Accountant {
     public void setHasTaxFillingAuthority(boolean hasTaxFillingAuthority) {
         this.hasTaxFillingAuthority = hasTaxFillingAuthority;
     }
-
 
 }
