@@ -1,3 +1,9 @@
+/*
+    MavagerDomain
+Author: Abulele Voki(230778941)
+Date: 11 May 2025
+*/
+
 package za.ac.cput.domain.user.employee;
 
 import java.util.Date;
