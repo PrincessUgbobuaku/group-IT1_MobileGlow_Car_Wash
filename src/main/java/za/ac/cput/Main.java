@@ -12,6 +12,8 @@ import java.util.List;
 
 public class Main {
 
+/*UNCOMMENT TO SEE HOW PROGRAM RUNS*/
+
     /*public static void main(String[] args) {
 
         Vehicle vehicle_1 = new Vehicle.Builder()
@@ -104,11 +106,11 @@ public class Main {
         System.out.println(booking_2.toString());
 
 
-        Payment.PaymentBuilder paymentBuilder = new Payment.PaymentBuilder();
+        Payment.Builder paymentBuilder = new Payment.Builder();
 
         double calculatedAmount1 = paymentBuilder.calculatePaymentAmount(booking_1);
 
-        Payment payment_1 = new Payment.PaymentBuilder()
+        Payment payment_1 = new Payment.Builder()
                 .setPaymentID("payment_1")
                 .setBookingID(booking_1.getBookingID())
                 .setPaymentAmount(calculatedAmount1)
@@ -118,7 +120,7 @@ public class Main {
 
          double calculatedAmount2 = paymentBuilder.calculatePaymentAmount(booking_2);
 
-        Payment payment_2 = new Payment.PaymentBuilder()
+        Payment payment_2 = new Payment.Builder()
                 .setPaymentID("payment_2")
                 .setBookingID(booking_2.getBookingID())
                 .setPaymentAmount(calculatedAmount2)

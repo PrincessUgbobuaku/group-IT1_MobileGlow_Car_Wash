@@ -15,12 +15,12 @@ public class Payment {
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
 
-    private Payment (PaymentBuilder paymentBuilder) {
-        this.paymentID = paymentBuilder.paymentID;
-        this.bookingID = paymentBuilder.bookingID;
-        this.paymentAmount = paymentBuilder.paymentAmount;
-        this.paymentMethod = paymentBuilder.paymentMethod;
-        this.paymentStatus = paymentBuilder.paymentStatus;
+    private Payment (Builder builder) {
+        this.paymentID = builder.paymentID;
+        this.bookingID = builder.bookingID;
+        this.paymentAmount = builder.paymentAmount;
+        this.paymentMethod = builder.paymentMethod;
+        this.paymentStatus = builder.paymentStatus;
     }
 
     public String getPaymentID() {
@@ -54,7 +54,7 @@ public class Payment {
                 '}';
     }
 
-    public static class PaymentBuilder {
+    public static class Builder {
 
         private String paymentID;
         private String bookingID;
@@ -62,17 +62,17 @@ public class Payment {
         private PaymentMethod paymentMethod;
         private PaymentStatus paymentStatus;
 
-        public PaymentBuilder setPaymentID(String paymentID) {
+        public Builder setPaymentID(String paymentID) {
             this.paymentID = paymentID;
             return this;
         }
 
-        public PaymentBuilder setBookingID(String bookingID) {
+        public Builder setBookingID(String bookingID) {
             this.bookingID = bookingID;
             return this;
         }
 
-        public PaymentBuilder setPaymentAmount(double paymentAmount) {
+        public Builder setPaymentAmount(double paymentAmount) {
 
             this.paymentAmount = paymentAmount;
             return this;
@@ -92,12 +92,12 @@ public class Payment {
 
             }
 
-        public PaymentBuilder setPaymentMethod(PaymentMethod paymentMethod) {
+        public Builder setPaymentMethod(PaymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
             return this;
         }
 
-        public PaymentBuilder setPaymentStatus(PaymentStatus paymentStatus) {
+        public Builder setPaymentStatus(PaymentStatus paymentStatus) {
             this.paymentStatus = paymentStatus;
             return this;
         }
