@@ -58,7 +58,7 @@ public class Helper {
     }
 
     public static void validateCustomerFields(String customerID, LocalDate dob) {
-        if (validateStringDetails(customerID)) {
+        if (!validateStringDetails(customerID)) {
             throw new IllegalArgumentException("CustomerID must not be null or empty");
         }
         if (!isValidDate(dob)) {
@@ -66,14 +66,18 @@ public class Helper {
         }
     }
 
-    public static void validateVehicleFields(String vehicleID, String carPlateNumber, String carMake,
-                                             String carModel, String customerID) {
-        if (validateStringDetails(vehicleID) ||
-                validateStringDetails(carPlateNumber) ||
-                validateStringDetails(carMake) ||
-                validateStringDetails(carModel) ||
-                validateStringDetails(customerID)) {
+
+    public static void validateVehicleFields(String vehicleID, String carPlateNumber,
+                                             String carMake, String carModel, String customerID) {
+
+        if (!validateStringDetails(vehicleID) ||
+                !validateStringDetails(carPlateNumber) ||
+                !validateStringDetails(carMake) ||
+                !validateStringDetails(carModel) ||
+                !validateStringDetails(customerID)) {
+
             throw new IllegalArgumentException("Vehicle fields must not be null or empty");
         }
     }
+
 }
