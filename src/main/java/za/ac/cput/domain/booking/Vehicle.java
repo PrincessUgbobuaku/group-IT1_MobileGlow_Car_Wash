@@ -14,11 +14,7 @@ public class Vehicle {
     private String carModel;
     private String customerID; // Foreign key reference to Customer
 
-    // Default constructor
-    public Vehicle() {
-    }
-
-    // Builder-based constructor
+    // Private constructor for Builder
     private Vehicle(Builder builder) {
         this.vehicleID = builder.vehicleID;
         this.carPlateNumber = builder.carPlateNumber;
@@ -28,53 +24,29 @@ public class Vehicle {
         this.customerID = builder.customerID;
     }
 
-    // Getters and Setters
+    // Getters only
     public String getVehicleID() {
         return vehicleID;
-    }
-
-    public void setVehicleID(String vehicleID) {
-        this.vehicleID = vehicleID;
     }
 
     public String getCarPlateNumber() {
         return carPlateNumber;
     }
 
-    public void setCarPlateNumber(String carPlateNumber) {
-        this.carPlateNumber = carPlateNumber;
-    }
-
     public String getCarMake() {
         return carMake;
-    }
-
-    public void setCarMake(String carMake) {
-        this.carMake = carMake;
     }
 
     public String getCarColour() {
         return carColour;
     }
 
-    public void setCarColour(String carColour) {
-        this.carColour = carColour;
-    }
-
     public String getCarModel() {
         return carModel;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
-    }
-
     public String getCustomerID() {
         return customerID;
-    }
-
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
     }
 
     // Builder inner class
@@ -86,40 +58,37 @@ public class Vehicle {
         private String carModel;
         private String customerID;
 
-        public Builder vehicleID(String vehicleID) {
+        public Builder setVehicleID(String vehicleID) {
             this.vehicleID = vehicleID;
             return this;
         }
 
-        public Builder carPlateNumber(String carPlateNumber) {
+        public Builder setCarPlateNumber(String carPlateNumber) {
             this.carPlateNumber = carPlateNumber;
             return this;
         }
 
-        public Builder carMake(String carMake) {
+        public Builder setCarMake(String carMake) {
             this.carMake = carMake;
             return this;
         }
 
-        public Builder carColour(String carColour) {
+        public Builder setCarColour(String carColour) {
             this.carColour = carColour;
             return this;
         }
 
-        public Builder carModel(String carModel) {
+        public Builder setCarModel(String carModel) {
             this.carModel = carModel;
             return this;
         }
 
-        public Builder customerID(String customerID) {
+        public Builder setCustomerID(String customerID) {
             this.customerID = customerID;
             return this;
         }
 
         public Vehicle build() {
-            //        if (vehicleID == null || carPlateNumber == null || carMake == null || carModel == null || customer == null) {
-            //            throw new IllegalArgumentException("Vehicle fields must not be null");
-            //        } will be used in helper class
             return new Vehicle(this);
         }
     }
