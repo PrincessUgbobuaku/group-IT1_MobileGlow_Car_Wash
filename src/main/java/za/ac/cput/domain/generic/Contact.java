@@ -16,9 +16,9 @@ public class Contact {
 
     }
 
-    public Contact(String contactID, String phoneNumber) {
-        this.contactID = contactID;
-        this.phoneNumber = phoneNumber;
+    public Contact(Builder builder) {
+        this.contactID = builder.contactID;
+        this.phoneNumber = builder.phoneNumber;
     }
 
 
@@ -30,11 +30,35 @@ public class Contact {
         return phoneNumber;
     }
 
-    public void setContactID(String contactID) {
-        this.contactID = contactID;
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "contactID='" + contactID + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public static class Builder {
+
+        private String contactID;
+        private String phoneNumber;
+
+        public Builder setContactID(String contactID) {
+            this.contactID = contactID;
+            return this;
+        }
+
+        public Builder setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+        public Builder copy(Contact contact) {
+            this.contactID = contact.contactID;
+            this.phoneNumber = contact.phoneNumber;
+            return this;
+        }
+        public Contact build() {
+            return new Contact(this);
+        }
     }
 }

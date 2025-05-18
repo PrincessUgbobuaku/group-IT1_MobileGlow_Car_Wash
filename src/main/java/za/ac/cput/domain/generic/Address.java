@@ -18,12 +18,12 @@ public class Address {
 
     }
 
-    public Address(String addressID, String streetNumber, String streetName, String city, String postalCode) {
-        this.addressID = addressID;
-        this.streetNumber = streetNumber;
-        this.streetName = streetName;
-        this.city = city;
-        this.postalCode = postalCode;
+    private Address(Builder builder) {
+        this.addressID = builder.addressID;
+        this.streetNumber = builder.streetNumber;
+        this.streetName = builder.streetName;
+        this.city = builder.city;
+        this.postalCode = builder.postalCode;
     }
 
     public String getAddressID() {
@@ -46,24 +46,62 @@ public class Address {
         return postalCode;
     }
 
-    public void setAddressID(String addressID) {
-        this.addressID = addressID;
+    @Override
+    public String toString() {
+        return "Address{" +
+                "addressID='" + addressID + '\'' +
+                ", streetNumber='" + streetNumber + '\'' +
+                ", streetName='" + streetName + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                '}';
     }
 
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
-    }
+    public static class Builder {
 
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
+        private String addressID;
+        private String streetNumber;
+        private String streetName;
+        private String city;
+        private String postalCode;
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+        public Builder setAddressID(String addressID) {
+            this.addressID = addressID;
+            return this;
+        }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+        public Builder setStreetNumber(String streetNumber) {
+            this.streetNumber = streetNumber;
+            return this;
+        }
+
+        public Builder setStreetName(String streetName) {
+            this.streetName = streetName;
+            return this;
+        }
+
+        public Builder setCity(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public Builder setPostalCode(String postalCode) {
+            this.postalCode = postalCode;
+            return this;
+
+        }
+
+        public Builder copy(Address address) {
+            this.addressID = address.addressID;
+            this.streetNumber = address.streetNumber;
+            this.streetName = address.streetName;
+            this.city = address.city;
+            this.postalCode = address.postalCode;
+            return this;
+        }
+        public Address build() {
+            return new Address(this);
+        }
     }
 
 }
