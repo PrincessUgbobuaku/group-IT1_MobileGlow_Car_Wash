@@ -1,10 +1,7 @@
 package za.ac.cput.util;
 
 import za.ac.cput.domain.booking.CleaningService;
-
-
 import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -50,6 +47,22 @@ public class Helper {
         }
     }
 
+
+    public static boolean isValidString(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
+
+    public static boolean isValidObject(Object obj) {
+        return obj != null;
+    }
+
+    public static boolean isValidInt(int number) {
+        return number > 0;
+    }
+
+    public static boolean isValidDouble(double number) {
+        return number > 0;
+
     public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
     }
@@ -80,6 +93,8 @@ public class Helper {
 
             throw new IllegalArgumentException("Vehicle fields must not be null or empty");
         }
+
     }
 
 }
+
