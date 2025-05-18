@@ -13,7 +13,7 @@ public class Accountant {
 
     public Accountant(){}
 
-    public Accountant(Builder builder){
+    private Accountant(Builder builder){
         this.accountantID=builder.accountantID;
         this.hasTaxFillingAuthority=builder.hasTaxFillingAuthority;
     }
