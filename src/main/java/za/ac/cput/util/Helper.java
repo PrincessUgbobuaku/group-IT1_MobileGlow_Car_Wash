@@ -3,6 +3,7 @@ package za.ac.cput.util;
 import za.ac.cput.domain.booking.CleaningService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,7 +67,7 @@ public class Helper {
     public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
     }
-
+  
     //the following is related to the customer and vehicle factory classes
     public static boolean isValidDate(LocalDate date) {
         return date != null && !date.isAfter(LocalDate.now());
@@ -94,6 +95,36 @@ public class Helper {
             throw new IllegalArgumentException("Vehicle fields must not be null or empty");
         }
 
+    }
+  
+  <<<<<<230778941 //Employee Factory Classes
+    public static boolean validateDate(Date hireDate) {
+        if (hireDate != null) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public static boolean validateShiftHours(int shiftHours) {
+        if(shiftHours <0){
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validateIsFullTime(boolean isFullTime) {
+        if(isFullTime == true){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean validateHasTaxFillingAuthority(boolean hasTaxFillingAuthority) {
+        if(hasTaxFillingAuthority == true){
+            return true;
+        }
+        return false;
     }
 
 }
