@@ -1,15 +1,17 @@
 package za.ac.cput.util;
 
+
 import org.apache.commons.validator.routines.EmailValidator;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 public class Helper {
 
-    public static String generateID() {
+    public static String generateID(){
         return UUID.randomUUID().toString();
     }
 
@@ -71,6 +73,27 @@ public class Helper {
         return true;
     }
 
+
+    public static boolean isValidString(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
+
+    public static boolean isValidObject(Object obj) {
+        return obj != null;
+    }
+
+    public static boolean isValidInt(int number) {
+        return number > 0;
+    }
+
+    public static boolean isValidDouble(double number) {
+        return number > 0;
+    }
+    public static boolean validateDuration(int durationMinutes) {
+        return durationMinutes > 0;
+    }
+  
+    //the following is related to the customer and vehicle factory classes
     public static boolean isValidDate(LocalDate date) {
         return date != null && !date.isAfter(LocalDate.now());
     }
@@ -96,6 +119,39 @@ public class Helper {
 
             throw new IllegalArgumentException("Vehicle fields must not be null or empty");
         }
+
+    }
+  
+    //Employee Factory Classes
+    public static boolean validateDate(Date hireDate) {
+        if (hireDate != null) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public static boolean validateShiftHours(int shiftHours) {
+        if(shiftHours <0){
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validateIsFullTime(boolean isFullTime) {
+        if(isFullTime == true){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean validateHasTaxFillingAuthority(boolean hasTaxFillingAuthority) {
+        if(hasTaxFillingAuthority == true){
+            return true;
+        }
+        return false;
+
     }
 
 }
+
