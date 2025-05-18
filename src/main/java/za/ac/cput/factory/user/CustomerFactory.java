@@ -12,11 +12,16 @@ import java.time.LocalDate;
 
 public class CustomerFactory {
 
-    public static Customer build(String customerID, LocalDate customerDOB) {
-        Helper.validateCustomerFields(customerID, customerDOB);
+
+   public static Customer build1(LocalDate customerDOB) {
+        if (!Helper.isValidDate(customerDOB)) {
+            throw new IllegalArgumentException("CustomerDOB must not be null or a future date");
+        }
+
+        String generatedID = Helper.generateID();
 
         return new Customer.Builder()
-                .setCustomerID(customerID)
+                .setCustomerID(generatedID)
                 .setCustomerDOB(customerDOB)
                 .build();
     }
