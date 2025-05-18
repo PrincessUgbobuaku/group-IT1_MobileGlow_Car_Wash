@@ -12,38 +12,38 @@ public class Customer {
     private String customerID;
     private LocalDate customerDOB;
 
-    // Default constructor
-    public Customer() {
+    // Private constructor used by Builder
+    private Customer(Builder builder) {
+        this.customerID = builder.customerID;
+        this.customerDOB = builder.customerDOB;
     }
 
-    // Constructor with both fields
-    public Customer(String customerID, LocalDate customerDOB) {
-        this.customerID = customerID;
-        this.customerDOB = customerDOB;
-    }
-
-    // Getters and setters
+    // Getters only
     public String getCustomerID() {
         return customerID;
-    }
-
-    public void setCustomerID(String customerID) {
-        this.customerID = customerID;
     }
 
     public LocalDate getCustomerDOB() {
         return customerDOB;
     }
 
-    public void setCustomerDOB(LocalDate customerDOB) {
-        this.customerDOB = customerDOB;
-    }
+    // Builder inner class
+    public static class Builder {
+        private String customerID;
+        private LocalDate customerDOB;
 
-    // @Override
-    // public String toString() {
-    //     return "Customer{" +
-    //             "customerID='" + customerID + '\'' +
-    //             ", customerDOB=" + customerDOB +
-    //             '}';
-    // }
+        public Builder setCustomerID(String customerID) {
+            this.customerID = customerID;
+            return this;
+        }
+
+        public Builder setCustomerDOB(LocalDate customerDOB) {
+            this.customerDOB = customerDOB;
+            return this;
+        }
+
+        public Customer build() {
+            return new Customer(this);
+        }
+    }
 }
