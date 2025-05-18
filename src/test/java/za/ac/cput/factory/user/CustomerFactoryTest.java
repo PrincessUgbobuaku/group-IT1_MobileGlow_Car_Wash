@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerFactoryTest {
 
-    @Test
+   @Test
     void testBuildCustomerSuccess() {
         Customer customer = CustomerFactory.build1(LocalDate.of(1995, 6, 15));
 

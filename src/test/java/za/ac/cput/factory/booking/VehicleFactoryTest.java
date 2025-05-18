@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class VehicleFactoryTest {
 
     @Test
+
     void testBuild1VehicleSuccess() {
         Vehicle vehicle = VehicleFactory.build1(
                 "XYZ123",
