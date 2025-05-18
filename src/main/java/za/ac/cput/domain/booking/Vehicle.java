@@ -6,8 +6,6 @@ Description: Domain class for Vehicle
 
 package za.ac.cput.domain.booking;
 
-//final vehicle class
-
 public class Vehicle {
     private String vehicleID;
     private String carPlateNumber;
@@ -26,6 +24,7 @@ public class Vehicle {
         this.customerID = builder.customerID;
     }
 
+    // Getters only
     public String getVehicleID() {
         return vehicleID;
     }
@@ -50,6 +49,7 @@ public class Vehicle {
         return customerID;
     }
 
+    // Builder inner class
     public static class Builder {
         private String vehicleID;
         private String carPlateNumber;
