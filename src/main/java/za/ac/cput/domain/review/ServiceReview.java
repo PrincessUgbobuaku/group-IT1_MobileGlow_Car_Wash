@@ -56,18 +56,27 @@ public class ServiceReview {
         private String comments;
         private Date reviewDate;
 
-        public void setReviewID(String reviewID) {
+        public Builder setReviewID(String reviewID) {
             this.reviewID = reviewID;
+            return this;
         }
-        public void setRating(int rating) {
+
+        public Builder setRating(int rating) {
             this.rating = rating;
+            return this;
         }
-        public void setComments(String comments) {
+
+        public Builder setComments(String comments) {
             this.comments = comments;
+            return this;
         }
-        public void setReviewDate(Date reviewDate) {
+
+        public Builder setReviewDate(Date reviewDate) {
             this.reviewDate = reviewDate;
+            return this;
         }
+
+
         public Builder copy(ServiceReview review){
             this.reviewID = review.reviewID;
             this.rating = review.rating;
