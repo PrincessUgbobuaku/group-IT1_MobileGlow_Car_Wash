@@ -3,6 +3,7 @@ package za.ac.cput.util;
 import za.ac.cput.domain.booking.CleaningService;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,5 +51,36 @@ public class Helper {
     public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
     }
+
+    public static boolean validateDate(Date hireDate) {
+        if (hireDate != null) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public static boolean validateShiftHours(int shiftHours) {
+        if(shiftHours <0){
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean validateIsFullTime(boolean isFullTime) {
+        if(isFullTime == true){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean validateHasTaxFillingAuthority(boolean hasTaxFillingAuthority) {
+        if(hasTaxFillingAuthority == true){
+            return true;
+        }
+        return false;
+    }
+
+
 
 }
