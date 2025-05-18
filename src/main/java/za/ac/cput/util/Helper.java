@@ -1,15 +1,15 @@
 package za.ac.cput.util;
 
-import za.ac.cput.domain.booking.CleaningService;
-
+import org.apache.commons.validator.routines.EmailValidator;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
+import java.util.List;
+import java.time.LocalDateTime;
+
 
 public class Helper {
 
-    public static String generateID(){
+    public static String generateID() {
         return UUID.randomUUID().toString();
     }
 
@@ -64,6 +64,13 @@ public class Helper {
         return durationMinutes > 0;
     }
 
+    public static boolean isValidEmail(String email){
+        EmailValidator validator = EmailValidator.getInstance();
+        if(validator.isValid(email))
+            return false;
+        return true;
+    }
+
     public static boolean isValidDate(LocalDate date) {
         return date != null && !date.isAfter(LocalDate.now());
     }
@@ -92,5 +99,3 @@ public class Helper {
     }
 
 }
-
-
