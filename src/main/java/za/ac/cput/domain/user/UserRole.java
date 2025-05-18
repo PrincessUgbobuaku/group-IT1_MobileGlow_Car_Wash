@@ -1,5 +1,7 @@
 package za.ac.cput.domain.user;
 
+import jakarta.persistence.EmbeddedId;
+
 import java.util.Objects;
 
 //Firstname:        Kwanda
@@ -7,49 +9,54 @@ import java.util.Objects;
 //Student Number:   218120192.
 
 public class UserRole {
-    private String userId;
-    private String roleId;
+    @EmbeddedId
+    private UserRoleID userRoleID;
     private boolean isActive;
 
     //Default Constructor
     public UserRole() {}
 
-    //Dynamic Constructor.
-    public UserRole(String userId, String roleId, boolean is_Active) {
-        this.userId = userId;
-        this.roleId = roleId;
-        this.isActive = is_Active;
+
+    public UserRole(Builder builder) {
+        this.userRoleID = builder.userRoleID;
+        this.isActive = builder.isActive;
     }
 
-    // Constructor for composite key
-    public UserRole(String userId, String roleId) {
-        this.userId = userId;
-        this.roleId = roleId;
-    }
 
-    public String getUserId() {
-        return userId;
-    }
-    public String getRoleId() {
-        return roleId;
+    //Getters
+    public UserRoleID getUserRoleID() {
+        return userRoleID;
     }
     public boolean isActive() {
         return isActive;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        UserRole userRole = (UserRole) object;
-        return userId.equals(userRole.userId) &&
-                roleId.equals(userRole.roleId);
+    public static class Builder {
+        private UserRoleID userRoleID;
+        private boolean isActive;
+
+        public Builder setUserRoleID(UserRoleID userRoleID) {
+            this.userRoleID = userRoleID;
+            return this;
+        }
+
+        public Builder setActive(boolean isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public Builder copy(UserRole userRole) {
+            this.userRoleID = userRole.getUserRoleID();
+            this.isActive = userRole.isActive();
+            return this;
+        }
+
+        public UserRole build() {
+            return new UserRole(this);
+        }
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, roleId);
-    }
+
 }
 
 
