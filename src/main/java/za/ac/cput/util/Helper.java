@@ -63,7 +63,7 @@ public class Helper {
 
     public static boolean isValidDouble(double number) {
         return number > 0;
-
+    }
     public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
     }
@@ -97,7 +97,7 @@ public class Helper {
 
     }
   
-  <<<<<<230778941 //Employee Factory Classes
+    //Employee Factory Classes
     public static boolean validateDate(Date hireDate) {
         if (hireDate != null) {
             return true;
