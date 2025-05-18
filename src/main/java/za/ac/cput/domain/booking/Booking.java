@@ -90,7 +90,8 @@ public class Booking {
         }
 
         //allows us to automatically add services to the list
-        public Builder addCleaningService(CleaningService service) {
+
+        public Builder addCleaningService(List<CleaningService> list, CleaningService service) {
             this.cleaningServices.add(service);
             return this;
         }
