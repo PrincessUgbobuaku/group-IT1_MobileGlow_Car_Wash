@@ -63,7 +63,7 @@ public class Helper {
 
     public static boolean isValidDouble(double number) {
         return number > 0;
-
+    }
     public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
     }
