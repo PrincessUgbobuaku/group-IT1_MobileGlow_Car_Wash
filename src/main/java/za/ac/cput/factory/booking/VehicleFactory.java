@@ -10,17 +10,25 @@ import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.util.Helper;
 
 public class VehicleFactory {
-    public static Vehicle build(String vehicleID,
-                                String carPlateNumber,
-                                String carMake,
-                                String carColour,
-                                String carModel,
-                                String customerID) {
 
-        Helper.validateVehicleFields(vehicleID, carPlateNumber, carMake, carModel, customerID);
+    public static Vehicle build1(String carPlateNumber,
+                                 String carMake,
+                                 String carColour,
+                                 String carModel,
+                                 String customerID) {
+
+        if (!Helper.validateStringDetails(carPlateNumber) ||
+                !Helper.validateStringDetails(carMake) ||
+                !Helper.validateStringDetails(carModel) ||
+                !Helper.validateStringDetails(customerID)) {
+
+            throw new IllegalArgumentException("Vehicle fields must not be null or empty");
+        }
+
+        String generatedID = Helper.generateID();
 
         return new Vehicle.Builder()
-                .setVehicleID(vehicleID)
+                .setVehicleID(generatedID)
                 .setCarPlateNumber(carPlateNumber)
                 .setCarMake(carMake)
                 .setCarColour(carColour)
