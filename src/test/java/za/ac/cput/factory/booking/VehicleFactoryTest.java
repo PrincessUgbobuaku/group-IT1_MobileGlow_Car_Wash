@@ -8,12 +8,12 @@ package za.ac.cput.factory.booking;
 
 import org.junit.jupiter.api.Test;
 import za.ac.cput.domain.booking.Vehicle;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class VehicleFactoryTest {
 
-   @Test
+    @Test
+
     void testBuild1VehicleSuccess() {
         Vehicle vehicle = VehicleFactory.build1(
                 "XYZ123",
@@ -38,4 +38,3 @@ public class VehicleFactoryTest {
         assertTrue(exception.getMessage().contains("Vehicle fields must not be null or empty"));
     }
 }
-

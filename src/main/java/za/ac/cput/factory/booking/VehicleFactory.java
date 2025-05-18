@@ -10,11 +10,21 @@ import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.util.Helper;
 
 public class VehicleFactory {
+
     public static Vehicle build1(String carPlateNumber,
                                  String carMake,
                                  String carColour,
                                  String carModel,
                                  String customerID) {
+
+
+
+    public static Vehicle build1(String carPlateNumber,
+                                 String carMake,
+                                 String carColour,
+                                 String carModel,
+                                 String customerID) {
+
 
         if (!Helper.validateStringDetails(carPlateNumber) ||
                 !Helper.validateStringDetails(carMake) ||
