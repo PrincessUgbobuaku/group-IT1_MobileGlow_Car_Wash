@@ -1,5 +1,10 @@
 package za.ac.cput.factory.generic;
 
+/* MobileGlow Car Wash
+   Contact Factory Test
+   Author: Inga Zekani (221043756)
+ */
+
 import org.junit.jupiter.api.Test;
 import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.factory.generic.ContactFactory;
