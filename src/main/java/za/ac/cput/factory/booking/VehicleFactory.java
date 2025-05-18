@@ -21,7 +21,6 @@ public class VehicleFactory {
                 !Helper.validateStringDetails(carMake) ||
                 !Helper.validateStringDetails(carModel) ||
                 !Helper.validateStringDetails(customerID)) {
-
             throw new IllegalArgumentException("Vehicle fields must not be null or empty");
         }
 

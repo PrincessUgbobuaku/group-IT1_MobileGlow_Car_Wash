@@ -8,7 +8,6 @@ package za.ac.cput.factory.user;
 
 import za.ac.cput.domain.user.Customer;
 import za.ac.cput.util.Helper;
-
 import java.time.LocalDate;
 
 public class CustomerFactory {
