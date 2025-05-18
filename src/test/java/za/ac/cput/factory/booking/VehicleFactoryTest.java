@@ -13,10 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class VehicleFactoryTest {
 
-    @Test
-    void testBuildVehicleSuccess() {
-        Vehicle vehicle = VehicleFactory.build(
-                "VEH001",
+   @Test
+    void testBuild1VehicleSuccess() {
+        Vehicle vehicle = VehicleFactory.build1(
                 "XYZ123",
                 "Toyota",
                 "Red",
@@ -25,15 +24,16 @@ public class VehicleFactoryTest {
         );
 
         assertNotNull(vehicle);
-        assertEquals("VEH001", vehicle.getVehicleID());
+        assertNotNull(vehicle.getVehicleID());
+        assertFalse(vehicle.getVehicleID().isBlank());
         assertEquals("Toyota", vehicle.getCarMake());
+        assertEquals("CUST001", vehicle.getCustomerID());
     }
 
     @Test
-    void testBuildVehicleWithEmptyIDShouldFail() {
+    void testBuildVehicleWithMissingFields() {
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                VehicleFactory.build(
-                        "", "XYZ123", "Toyota", "Red", "Corolla", "CUST001")
+                VehicleFactory.build1("", "Toyota", "Red", "Corolla", "CUST001")
         );
         assertTrue(exception.getMessage().contains("Vehicle fields must not be null or empty"));
     }
