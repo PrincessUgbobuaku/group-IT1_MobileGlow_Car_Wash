@@ -6,6 +6,8 @@ Description: Domain class for Vehicle
 
 package za.ac.cput.domain.booking;
 
+//final vehicle class
+
 public class Vehicle {
     private String vehicleID;
     private String carPlateNumber;

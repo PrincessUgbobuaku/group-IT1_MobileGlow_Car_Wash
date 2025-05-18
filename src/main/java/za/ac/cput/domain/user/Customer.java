@@ -6,6 +6,8 @@ Description: Domain class for Customer
 
 package za.ac.cput.domain.user;
 
+//final vehicle class
+
 import java.time.LocalDate;
 
 public class Customer {
@@ -18,7 +20,6 @@ public class Customer {
         this.customerDOB = builder.customerDOB;
     }
 
-    // Getters only
     public String getCustomerID() {
         return customerID;
     }
@@ -27,7 +28,6 @@ public class Customer {
         return customerDOB;
     }
 
-    // Builder inner class
     public static class Builder {
         private String customerID;
         private LocalDate customerDOB;
