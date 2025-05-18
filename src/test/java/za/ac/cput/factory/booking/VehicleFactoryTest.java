@@ -11,7 +11,7 @@ import za.ac.cput.domain.booking.Vehicle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class VehicleFactoryTest {
+public class VehicleFactoryTest {
 
     @Test
     void testBuildVehicleSuccess() {

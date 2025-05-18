@@ -10,7 +10,6 @@ import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.util.Helper;
 
 public class VehicleFactory {
-
     public static Vehicle build(String vehicleID,
                                 String carPlateNumber,
                                 String carMake,

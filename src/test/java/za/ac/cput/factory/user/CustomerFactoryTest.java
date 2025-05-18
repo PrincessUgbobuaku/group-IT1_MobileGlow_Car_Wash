@@ -8,9 +8,7 @@ package za.ac.cput.factory.user;
 
 import org.junit.jupiter.api.Test;
 import za.ac.cput.domain.user.Customer;
-
 import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerFactoryTest {
