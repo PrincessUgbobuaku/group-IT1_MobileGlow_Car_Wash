@@ -29,6 +29,15 @@ public class Login {
         return password;
     }
 
+    @Override
+    public String toString() {
+        return "Login{" +
+                "loginID='" + loginID + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public static class Builder {
         private String loginID;
         private String emailAddress;

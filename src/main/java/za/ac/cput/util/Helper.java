@@ -1,4 +1,64 @@
 package za.ac.cput.util;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
+import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.List;
+
+
 public class Helper {
+
+    public static String generateID(){
+        return UUID.randomUUID().toString();
+    }
+
+    public static boolean validateStringDetails(String str) {
+        // Ensure that none of the fields are empty or null
+
+        if (str != null && !str.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isListOfCorrectType(List<?> list, Class<?> expectedType) {
+        for (Object obj : list) {
+            if (!expectedType.isInstance(obj)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isValidEnumValue(Object obj, Class<? extends Enum<?>> enumType) {
+        return obj != null && enumType.isInstance(obj);
+    }
+
+    public static boolean isFutureDate(LocalDateTime dateTime) {
+        return dateTime.isAfter(LocalDateTime.now());
+    }
+
+    public static boolean validatePrice(double price) {
+        if (price > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean validateDuration(int durationMinutes) {
+        return durationMinutes > 0;
+    }
+
+    public static boolean isValidEmail(String email){
+        EmailValidator validator = EmailValidator.getInstance();
+        if(validator.isValid(email))
+            return false;
+        return true;
+    }
+
+
+
 }

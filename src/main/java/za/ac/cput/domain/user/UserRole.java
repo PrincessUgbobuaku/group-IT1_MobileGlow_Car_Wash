@@ -27,8 +27,16 @@ public class UserRole {
     public UserRoleID getUserRoleID() {
         return userRoleID;
     }
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "userRoleID= " + userRoleID +
+                ", isActive= " + isActive +
+                '}';
     }
 
     public static class Builder {
@@ -47,7 +55,7 @@ public class UserRole {
 
         public Builder copy(UserRole userRole) {
             this.userRoleID = userRole.getUserRoleID();
-            this.isActive = userRole.isActive();
+            this.isActive = userRole.getIsActive();
             return this;
         }
 
