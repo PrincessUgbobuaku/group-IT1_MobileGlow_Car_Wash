@@ -1,11 +1,13 @@
 package za.ac.cput.util;
 
-import za.ac.cput.domain.booking.CleaningService;
+
+import org.apache.commons.validator.routines.EmailValidator;
 import java.time.LocalDate;
+import java.util.UUID;
+import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+
 
 public class Helper {
 
@@ -32,6 +34,18 @@ public class Helper {
         return true;
     }
 
+    public static <E extends Enum<E>> boolean isValidEnumValue(Class<E> enumClass, String value) {
+        if (value == null || enumClass == null)
+            return false;
+
+        try {
+            Enum.valueOf(enumClass, value.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
     public static boolean isValidEnumValue(Object obj, Class<? extends Enum<?>> enumType) {
         return obj != null && enumType.isInstance(obj);
     }
@@ -46,6 +60,17 @@ public class Helper {
         } else {
             return false;
         }
+    }
+
+    public static boolean validateDuration(int durationMinutes) {
+        return durationMinutes > 0;
+    }
+
+    public static boolean isValidEmail(String email){
+        EmailValidator validator = EmailValidator.getInstance();
+        if(validator.isValid(email))
+            return false;
+        return true;
     }
 
 
@@ -125,6 +150,7 @@ public class Helper {
             return true;
         }
         return false;
+
     }
 
 }
