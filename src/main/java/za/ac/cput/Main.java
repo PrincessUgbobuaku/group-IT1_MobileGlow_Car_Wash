@@ -14,7 +14,7 @@ public class Main {
 
 /*UNCOMMENT TO SEE HOW PROGRAM RUNS*/
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
 
         Vehicle vehicle_1 = new Vehicle.Builder()
                 .vehicleID("vehicle_1")
@@ -131,5 +131,7 @@ public class Main {
         System.out.println("Payment for the first booking: " + payment_1.toString());
         System.out.println("Payment for the second booking: " + payment_2.toString());
 
-    }*/
+
+
+    }
 }
