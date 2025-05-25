@@ -6,28 +6,32 @@
 
 package za.ac.cput.factory.user;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import za.ac.cput.domain.user.Customer;
+
 import java.time.LocalDate;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.Assert.*;
 
 public class CustomerFactoryTest {
 
-   @Test
-    void testBuildCustomerSuccess() {
+    @Test
+    public void testBuildCustomerSuccess() {
         Customer customer = CustomerFactory.build1(LocalDate.of(1995, 6, 15));
 
         assertNotNull(customer);
         assertNotNull(customer.getCustomerID());
-        assertFalse(customer.getCustomerID().isBlank());
+        assertFalse(customer.getCustomerID().isEmpty());
         assertEquals(LocalDate.of(1995, 6, 15), customer.getCustomerDOB());
     }
 
     @Test
-    void testBuildCustomerWithInvalidDate() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-                CustomerFactory.build1(null)
-        );
-        assertTrue(exception.getMessage().contains("CustomerDOB must not be null"));
+    public void testBuildCustomerWithInvalidDate() {
+        try {
+            CustomerFactory.build1(null);
+            fail("Expected IllegalArgumentException was not thrown");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("CustomerDOB must not be null"));
+        }
     }
 }
