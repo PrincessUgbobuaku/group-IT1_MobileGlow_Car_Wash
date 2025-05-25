@@ -7,3 +7,4 @@ public interface IRepository<T, ID> {
     void delete(ID id);
 
 }
+
