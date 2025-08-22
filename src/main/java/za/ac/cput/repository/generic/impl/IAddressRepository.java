@@ -1,4 +1,13 @@
 package za.ac.cput.repository.generic.impl;
 
-public interface IAddressRepository {
+
+import za.ac.cput.domain.generic.Address;
+import za.ac.cput.repository.IRepository;
+
+public interface IAddressRepository extends IRepository<Address, String> {
+
+
+
+
 }
+

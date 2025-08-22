@@ -1,4 +1,9 @@
 package za.ac.cput.repository.generic.impl;
 
-public interface IContactRepository {
+import za.ac.cput.domain.generic.Contact;
+import za.ac.cput.repository.IRepository;
+
+public interface IContactRepository extends IRepository<Contact, String> {
+
 }
+
