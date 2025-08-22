@@ -2,6 +2,8 @@ package za.ac.cput.util;
 
 
 import org.apache.commons.validator.routines.EmailValidator;
+import za.ac.cput.domain.payment.Payment;
+
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
@@ -15,7 +17,8 @@ public class Helper {
         return UUID.randomUUID().toString();
     }
 
-    public static boolean validateStringDetails(String str) {
+    /*DOES THE SAME THINGS AS 'isValidString'*/
+    public static boolean isValidString(String str) {
         // Ensure that none of the fields are empty or null
 
         if (str != null && !str.isEmpty()) {
@@ -24,6 +27,11 @@ public class Helper {
             return false;
         }
     }
+
+    public static boolean validateStringDetails(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
+
 
     public static boolean isListOfCorrectType(List<?> list, Class<?> expectedType) {
         for (Object obj : list) {
@@ -34,17 +42,17 @@ public class Helper {
         return true;
     }
 
-    public static <E extends Enum<E>> boolean isValidEnumValue(Class<E> enumClass, String value) {
-        if (value == null || enumClass == null)
-            return false;
-
-        try {
-            Enum.valueOf(enumClass, value.toUpperCase());
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
+//    public static <E extends Enum<E>> boolean isValidEnumValue(Class<E> enumClass, String value) {
+//        if (value == null || enumClass == null)
+//            return false;
+//
+//        try {
+//            Enum.valueOf(enumClass, value.toUpperCase());
+//            return true;
+//        } catch (IllegalArgumentException e) {
+//            return false;
+//        }
+//    }
 
     public static boolean isValidEnumValue(Object obj, Class<? extends Enum<?>> enumType) {
         return obj != null && enumType.isInstance(obj);
@@ -54,16 +62,18 @@ public class Helper {
         return dateTime.isAfter(LocalDateTime.now());
     }
 
-    public static boolean validatePrice(double price) {
-        if (price > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    public static boolean validateDuration(int durationMinutes) {
-        return durationMinutes > 0;
+    /*DOES THE SAME THINGS AS 'isValidDouble'*/
+//    public static boolean validatePrice(double price) {
+//        if (price > 0) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+
+    public static boolean isValidDouble(double number) {
+        return number > 0;
     }
 
     public static boolean isValidEmail(String email){
@@ -74,10 +84,6 @@ public class Helper {
     }
 
 
-    public static boolean isValidString(String str) {
-        return str != null && !str.trim().isEmpty();
-    }
-
     public static boolean isValidObject(Object obj) {
         return obj != null;
     }
@@ -86,10 +92,7 @@ public class Helper {
         return number > 0;
     }
 
-    public static boolean isValidDouble(double number) {
-        return number > 0;
-    }
-    public static boolean validateDuration(int durationMinutes) {
+    public static boolean validateDuration(double durationMinutes) {
         return durationMinutes > 0;
     }
   
@@ -99,7 +102,7 @@ public class Helper {
     }
 
     public static void validateCustomerFields(String customerID, LocalDate dob) {
-        if (!validateStringDetails(customerID)) {
+        if (!isValidString(customerID)) {
             throw new IllegalArgumentException("CustomerID must not be null or empty");
         }
         if (!isValidDate(dob)) {
@@ -151,6 +154,23 @@ public class Helper {
         }
         return false;
 
+    }
+
+    public static boolean isInstanceOf(Object obj, Class<?> expectedType) {
+        return obj != null && expectedType.isInstance(obj);
+    }
+
+    public static boolean areAllPaymentAmountsValid(List<Payment> payments) {
+        if (payments == null || payments.isEmpty()) {
+            return false;
+        }
+
+        for (Payment payment : payments) {
+            if (payment == null || payment.getPaymentAmount() <= 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
