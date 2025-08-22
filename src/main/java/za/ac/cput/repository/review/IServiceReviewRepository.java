@@ -1,4 +1,4 @@
-package za.ac.cput.repository.review.impl;
+package za.ac.cput.repository.review;
 
 import za.ac.cput.domain.review.ServiceReview;
 import za.ac.cput.repository.IRepository;
