@@ -6,12 +6,16 @@
 
 package za.ac.cput.factory.user;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;  // JUnit 5 Test annotation
+
+
+//import org.junit.Test;
 import za.ac.cput.domain.user.Customer;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerFactoryTest {
 

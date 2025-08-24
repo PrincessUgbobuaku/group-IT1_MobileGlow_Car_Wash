@@ -1,10 +1,9 @@
 package za.ac.cput.repository;
 
-public interface IRepository<T, ID> {
-    T create(T t);
-    T read(ID id);
-    T update(T t);
-    void delete(ID id);
-
+@Deprecated
+public interface IRepository<Type, ID> {
+    Type create(Type t); //create Employee object and insert it into database
+    Type read(ID id);
+    Type update(Type t);
+    boolean delete(ID id);
 }
-

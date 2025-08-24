@@ -6,9 +6,18 @@ Description: Domain class for Customer
 
 package za.ac.cput.domain.user;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.time.LocalDate;
 
+@Entity
 public class Customer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID) // or GenerationType.IDENTITY, depending on DB config
     private String customerID;
     private LocalDate customerDOB;
 

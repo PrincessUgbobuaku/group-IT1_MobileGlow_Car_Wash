@@ -1,38 +1,47 @@
-/*
-Student name: Thaakirah Watson
-Student number: 230037550
-Description: Factory class for Vehicle
- */
+//Thaakirah Watson, 230037550
 
 package za.ac.cput.factory.booking;
 
+import za.ac.cput.domain.user.Customer;
 import za.ac.cput.domain.booking.Vehicle;
-import za.ac.cput.util.Helper;
 
-public class VehicleFactory {
+import java.util.UUID;
 
-    public static Vehicle build1(String carPlateNumber,
-                                 String carMake,
-                                 String carColour,
-                                 String carModel,
-                                 String customerID) {
+public final class VehicleFactory {
 
-        if (!Helper.validateStringDetails(carPlateNumber) ||
-                !Helper.validateStringDetails(carMake) ||
-                !Helper.validateStringDetails(carModel) ||
-                !Helper.validateStringDetails(customerID)) {
-            throw new IllegalArgumentException("Vehicle fields must not be null or empty");
-        }
+    private static final VehicleFactory INSTANCE = new VehicleFactory();
+    private VehicleFactory() { }
+    public static VehicleFactory getInstance() { return INSTANCE; }
 
-        String generatedID = Helper.generateID();
+    public Vehicle create(
+            String vehicleID,
+            String carPlateNumber,
+            String carMaker,
+            String carColour,
+            String carModel,
+            Customer customer) {
+
+        if (customer == null) throw new IllegalArgumentException("customer is required");
+        if (isBlank(carPlateNumber)) throw new IllegalArgumentException("carPlateNumber is required");
+
+        String id = isBlank(vehicleID) ? generateId() : vehicleID.trim();
 
         return new Vehicle.Builder()
-                .setVehicleID(generatedID)
-                .setCarPlateNumber(carPlateNumber)
-                .setCarMake(carMake)
-                .setCarColour(carColour)
-                .setCarModel(carModel)
-                .setCustomerID(customerID)
+                .setVehicleID(id)
+                .setCarPlateNumber(carPlateNumber.trim())
+                .setCarMaker(carMaker != null ? carMaker.trim() : null)
+                .setCarColour(carColour != null ? carColour.trim() : null)
+                .setCarModel(carModel != null ? carModel.trim() : null)
+                .setCustomer(customer)
                 .build();
     }
+
+    public Vehicle create(
+            String carPlateNumber, String carMaker, String carColour, String carModel, Customer customer) {
+        return create(null, carPlateNumber, carMaker, carColour, carModel, customer);
+    }
+
+    // --- Helpers ---
+    private boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
+    private String generateId() { return "VEH-" + UUID.randomUUID(); }
 }

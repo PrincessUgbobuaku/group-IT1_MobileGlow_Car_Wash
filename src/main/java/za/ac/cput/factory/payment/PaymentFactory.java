@@ -7,19 +7,20 @@ import za.ac.cput.util.Helper;
 public class PaymentFactory {
 
 
-    public static Payment createPaymentFactory1(Booking booking, double paymentAmount, Payment.PaymentMethod paymentMethod, Payment.PaymentStatus paymentStatus) {
+    public static Payment createPayment(Booking booking, double paymentAmount, Payment.PaymentMethod paymentMethod, Payment.PaymentStatus paymentStatus) {
 
         String paymentID = Helper.generateID();
         String bookingID = booking.getBookingID();
 
-        if( !Helper.validatePrice(paymentAmount)
+        if( !Helper.isValidDouble(paymentAmount)
          || !Helper.isValidEnumValue(paymentMethod, Payment.PaymentMethod.class)
         || !Helper.isValidEnumValue(paymentStatus, Payment.PaymentStatus.class)) {
             return null;
         } else {
+
             return new Payment.Builder()
                     .setPaymentID(paymentID)
-                    .setBookingID(bookingID)
+                    .setBooking(booking)
                     .setPaymentAmount(paymentAmount)
                     .setPaymentMethod(paymentMethod)
                     .setPaymentStatus(paymentStatus)

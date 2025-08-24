@@ -1,30 +1,39 @@
-/*
-Student name: Thaakirah Watson
-Student number: 230037550
-Description: Domain class for Vehicle
- */
+
+//Thaakirah Watson, 230037550
 
 package za.ac.cput.domain.booking;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import za.ac.cput.domain.user.Customer;
+
+@Entity
 public class Vehicle {
+
+    @Id
     private String vehicleID;
     private String carPlateNumber;
-    private String carMake;
+    private String carMaker;
     private String carColour;
     private String carModel;
-    private String customerID; // Foreign key reference to Customer
 
-    // Private constructor for Builder
+    @ManyToOne
+    private Customer customer;
+
     private Vehicle(Builder builder) {
         this.vehicleID = builder.vehicleID;
         this.carPlateNumber = builder.carPlateNumber;
-        this.carMake = builder.carMake;
+        this.carMaker = builder.carMaker;
         this.carColour = builder.carColour;
         this.carModel = builder.carModel;
-        this.customerID = builder.customerID;
+        this.customer = builder.customer;
     }
 
-    // Getters only
+    public Vehicle() {
+
+    }
+
     public String getVehicleID() {
         return vehicleID;
     }
@@ -33,8 +42,8 @@ public class Vehicle {
         return carPlateNumber;
     }
 
-    public String getCarMake() {
-        return carMake;
+    public String getCarMaker() {
+        return carMaker;
     }
 
     public String getCarColour() {
@@ -45,18 +54,17 @@ public class Vehicle {
         return carModel;
     }
 
-    public String getCustomerID() {
-        return customerID;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    // Builder inner class
     public static class Builder {
         private String vehicleID;
         private String carPlateNumber;
-        private String carMake;
+        private String carMaker;
         private String carColour;
         private String carModel;
-        private String customerID;
+        private Customer customer;
 
         public Builder setVehicleID(String vehicleID) {
             this.vehicleID = vehicleID;
@@ -68,8 +76,8 @@ public class Vehicle {
             return this;
         }
 
-        public Builder setCarMake(String carMake) {
-            this.carMake = carMake;
+        public Builder setCarMaker(String carMaker) {
+            this.carMaker = carMaker;
             return this;
         }
 
@@ -83,19 +91,20 @@ public class Vehicle {
             return this;
         }
 
-        public Builder setCustomerID(String customerID) {
-            this.customerID = customerID;
+        public Builder setCustomer(Customer customer) {
+            this.customer = customer;
             return this;
         }
 
-        public Builder copy(Vehicle vehicle) {
-            this.vehicleID = vehicle.vehicleID;
-            this.carPlateNumber = vehicle.carPlateNumber;
-            this.carMake = vehicle.carMake;
-            this.carColour = vehicle.carColour;
-            this.carModel = vehicle.carModel;
-            this.customerID = vehicle.customerID;
-            return this;
+        public Vehicle copy() {
+            return new Builder()
+                    .setVehicleID(this.vehicleID)
+                    .setCarPlateNumber(this.carPlateNumber)
+                    .setCarMaker(this.carMaker)
+                    .setCarColour(this.carColour)
+                    .setCarModel(this.carModel)
+                    .setCustomer(this.customer)
+                    .build();
         }
 
         public Vehicle build() {

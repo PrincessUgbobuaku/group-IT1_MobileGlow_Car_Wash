@@ -1,27 +1,37 @@
 package za.ac.cput.factory.booking;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;  // JUnit 5 Test annotation
 import za.ac.cput.domain.booking.CleaningService;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import za.ac.cput.domain.booking.CleaningService;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CleaningServiceFactoryTest {
 
     @Test
-    public void testCreateCleaningServiceFactory1() {
-        CleaningService cs_1 = CleaningServiceFactory.createCleaningServiceFactory1(CleaningService.ServiceName.ENGINE_CLEANING, 500, 2.5);
+    public void testCreateSingleCleaningService() {
+        CleaningService cs_1 = CleaningServiceFactory.createCleaningService(CleaningService.ServiceName.ENGINE_CLEANING, 500, 2.5);
 
         assertNotNull(cs_1); // Ensure object is created
-//        assertNotNull(cs_1.getCleaningServiceID()); // Ensure ID is generated
-//        assertEquals(CleaningService.ServiceName.ENGINE_CLEANING, cs_1.getServiceName()); // Check correct enum
-//        assertEquals(500.00, cs_1.getPriceOfService(), 0.01); // Check price
-//        assertEquals(2.5, cs_1.getDuration(), 0.01); // Check duration
-//        System.out.println(cs_1.toString());
 
+        assertEquals(CleaningService.ServiceName.ENGINE_CLEANING, cs_1.getServiceName());
+        assertTrue(cs_1.getPriceOfService() > 0);
+        System.out.println("Single cleaning service created:\n" + cs_1);
+    }
+
+    @Test
+    public void testCreateMultipleCleaningServices() {
+        CleaningService cs_1 = CleaningServiceFactory.createCleaningService(
+                CleaningService.ServiceName.WAXING_AND_POLISHING, 300, 1.5);
+        CleaningService cs_2 = CleaningServiceFactory.createCleaningService(
+                CleaningService.ServiceName.CERAMIC_COATING, 700, 2.0);
+
+        assertNotNull(cs_1);
+        assertNotNull(cs_2);
+        assertNotEquals(cs_1.getCleaningServiceID(), cs_2.getCleaningServiceID());
+
+        System.out.println("Multiple cleaning services created:\n" + cs_1 + "\n" + cs_2);
     }
 }
