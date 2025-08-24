@@ -1,4 +1,4 @@
 package za.ac.cput.service.user.employee;
 
-public class CustomerService {
+public class AccountantServiceTest {
 }
