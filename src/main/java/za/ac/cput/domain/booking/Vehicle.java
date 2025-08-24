@@ -88,6 +88,16 @@ public class Vehicle {
             return this;
         }
 
+        public Builder copy(Vehicle vehicle) {
+            this.vehicleID = vehicle.vehicleID;
+            this.carPlateNumber = vehicle.carPlateNumber;
+            this.carMake = vehicle.carMake;
+            this.carColour = vehicle.carColour;
+            this.carModel = vehicle.carModel;
+            this.customerID = vehicle.customerID;
+            return this;
+        }
+
         public Vehicle build() {
             return new Vehicle(this);
         }
