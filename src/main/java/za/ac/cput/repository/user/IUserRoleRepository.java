@@ -1,4 +1,4 @@
-package za.ac.cput.repository.user;
-
-public interface IUserRoleRepository {
-}
+//package za.ac.cput.repository.user;
+//
+//public interface IUserRoleRepository {
+//}

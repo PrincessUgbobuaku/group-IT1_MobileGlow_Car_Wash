@@ -1,8 +1,3 @@
-/*CleaningService.java
- * Cleaning Service model class
- * Author: Adaeze Princess Ugbobuaku
- * Date: 11 May 2025*/
-
 package za.ac.cput.domain.booking;
 
 import jakarta.persistence.*;
@@ -14,23 +9,24 @@ public class CleaningService {
     private String cleaningServiceID;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "service_name", nullable = false, unique = true)
-    //Ensures the enum is stored as a readable string (not ordinal numbers).
-    //Stores enums as strings in the DB (e.g., "WAXING_AND_POLISHING" instead of 0).
-
+    @Column(name = "service_name", nullable = false, unique = true, length = 50)
     private ServiceName serviceName;
+
     private double priceOfService;
     private double duration;
 
+    @Column  // You can remove nullable=false if category is optional
+    private String category;
+
     // Required by JPA
     protected CleaningService() {}
-
 
     private CleaningService(Builder builder) {
         this.cleaningServiceID = builder.cleaningServiceID;
         this.serviceName = builder.serviceName;
         this.priceOfService = builder.priceOfService;
         this.duration = builder.duration;
+        this.category = builder.category;
     }
 
     public String getCleaningServiceID() {
@@ -49,6 +45,10 @@ public class CleaningService {
         return duration;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     @Override
     public String toString() {
         return "CleaningService{" +
@@ -56,6 +56,7 @@ public class CleaningService {
                 ", serviceName=" + serviceName +
                 ", priceOfService=" + priceOfService +
                 ", duration=" + duration +
+                ", category='" + category + '\'' +
                 '}';
     }
 
@@ -64,6 +65,7 @@ public class CleaningService {
         private ServiceName serviceName;
         private double priceOfService;
         private double duration;
+        private String category;
 
         public Builder setCleaningServiceID(String cleaningServiceID) {
             this.cleaningServiceID = cleaningServiceID;
@@ -85,20 +87,25 @@ public class CleaningService {
             return this;
         }
 
-        // Copy method
+        public Builder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
         public Builder copy(CleaningService cleaningService) {
             this.cleaningServiceID = cleaningService.cleaningServiceID;
             this.serviceName = cleaningService.serviceName;
             this.priceOfService = cleaningService.priceOfService;
             this.duration = cleaningService.duration;
+            this.category = cleaningService.category;
             return this;
         }
-
 
         public CleaningService build() {
             return new CleaningService(this);
         }
     }
+
     public enum ServiceName {
         EXTERIOR_WASH,
         INTERIOR_CLEANING,
@@ -106,5 +113,8 @@ public class CleaningService {
         CERAMIC_COATING,
         TIRE_AND_WHEEL_CLEANING,
         ENGINE_CLEANING,
+        BASIC_HAND_WASH,
+        TOUCHLESS_CAR_WASH,
+        FOAM_CANNON_PRE_WASH
     }
 }
