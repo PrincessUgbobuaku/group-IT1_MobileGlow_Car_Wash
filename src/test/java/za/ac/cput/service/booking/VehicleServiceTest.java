@@ -1,4 +1,4 @@
-package za.ac.cput.service.booking;
-
-public class VehicleServiceTest {
-}
+//package za.ac.cput.service.booking;
+//
+//public class VehicleServiceTest {
+//}

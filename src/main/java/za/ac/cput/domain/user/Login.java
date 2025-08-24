@@ -1,15 +1,23 @@
 package za.ac.cput.domain.user;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 //Firstname:        Kwanda
 //LastName:         Twalo
 //Student Number:   218120192.
 
+@Entity
 public class Login {
-    private String loginID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long loginID;
     private String emailAddress;
     private String password;
 
-    private Login() {}
+    protected Login() {}
 
     private Login(Builder builder) {
         this.loginID = builder.loginID;
@@ -17,7 +25,7 @@ public class Login {
         this.password = builder.password;
     }
 
-    public String getLoginID() {
+    public Long getLoginID() {
         return loginID;
     }
 
@@ -31,7 +39,7 @@ public class Login {
 
     @Override
     public String toString() {
-        return "Login{" +
+        return "\nLogin{" +
                 "loginID='" + loginID + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
@@ -39,11 +47,11 @@ public class Login {
     }
 
     public static class Builder {
-        private String loginID;
+        private Long loginID;
         private String emailAddress;
         private String password;
 
-        public Builder setLoginID(String loginID) {
+        public Builder setLoginID(Long loginID) {
             this.loginID = loginID;
             return this;
         }
