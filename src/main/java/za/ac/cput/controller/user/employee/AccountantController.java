@@ -1,4 +1,4 @@
 package za.ac.cput.controller.user.employee;
 
-public class CustomerControllerTest {
+public class AccountantController {
 }

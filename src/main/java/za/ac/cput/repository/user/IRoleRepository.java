@@ -1,4 +1,4 @@
-package za.ac.cput.repository.user;
-
-public interface IRoleRepository {
-}
+//package za.ac.cput.repository.user;
+//
+//public interface IRoleRepository {
+//}
