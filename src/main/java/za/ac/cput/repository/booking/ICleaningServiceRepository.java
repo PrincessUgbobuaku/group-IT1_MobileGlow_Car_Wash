@@ -14,6 +14,8 @@ public interface ICleaningServiceRepository extends JpaRepository<CleaningServic
 
     Optional<CleaningService> findByServiceName(CleaningService.ServiceName serviceName); // ✅ method declaration only
 
+    // ✅ New method: fetch all services by category
+    List<CleaningService> findAllByCategory(String category);
 }
 
 

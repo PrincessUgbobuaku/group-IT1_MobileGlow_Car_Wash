@@ -8,15 +8,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import za.ac.cput.domain.user.Login;
 
-import java.sql.SQLOutput;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginFactoryTest {
-    private Login l1 = LoginFactory.createLogin("218120192@mycput.ac.za", "123456");
-    private Login l2 = LoginFactory.createLogin("218120192mycput.ac.za", "123456");
-    private Login l3 = LoginFactory.createLogin("218120192@mycput.ac.za", "");
+    private Login l1 = LoginFactory.createLogin("218120192@mycput.ac.za", "student123");
+    private Login l2 = LoginFactory.createLogin("218120192mycput.ac.za", "student123");
+    private Login l3 = LoginFactory.createLogin("218120192@mycput.ac.za", "abc");
 
     @Test
     @Order(1)
@@ -30,16 +27,16 @@ public class LoginFactoryTest {
     @Order(2)
     public void testInValidEmail() {
         //this test should fail because there's no @ in the email.
-        assertNotNull(l2);
-        System.out.println(l2.toString());
+        assertNull(l2);
+        System.out.println("Null because there's no @ in the email.");
     }
 
     @Test
     @Order(3)
-    public void testAllValuesAreFilled() {
+    public void testInValidPassword() {
         //this test should fail because there are missing values.
-        assertNotNull(l3);
-        System.out.println(l3.toString());
+        assertNull(l3);
+        System.out.println("Null because the password should be more than 8 characters.");
     }
 
 
