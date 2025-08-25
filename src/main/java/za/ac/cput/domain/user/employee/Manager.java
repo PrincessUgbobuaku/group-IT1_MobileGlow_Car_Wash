@@ -1,11 +1,8 @@
-/*
-    ManagerDomain
-Author: Abulele Voki(230778941)
-Date: 11 May 2025
-*/
-
 package za.ac.cput.domain.user.employee;
 
+//Firstname:        Kwanda
+//LastName:         Twalo
+//Student Number:   218120192.
 
 import jakarta.persistence.Entity;
 import za.ac.cput.domain.generic.Address;
@@ -14,7 +11,6 @@ import za.ac.cput.domain.user.Login;
 import za.ac.cput.domain.user.User;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 public class Manager extends User {
@@ -75,8 +71,6 @@ public class Manager extends User {
         private Address address;
         private Login login;
 
-
-
         public Builder setUserId(Long userId){
             this.userId = userId;
             return this;
@@ -104,7 +98,7 @@ public class Manager extends User {
             return this;
         }
 
-        public Builder setHireDate(Date hireDate){
+        public Builder setHireDate(LocalDate hireDate){
             this.hireDate=hireDate;
             return this;
         }

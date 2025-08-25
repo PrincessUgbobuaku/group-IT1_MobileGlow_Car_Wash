@@ -5,12 +5,9 @@ import org.springframework.stereotype.Service;
 import za.ac.cput.domain.booking.CleaningService;
 import za.ac.cput.factory.booking.CleaningServiceFactory;
 import za.ac.cput.repository.booking.ICleaningServiceRepository;
-
-import java.util.List;
-
-import jakarta.annotation.PostConstruct;
 import za.ac.cput.util.Helper;
 
+import java.util.List;
 
 @Service
 public class CleaningServiceService implements ICleaningServiceService {
@@ -29,23 +26,23 @@ public class CleaningServiceService implements ICleaningServiceService {
 
     @Override
     public CleaningService create(CleaningService cleaningServiceInput) {
-        // Check if service with the same serviceName exists to avoid duplicates
+        System.out.println("Received service input: " + cleaningServiceInput);
+
         if (cleaningServiceRepository.existsByServiceName(cleaningServiceInput.getServiceName())) {
             throw new IllegalArgumentException("CleaningServiceService: Service already exists");
         }
 
-        // Use factory to create a new CleaningService object with generated ID and validated fields
         CleaningService created = CleaningServiceFactory.createCleaningService(
                 cleaningServiceInput.getServiceName(),
                 cleaningServiceInput.getPriceOfService(),
-                cleaningServiceInput.getDuration()
+                cleaningServiceInput.getDuration(),
+                cleaningServiceInput.getCategory() // ✅ NEW
         );
 
         if (created == null) {
             throw new IllegalArgumentException("Invalid CleaningService data");
         }
 
-        // Save the created entity (with generated ID) to the repository
         return cleaningServiceRepository.save(created);
     }
 
@@ -73,16 +70,13 @@ public class CleaningServiceService implements ICleaningServiceService {
         return cleaningServiceRepository.findAll();
     }
 
-//    @PostConstruct
-//    public void loadPredefinedCleaningServices() {
-//        addIfNotExists(CleaningService.ServiceName.EXTERIOR_WASH, 150.00, 1.0);
-//        addIfNotExists(CleaningService.ServiceName.INTERIOR_CLEANING, 200.00, 1.5);
-//        addIfNotExists(CleaningService.ServiceName.WAXING_AND_POLISHING, 230.00, 2.0);
-//        addIfNotExists(CleaningService.ServiceName.CERAMIC_COATING, 350.00, 2.5);
-//    }
+    // ✅ Optional: Add support for querying by category
+    public List<CleaningService> getByCategory(String category) {
+        return cleaningServiceRepository.findAllByCategory(category);
+    }
 
-    private void addIfNotExists(CleaningService.ServiceName serviceName, double price, double duration) {
-        // Check if a cleaning service with the given serviceName does NOT exist
+    // Optional: Preload services
+    private void addIfNotExists(CleaningService.ServiceName serviceName, double price, double duration, String category) {
         if (!cleaningServiceRepository.existsByServiceName(serviceName)) {
             String id = Helper.generateID();
             CleaningService cleaningService = new CleaningService.Builder()
@@ -90,6 +84,7 @@ public class CleaningServiceService implements ICleaningServiceService {
                     .setServiceName(serviceName)
                     .setPriceOfService(price)
                     .setDuration(duration)
+                    .setCategory(category) // ✅ NEW
                     .build();
             cleaningServiceRepository.save(cleaningService);
         }

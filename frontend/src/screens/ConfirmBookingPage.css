@@ -1,0 +1,124 @@
+.confirm-container {
+  padding: 40px;
+  font-family: 'Arial', sans-serif;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+.confirm-content {
+  display: flex;
+  gap: 40px;
+}
+
+/* Left Panel */
+.confirm-left {
+  flex: 2;
+}
+
+.form-section {
+  margin-bottom: 30px;
+}
+
+.payment-button {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.discount-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.discount-row input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.apply-btn {
+  padding: 10px 16px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  height: 100px;
+  resize: vertical;
+}
+
+/* Right Panel */
+.confirm-summary {
+  flex: 1;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.confirm-summary h3 {
+  margin-top: 0;
+}
+
+.location {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.date-time p {
+  margin: 4px 0;
+}
+
+.price-row,
+.total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.pay-now {
+  color: green;
+  font-size: 14px;
+}
+
+.pay-at-venue {
+  color: #777;
+  font-size: 13px;
+}
+
+.total-price {
+  font-size: 20px;
+}
+
+.confirm-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}

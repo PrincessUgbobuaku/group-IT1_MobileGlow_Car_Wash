@@ -11,14 +11,11 @@ public class LoginFactory {
 
     public static Login createLogin(String emailAddress, String password) {
 
-        String loginID = Helper.generateID();
-
-        if (Helper.isValidEmail(emailAddress) ||
-                !Helper.validateStringDetails(password)
+        if (!Helper.isValidEmail(emailAddress) ||
+                !Helper.isValidPassword(password)
         )
          {return null;}
         return new Login.Builder()
-                .setLoginID(loginID)
                 .setEmailAddress(emailAddress)
                 .setPassword(password)
                 .build();
