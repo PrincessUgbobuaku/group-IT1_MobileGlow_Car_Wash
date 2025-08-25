@@ -1,40 +1,35 @@
-
 //Thaakirah Watson, 230037550
-
 package za.ac.cput.domain.booking;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import za.ac.cput.domain.user.Customer;
 
 @Entity
 public class Vehicle {
-
     @Id
-    private String vehicleID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long vehicleID;
     private String carPlateNumber;
-    private String carMaker;
+    private String carMake;   // ✅ corrected from carMaker
     private String carColour;
     private String carModel;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    protected Vehicle() {}
 
     private Vehicle(Builder builder) {
         this.vehicleID = builder.vehicleID;
         this.carPlateNumber = builder.carPlateNumber;
-        this.carMaker = builder.carMaker;
+        this.carMake = builder.carMake;
         this.carColour = builder.carColour;
         this.carModel = builder.carModel;
         this.customer = builder.customer;
     }
 
-    public Vehicle() {
-
-    }
-
-    public String getVehicleID() {
+    public Long getVehicleID() {
         return vehicleID;
     }
 
@@ -42,8 +37,8 @@ public class Vehicle {
         return carPlateNumber;
     }
 
-    public String getCarMaker() {
-        return carMaker;
+    public String getCarMake() {
+        return carMake;
     }
 
     public String getCarColour() {
@@ -58,53 +53,59 @@ public class Vehicle {
         return customer;
     }
 
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "vehicleID=" + vehicleID +
+                ", carPlateNumber='" + carPlateNumber + '\'' +
+                ", carMake='" + carMake + '\'' +
+                ", carColour='" + carColour + '\'' +
+                ", carModel='" + carModel + '\'' +
+                ", customer=" + (customer != null ? customer.getUserId() : null) +
+                '}';
+    }
+
     public static class Builder {
-        private String vehicleID;
+        private Long vehicleID;
         private String carPlateNumber;
-        private String carMaker;
+        private String carMake;
         private String carColour;
         private String carModel;
         private Customer customer;
 
-        public Builder setVehicleID(String vehicleID) {
+        public Builder setVehicleID(Long vehicleID) {
             this.vehicleID = vehicleID;
             return this;
         }
-
         public Builder setCarPlateNumber(String carPlateNumber) {
             this.carPlateNumber = carPlateNumber;
             return this;
         }
-
-        public Builder setCarMaker(String carMaker) {
-            this.carMaker = carMaker;
+        public Builder setCarMake(String carMake) {
+            this.carMake = carMake;
             return this;
         }
-
         public Builder setCarColour(String carColour) {
             this.carColour = carColour;
             return this;
         }
-
         public Builder setCarModel(String carModel) {
             this.carModel = carModel;
             return this;
         }
-
         public Builder setCustomer(Customer customer) {
             this.customer = customer;
             return this;
         }
 
-        public Vehicle copy() {
-            return new Builder()
-                    .setVehicleID(this.vehicleID)
-                    .setCarPlateNumber(this.carPlateNumber)
-                    .setCarMaker(this.carMaker)
-                    .setCarColour(this.carColour)
-                    .setCarModel(this.carModel)
-                    .setCustomer(this.customer)
-                    .build();
+        public Builder copy(Vehicle vehicle) {
+            this.vehicleID = vehicle.vehicleID;
+            this.carPlateNumber = vehicle.carPlateNumber;
+            this.carMake = vehicle.carMake;
+            this.carColour = vehicle.carColour;
+            this.carModel = vehicle.carModel;
+            this.customer = vehicle.customer;
+            return this;
         }
 
         public Vehicle build() {
