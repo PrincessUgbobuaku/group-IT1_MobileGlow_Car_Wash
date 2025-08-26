@@ -24,6 +24,7 @@ class ContactControllerTest {
     @LocalServerPort
     private int port;
 
+
     private static Contact contact = new Contact.Builder()
             .setContactID(1L)
             .setPhoneNumber("+27821234567")

@@ -26,6 +26,7 @@ class ServiceReviewControllerTest {
     @LocalServerPort
     private int port;
 
+
     private static ServiceReview serviceReview = new ServiceReview.Builder()
             .setReviewID(1L)
             .setRating(5)
