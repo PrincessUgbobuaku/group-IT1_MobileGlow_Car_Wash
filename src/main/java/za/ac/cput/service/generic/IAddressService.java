@@ -13,10 +13,8 @@ import java.util.Optional;
 
 public interface IAddressService extends IService<Address, Long> {
 
-//    Address saveAddress(Address address);
+
     List<Address> getAllAddresses();
-//    Optional<Address> getAddressById(Long id);
-//    boolean existsById(Long id);
-//    void deleteAddressById(Long id);
+
 
 }

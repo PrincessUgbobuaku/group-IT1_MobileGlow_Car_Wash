@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface IServiceReviewService extends IService<ServiceReview, Long> {
     List<ServiceReview> getAll();
-
     }
 
 

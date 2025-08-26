@@ -14,4 +14,5 @@ public interface IContactService extends IService<Contact, Long> {
 
     List<Contact> getAll();
 
+
 }
