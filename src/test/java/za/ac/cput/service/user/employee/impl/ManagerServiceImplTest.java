@@ -52,9 +52,9 @@ class ManagerServiceImplTest {
 
     @Test
     void a_create() {
-       Manager created =  managerService.create(manager);
-       assertNotNull(created);
-       managerWithId = created;
+        Manager created =  managerService.create(manager);
+        assertNotNull(created);
+        managerWithId = created;
         System.out.println("Created: " + created);
     }
 
@@ -93,3 +93,4 @@ class ManagerServiceImplTest {
         System.out.println("Delete successfully: " + managerWithId);
     }
 }
+

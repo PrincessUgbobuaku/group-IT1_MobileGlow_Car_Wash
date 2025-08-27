@@ -73,3 +73,4 @@ class LoginServiceImplTest {
         System.out.println("Deleted login: " + login);
     }
 }
+
