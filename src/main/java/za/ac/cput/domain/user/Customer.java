@@ -7,15 +7,15 @@ import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.generic.Contact;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Customer extends User {
     private LocalDate customerDOB;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Vehicle> vehicles = new HashSet<>();
+    private List<Vehicle> vehicles = new ArrayList<>();
 
     protected Customer() {
         super();
@@ -38,7 +38,7 @@ public class Customer extends User {
         return customerDOB;
     }
 
-    public Set<Vehicle> getVehicles() {
+    public List<Vehicle> getVehicles() {
         return vehicles;
     }
 
@@ -68,7 +68,7 @@ public class Customer extends User {
         private Address address;
         private Contact contact;
         private LocalDate customerDOB;
-        private Set<Vehicle> vehicles = new HashSet<>();
+        private List<Vehicle> vehicles = new ArrayList<>();
 
         public Builder setUserId(Long userId) {
             this.userId = userId;
@@ -106,7 +106,7 @@ public class Customer extends User {
             this.customerDOB = customerDOB;
             return this;
         }
-        public Builder setVehicles(Set<Vehicle> vehicles) {
+        public Builder setVehicles(List<Vehicle> vehicles) {
             this.vehicles = vehicles;
             return this;
         }
