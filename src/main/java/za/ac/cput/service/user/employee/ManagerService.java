@@ -47,9 +47,5 @@ public class ManagerService implements IManagerService {
         return true;
     }
 
-    //this method is not supposed to be here but because it is in IService that is why I have implemented.
-    @Override
-    public List<Manager> findAll() {
-        return null;
-    }
+   
 }
