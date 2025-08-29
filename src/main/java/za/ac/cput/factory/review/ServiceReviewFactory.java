@@ -13,7 +13,7 @@ import java.util.Date;
 public class ServiceReviewFactory {
 
     public static ServiceReview createServiceReview(int rating, String comments, Date reviewDate) {
-        if (!Helper.isValidString(comments) || rating < 1 || rating > 5) {
+        if (!Helper.isValidString(comments) ||!Helper.isValidRating(rating)) {
             return null;
         }
 
@@ -24,16 +24,4 @@ public class ServiceReviewFactory {
                 .build();
     }
 
-    public static ServiceReview createServiceReviewWithId(Long reviewID, int rating, String comments, Date reviewDate) {
-        if (reviewID == null || !Helper.isValidString(comments) || rating < 1 || rating > 5) {
-            return null;
-        }
-
-        return new ServiceReview.Builder()
-                .setReviewID(reviewID)
-                .setRating(rating)
-                .setComments(comments)
-                .setReviewDate(reviewDate)
-                .build();
-    }
 }
