@@ -1,5 +1,10 @@
 package za.ac.cput.service.generic;
 
+/* MobileGlow Car Wash
+   Contact Service
+   Author: Inga Zekani (221043756)
+ */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.generic.Contact;
@@ -14,16 +19,13 @@ public class ContactService implements IContactService {
 
     @Autowired
     public ContactService(IContactRepository contactRepository) {
+
         this.contactRepository = contactRepository;
     }
 
     @Override
     public Contact create(Contact contact) {
-        // Check if phone number already exists using findAll() and stream
-        boolean phoneNumberExists = contactRepository.findAll().stream()
-                .anyMatch(c -> c.getPhoneNumber().equals(contact.getPhoneNumber()));
-
-        if (phoneNumberExists) {
+        if (contactRepository.existsByPhoneNumber(contact.getPhoneNumber())) {
             throw new IllegalArgumentException("Contact with phone number " + contact.getPhoneNumber() + " already exists");
         }
         return contactRepository.save(contact);
@@ -31,13 +33,13 @@ public class ContactService implements IContactService {
 
     @Override
     public Contact read(Long contactID) {
-        return contactRepository.findById(contactID)
+        return contactRepository.findById(contactID) // Corrected: findById (not findByID)
                 .orElseThrow(() -> new RuntimeException("Contact with ID " + contactID + " not found"));
     }
 
     @Override
     public Contact update(Contact contact) {
-        // Check if contact exists using existsById() (built-in method)
+        // Use existsById() instead of existsByContactID()
         if (!contactRepository.existsById(contact.getContactID())) {
             throw new RuntimeException("Contact with ID " + contact.getContactID() + " not found");
         }
@@ -46,7 +48,7 @@ public class ContactService implements IContactService {
 
     @Override
     public boolean delete(Long contactID) {
-        // Check if contact exists using existsById() (built-in method)
+        // Use existsById() instead of existsByContactID()
         if (!contactRepository.existsById(contactID)) {
             throw new RuntimeException("Contact with ID " + contactID + " not found");
         }
@@ -56,6 +58,7 @@ public class ContactService implements IContactService {
 
     @Override
     public List<Contact> getAll() {
+
         return contactRepository.findAll();
     }
 }
