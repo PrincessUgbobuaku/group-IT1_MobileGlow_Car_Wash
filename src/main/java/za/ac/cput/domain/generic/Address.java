@@ -5,9 +5,15 @@ package za.ac.cput.domain.generic;
    Author: Inga Zekani (221043756)
  */
 
+import jakarta.persistence.*;
+
+@Entity
+@Table (name = "address")
 public class Address {
 
-    private String addressID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long addressID;
     private String streetNumber;
     private String streetName;
     private String city;
@@ -26,7 +32,7 @@ public class Address {
         this.postalCode = builder.postalCode;
     }
 
-    public String getAddressID() {
+    public Long getAddressID() {
         return addressID;
     }
 
@@ -59,13 +65,13 @@ public class Address {
 
     public static class Builder {
 
-        private String addressID;
+        private Long addressID;
         private String streetNumber;
         private String streetName;
         private String city;
         private String postalCode;
 
-        public Builder setAddressID(String addressID) {
+        public Builder setAddressID(Long addressID) {
             this.addressID = addressID;
             return this;
         }
