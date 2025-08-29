@@ -208,5 +208,9 @@ public class Helper {
         return matcher.matches();
     }
 
+    public static boolean isValidRating(int rating) {
+        return rating >= 1 && rating <= 5;
+    }
+
 }
 
