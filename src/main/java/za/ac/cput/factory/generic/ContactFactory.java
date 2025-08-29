@@ -1,21 +1,29 @@
 package za.ac.cput.factory.generic;
+
 /* MobileGlow Car Wash
-   Factory Contact
+   Contact Factory class
    Author: Inga Zekani (221043756)
  */
 
 import za.ac.cput.domain.generic.Contact;
-import java.util.UUID;
 import za.ac.cput.util.Helper;
 
 public class ContactFactory {
 
-    public static Contact createContactFactory1(String phoneNumber) {
-        //Create Unique Contact ID
-        String contactID = UUID.randomUUID().toString();
+    public static Contact createContact(String phoneNumber) {
+        // Validate phone number
+        if (!Helper.isValidString(phoneNumber) || !isValidPhoneNumber(phoneNumber)) {
+            return null;
+        }
 
+        return new Contact.Builder()
+                .setPhoneNumber(phoneNumber)
+                .build();
+    }
 
-        if (!Helper.isValidString(phoneNumber)) {
+    public static Contact createContactWithId(Long contactID, String phoneNumber) {
+        // Validate phone number
+        if (!Helper.isValidString(phoneNumber) || !isValidPhoneNumber(phoneNumber)) {
             return null;
         }
 
@@ -23,5 +31,11 @@ public class ContactFactory {
                 .setContactID(contactID)
                 .setPhoneNumber(phoneNumber)
                 .build();
+    }
+
+    private static boolean isValidPhoneNumber(String phoneNumber) {
+        // Basic phone number validation - adjust regex as needed
+        String phoneRegex = "^\\+?[0-9]{10,15}$";
+        return phoneNumber != null && phoneNumber.matches(phoneRegex);
     }
 }
