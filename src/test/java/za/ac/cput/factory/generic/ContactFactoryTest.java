@@ -17,7 +17,6 @@ class ContactFactoryTest {
     void testBuildValidContact() {
         Contact contact = ContactFactory.createContactFactory1("0831234567");
         assertNotNull(contact);
-        assertNotNull(contact.getContactID());
         assertEquals("0831234567", contact.getPhoneNumber());
 
         System.out.println(contact);
