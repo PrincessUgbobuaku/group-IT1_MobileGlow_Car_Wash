@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/implementation/LoginServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/impl/ManagerServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/impl/ManagerServiceImplTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/implementation/LoginServiceImplTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +59,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "230098010",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/USER/Downloads/MobileGlow_Car_Wash",
+    "last_opened_file_path": "C:/Users/USER/Desktop/CardConnect",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>

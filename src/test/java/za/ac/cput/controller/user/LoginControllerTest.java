@@ -1,5 +1,9 @@
 package za.ac.cput.controller.user;
 
+//Firstname:        Kwanda
+//LastName:         Twalo
+//Student Number:   218120192.
+
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -10,9 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import za.ac.cput.domain.user.Login;
 import za.ac.cput.factory.user.LoginFactory;
-import za.ac.cput.service.user.implementation.LoginServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class LoginControllerTest {
