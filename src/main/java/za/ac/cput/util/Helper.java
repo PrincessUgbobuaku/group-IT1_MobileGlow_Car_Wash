@@ -196,5 +196,17 @@ public class Helper {
 
     }
 
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        if (isNullorEmpty(phoneNumber)) {
+            return false;
+        }
+
+        //Checks for e.g 0725637252 or +27 72 563...
+        String regex = "^(\\+27|0)[6-8][0-9]{8}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+
 }
 
