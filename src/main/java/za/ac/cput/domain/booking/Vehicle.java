@@ -9,12 +9,15 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vehicleID;
+
+    @Column(name = "car_plate_number", unique = true)
     private String carPlateNumber;
+
     private String carMake;   // ✅ corrected from carMaker
     private String carColour;
     private String carModel;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
