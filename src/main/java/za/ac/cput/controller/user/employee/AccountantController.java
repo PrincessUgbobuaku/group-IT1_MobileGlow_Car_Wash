@@ -9,7 +9,7 @@ import za.ac.cput.service.user.employee.IAccountantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/accountants")
+@RequestMapping("/accountants")
 public class AccountantController {
 
     private final IAccountantService accountantService;
