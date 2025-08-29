@@ -27,6 +27,7 @@ public class VehicleFactory {
             throw new IllegalArgumentException("Vehicle must belong to a customer");
         }
 
+        //vehicle builder
         return new Vehicle.Builder()
                 .setCarPlateNumber(carPlateNumber.toUpperCase()) // optional: normalize
                 .setCarMake(carMake)
