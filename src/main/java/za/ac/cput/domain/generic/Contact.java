@@ -1,49 +1,56 @@
 package za.ac.cput.domain.generic;
 
 /* MobileGlow Car Wash
-   Contact class
+   Contact
    Author: Inga Zekani (221043756)
  */
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+
+@Entity
+@Table(name = "contact")
 public class Contact {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "contact_id")
+    private Long contactID;
 
-    private String contactID;
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number should be valid")
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    //Default Constructor
-    public Contact() {
+    // Default constructor
+    public Contact() {}
 
-    }
 
-    public Contact(Builder builder) {
+    // Builder constructor
+    private Contact(Builder builder) {
         this.contactID = builder.contactID;
         this.phoneNumber = builder.phoneNumber;
     }
 
-
-    public String getContactID() {
-        return contactID;
-    }
-
+    // Getters
+    public Long getContactID() {
+        return contactID; }
     public String getPhoneNumber() {
-        return phoneNumber;
-    }
+        return phoneNumber; }
 
     @Override
     public String toString() {
         return "Contact{" +
-                "contactID='" + contactID + '\'' +
+                "contactID=" + contactID +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 
+    // Builder class
     public static class Builder {
-
-        private String contactID;
+        private Long contactID;
         private String phoneNumber;
 
-        public Builder setContactID(String contactID) {
+        public Builder setContactID(Long contactID) {
             this.contactID = contactID;
             return this;
         }
@@ -52,13 +59,29 @@ public class Contact {
             this.phoneNumber = phoneNumber;
             return this;
         }
+
         public Builder copy(Contact contact) {
             this.contactID = contact.contactID;
             this.phoneNumber = contact.phoneNumber;
             return this;
         }
+
         public Contact build() {
             return new Contact(this);
         }
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return phoneNumber.equals(contact.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return phoneNumber.hashCode();
     }
 }

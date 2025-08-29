@@ -1,23 +1,41 @@
-/*Payment.java
- * Payment model class
- * Author: Adaeze Princess Ugbobuaku
- * Date: 11 May 2025*/
-
 package za.ac.cput.domain.payment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import za.ac.cput.domain.booking.Booking;
 
-public class Payment {
+import java.io.Serializable;
 
+@Entity
+public class Payment implements Serializable {
+
+    @Id
     private String paymentID;
-    private String bookingID;
+
+    @ManyToOne
+    @JoinColumn(name = "booking_id", nullable = false)
+    @JsonBackReference
+    private Booking booking;
+
     private double paymentAmount;
+
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+
+    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    private Payment (Builder builder) {
+    protected Payment() {}
+
+    private Payment(Builder builder) {
         this.paymentID = builder.paymentID;
-        this.bookingID = builder.bookingID;
+        this.booking = builder.booking;
         this.paymentAmount = builder.paymentAmount;
         this.paymentMethod = builder.paymentMethod;
         this.paymentStatus = builder.paymentStatus;
@@ -27,8 +45,14 @@ public class Payment {
         return paymentID;
     }
 
+    public Booking getBooking() {
+        return booking;
+    }
+
+    // Add this method to expose bookingID in JSON response
+    @JsonProperty("bookingID")
     public String getBookingID() {
-        return bookingID;
+        return booking != null ? booking.getBookingID() : null;
     }
 
     public double getPaymentAmount() {
@@ -47,7 +71,7 @@ public class Payment {
     public String toString() {
         return "Payment{" +
                 "paymentID='" + paymentID + '\'' +
-                ", bookingID='" + bookingID + '\'' +
+                ", booking='" + booking + '\'' +
                 ", paymentAmount=" + paymentAmount +
                 ", paymentMethod=" + paymentMethod +
                 ", paymentStatus=" + paymentStatus +
@@ -57,7 +81,7 @@ public class Payment {
     public static class Builder {
 
         private String paymentID;
-        private String bookingID;
+        private Booking booking;
         private double paymentAmount;
         private PaymentMethod paymentMethod;
         private PaymentStatus paymentStatus;
@@ -67,30 +91,15 @@ public class Payment {
             return this;
         }
 
-        public Builder setBookingID(String bookingID) {
-            this.bookingID = bookingID;
+        public Builder setBooking(Booking booking) {
+            this.booking = booking;
             return this;
         }
 
         public Builder setPaymentAmount(double paymentAmount) {
-
             this.paymentAmount = paymentAmount;
             return this;
         }
-
-        public double calculatePaymentAmount(Booking booking) { // calculates total payment; adds tip if set to true
-            double bookingCost = booking.getBookingCost();
-            boolean tipAdd = booking.isTipAdd();
-
-
-            if (tipAdd) {
-                paymentAmount = bookingCost + (bookingCost * 0.10);
-            } else {
-                paymentAmount = bookingCost;
-            }
-                return paymentAmount;
-
-            }
 
         public Builder setPaymentMethod(PaymentMethod paymentMethod) {
             this.paymentMethod = paymentMethod;
@@ -102,11 +111,19 @@ public class Payment {
             return this;
         }
 
-        public Payment build () {
-            return new Payment (this);
+        public Builder copy(Payment payment) {
+            this.paymentID = payment.paymentID;
+            this.booking = payment.booking;
+            this.paymentAmount = payment.paymentAmount;
+            this.paymentMethod = payment.paymentMethod;
+            this.paymentStatus = payment.paymentStatus;
+            return this;
+        }
+
+        public Payment build() {
+            return new Payment(this);
         }
     }
-
 
     public enum PaymentMethod {
         DEBIT,
@@ -115,6 +132,7 @@ public class Payment {
         GOOGLE_PAY,
         PAYPAL
     }
+
     public enum PaymentStatus {
         PENDING,
         PAID,

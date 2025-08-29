@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Helper {
@@ -23,6 +25,25 @@ public class Helper {
         } else {
             return false;
         }
+    }
+
+    //validated the employee hire date.
+    public static boolean isValidHireDate(LocalDate hireDate) {
+        if (hireDate == null) {
+            return false;
+        }
+
+        LocalDate today = LocalDate.now();
+
+        // Hire date should not be in the future
+        if (hireDate.isAfter(today)) {
+            return false;
+        }
+
+        // Optional: Restrict hire date to not be older than, say, 50 years
+        LocalDate earliestAllowed = today.minusYears(50);
+
+        return !hireDate.isBefore(earliestAllowed);
     }
 
     public static boolean isListOfCorrectType(List<?> list, Class<?> expectedType) {
@@ -62,15 +83,37 @@ public class Helper {
         }
     }
 
-    public static boolean validateDuration(int durationMinutes) {
+    /*public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
-    }
+    }*/
 
-    public static boolean isValidEmail(String email){
+   /* public static boolean isValidEmail(String email){
         EmailValidator validator = EmailValidator.getInstance();
         if(validator.isValid(email))
             return false;
+
         return true;
+    }*/
+
+    public static boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    public static boolean isValidPassword(String password) {
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        //Checks if Password has at least one digit, one letter and is more than 8 characters long and No Special Characters.
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 
 
