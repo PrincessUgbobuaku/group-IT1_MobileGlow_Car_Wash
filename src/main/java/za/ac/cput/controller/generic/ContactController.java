@@ -1,5 +1,10 @@
 package za.ac.cput.controller.generic;
 
+/* MobileGlow Car Wash
+   Contact Controller Class
+   Author: Inga Zekani (221043756)
+ */
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +45,7 @@ public class ContactController {
 
     // READ - Get contact by ID
     @GetMapping("/read/{contactID}")
-    public ResponseEntity<?> read(@PathVariable Long contactID) {
+    public ResponseEntity<?> readContact(@PathVariable Long contactID) {
         try {
             Contact contact = contactService.read(contactID);
             return ResponseEntity.ok(contact);
@@ -52,7 +57,7 @@ public class ContactController {
 
     // UPDATE - Update existing contact
     @PutMapping("/update/{contactID}")
-    public ResponseEntity<?> update(@PathVariable Long contactID, @Valid @RequestBody Contact contact, BindingResult result) {
+    public ResponseEntity<?> updateContact(@PathVariable Long contactID, @Valid @RequestBody Contact contact, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body("Validation error: " + result.getFieldError().getDefaultMessage());
         }
