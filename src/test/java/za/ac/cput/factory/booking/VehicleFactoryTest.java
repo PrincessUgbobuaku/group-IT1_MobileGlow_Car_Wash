@@ -28,7 +28,7 @@ public class VehicleFactoryTest {
                 .build();
 
         Address address = new Address.Builder()
-                .setAddressID("001")
+                .setAddressID(111L)
                 .setStreetNumber("123")
                 .setStreetName("Main str.")
                 .setCity("Cape Town")
@@ -36,7 +36,7 @@ public class VehicleFactoryTest {
                 .build();
 
         Contact contact = new Contact.Builder()
-                .setContactID("001")
+                .setContactID(222L)
                 .setPhoneNumber("+27123456789")
                 .build();
 
