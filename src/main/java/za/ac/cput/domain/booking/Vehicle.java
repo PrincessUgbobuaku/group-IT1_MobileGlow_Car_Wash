@@ -1,6 +1,7 @@
 //Thaakirah Watson, 230037550
 package za.ac.cput.domain.booking;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.domain.user.Customer;
 
@@ -17,8 +18,11 @@ public class Vehicle {
     private String carColour;
     private String carModel;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)  // Make sure cascading is set here
+
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonManagedReference
     private Customer customer;
 
     protected Vehicle() {}

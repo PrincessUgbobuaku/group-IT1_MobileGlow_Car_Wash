@@ -1,13 +1,10 @@
-/*Booking.java
- * Booking model class
- * Author: Adaeze Princess Ugbobuaku
- * Date: 11 May 2025*/
-
 package za.ac.cput.domain.booking;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import za.ac.cput.domain.payment.Payment;
-import za.ac.cput.domain.booking.Vehicle;
 import jakarta.persistence.*;
+import za.ac.cput.domain.payment.Payment;
+import za.ac.cput.domain.user.employee.WashAttendant;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,48 +13,50 @@ import java.util.List;
 public class Booking {
 
     @Id
-    private String bookingID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long bookingID;
 
     @ManyToMany
     @JoinTable(
-            name = "booking_cleaning_service", // 👈 join table name
-            joinColumns = @JoinColumn(name = "booking_id"), // 👈 foreign key to Booking
-            inverseJoinColumns = @JoinColumn(name = "cleaning_service_id") // 👈 foreign key to CleaningService
+            name = "booking_cleaning_service",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "cleaning_service_id")
     )
     private List<CleaningService> cleaningServices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "booking", orphanRemoval = true)
+    @OneToMany(mappedBy = "booking", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Payment> payments = new ArrayList<>();
-    //One booking can have many payments.
-    //mappedBy = "booking" means the booking field in Payment.java is the owning side.
 
-    private String washAttendantID;
+    @ManyToOne
+    @JoinColumn(name = "wash_attendant_id")
+    private WashAttendant washAttendant;
+
     private LocalDateTime bookingDateTime;
 
     @ManyToOne
-    @JoinColumn(name = "vehicleID")
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
     private boolean tipAdd;
     private double bookingCost;
 
-    // Required by JPA
     protected Booking() {}
 
-
-    private Booking (Builder builder) {
+    private Booking(Builder builder) {
         this.bookingID = builder.bookingID;
         this.cleaningServices = builder.cleaningServices;
         this.payments = builder.payments;
-        this.washAttendantID = builder.washAttendantID;
+        this.washAttendant = builder.washAttendant;
         this.bookingDateTime = builder.bookingDateTime;
         this.vehicle = builder.vehicle;
         this.tipAdd = builder.tipAdd;
         this.bookingCost = builder.bookingCost;
     }
 
-    public String getBookingID() {
+    // --- Getters ---
+
+    public Long getBookingID() {
         return bookingID;
     }
 
@@ -69,8 +68,8 @@ public class Booking {
         return payments;
     }
 
-    public String getWashAttendantID() {
-        return washAttendantID;
+    public WashAttendant getWashAttendant() {
+        return washAttendant;
     }
 
     public LocalDateTime getBookingDateTime() {
@@ -92,29 +91,28 @@ public class Booking {
     @Override
     public String toString() {
         return "Booking{" +
-                "bookingID='" + bookingID + '\'' +
+                "bookingID=" + bookingID +
                 ", cleaningServices=" + cleaningServices +
-                ", payments=" + payments +
-                ", washAttendantID='" + washAttendantID + '\'' +
+                ", payments=" + (payments != null ? payments.size() + " payment(s)" : "null") +  // 👈 Changed
+                ", washAttendant=" + washAttendant  +
                 ", bookingDateTime=" + bookingDateTime +
-                ", vehicleID='" + vehicle.getVehicleID() + '\'' +
-                ", vehicleModel='" + vehicle.getCarModel() + '\'' +
+                ", vehicleID=" + (vehicle != null ? vehicle.getVehicleID() : "null") +
                 ", tipAdd=" + tipAdd +
                 ", bookingCost=" + bookingCost +
                 '}';
     }
 
     public static class Builder {
-        private String bookingID;
+        private Long bookingID;
         private List<CleaningService> cleaningServices = new ArrayList<>();
-        private String washAttendantID;
         private List<Payment> payments = new ArrayList<>();
+        private WashAttendant washAttendant;
         private LocalDateTime bookingDateTime;
         private Vehicle vehicle;
         private boolean tipAdd;
         private double bookingCost;
 
-        public Builder setBookingID(String bookingID) {
+        public Builder setBookingID(Long bookingID) {
             this.bookingID = bookingID;
             return this;
         }
@@ -124,20 +122,13 @@ public class Booking {
             return this;
         }
 
-        //allows us to automatically add services to the list
-
-//        public Builder addCleaningService(List<CleaningService> list, CleaningService service) {
-//            this.cleaningServices.add(service);
-//            return this;
-//        }
-
         public Builder setPayments(List<Payment> payments) {
             this.payments = payments;
             return this;
         }
 
-        public Builder setWashAttendantID(String washAttendantID) {
-            this.washAttendantID = washAttendantID;
+        public Builder setWashAttendant(WashAttendant washAttendant) {
+            this.washAttendant = washAttendant;
             return this;
         }
 
@@ -165,29 +156,13 @@ public class Booking {
             this.bookingID = booking.bookingID;
             this.cleaningServices = booking.cleaningServices;
             this.payments = booking.payments;
-            this.washAttendantID = booking.washAttendantID;
+            this.washAttendant = booking.washAttendant;
             this.bookingDateTime = booking.bookingDateTime;
             this.vehicle = booking.vehicle;
             this.tipAdd = booking.tipAdd;
             this.bookingCost = booking.bookingCost;
             return this;
         }
-
-        //copy method can be used when injecting payments after booking has been created.
-
-        /*ADD TO SERVICE*/
-//        public double calculateBookingCost(List<CleaningService> booking_list) { //loops through booking_list and calculates booking cost
-//
-//            double totalCost = 0;
-//            int index = 0;
-//
-//            while (index < booking_list.size()) {
-//                totalCost += booking_list.get(index).getPriceOfService();
-//                index++;
-//            }
-//
-//            return totalCost;
-//        }
 
         public Booking build() {
             return new Booking(this);

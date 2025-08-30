@@ -17,12 +17,14 @@ public abstract class User {
     protected String userName;
     protected String userSurname;
     protected Boolean isActive;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "role_description", length = 50)
     protected User.RoleDescription roleDescription;
 
     public enum RoleDescription {
         CLIENT,
-        EMPLOYEE;
+        EMPLOYEE,
     }
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

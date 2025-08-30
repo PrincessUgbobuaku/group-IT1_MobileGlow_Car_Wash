@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.domain.user.Customer;
 import za.ac.cput.domain.user.User;
@@ -34,7 +35,7 @@ class VehicleServiceTest {
     @BeforeEach
     void setUp() {
         customer = new Customer.Builder()
-                .setUserName("John")
+                .setUserName("Liam")
                 .setUserSurname("Doe")
                 .setIsActive(true)
                 .setRoleDescription(User.RoleDescription.CLIENT)
@@ -65,6 +66,7 @@ class VehicleServiceTest {
     }
 
     @Test
+    @Rollback(false) //added by Princess
     @Order(1)
     void create() {
         Vehicle newVehicle = new Vehicle.Builder()
@@ -82,6 +84,7 @@ class VehicleServiceTest {
     }
 
     @Test
+    @Rollback //added by Princess
     @Order(2)
     void read() {
         Vehicle readVehicle = service.read(vehicle1.getVehicleID());

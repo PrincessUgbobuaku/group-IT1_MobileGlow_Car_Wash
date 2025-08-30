@@ -117,3 +117,95 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.booking-two-container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.left-panel {
+  flex: 2;
+}
+
+.right-panel {
+  flex: 1;
+  padding: 2rem;
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.calendar {
+  margin-bottom: 20px;
+}
+
+.time-selector {
+  margin-top: 20px;
+}
+
+.time-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.time-btn {
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.time-btn.selected {
+  background-color: #333;
+  color: white;
+}
+
+.total-price {
+  margin-top: 20px;
+  font-size: 1.5rem;
+}
+
+.continue-btn {
+  margin-top: 20px;
+  padding: 1rem;
+  background-color: purple;
+  color: white;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 8px;
+}
+
+/* Styling for Date Picker Input */
+.date-picker {
+  margin-top: 20px;
+  width: 100%; /* Full width */
+}
+
+.date-picker input {
+  padding: 10px;
+  width: 100%; /* Full width */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+}
+
+.date-picker input:focus {
+  border-color: #7c3aed;
+  outline: none;
+}
+
+/* Additional improvements for the time selection */
+.time-btn.selected {
+  background-color: #7c3aed; /* Highlight selected time */
+  color: white;
+}
+
+.time-btn:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}

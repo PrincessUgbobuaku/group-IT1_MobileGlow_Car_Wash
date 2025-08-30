@@ -5,19 +5,17 @@ import za.ac.cput.util.Helper;
 
 public class CleaningServiceFactory {
 
-    public static CleaningService createCleaningService(CleaningService.ServiceName serviceName, double priceOfService, double duration, String category) {
+    public static CleaningService createCleaningService(String serviceName, double priceOfService, double duration, String category) {
 
-        String cleaningServiceID = Helper.generateID();
-
-        if (!Helper.isValidEnumValue(serviceName, CleaningService.ServiceName.class)
+        if (!Helper.isValidString(serviceName)
                 || !Helper.isValidDouble(priceOfService)
-                || !Helper.validateDuration(duration)
+                || !Helper.isValidDouble(duration)
                 || !Helper.isValidString(category)) {
             return null;
         }
 
         return new CleaningService.Builder()
-                .setCleaningServiceID(cleaningServiceID)
+                // No ID setter here, JPA will auto-generate it
                 .setServiceName(serviceName)
                 .setPriceOfService(priceOfService)
                 .setDuration(duration)

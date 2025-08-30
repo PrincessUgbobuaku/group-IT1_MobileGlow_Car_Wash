@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.domain.user.Customer;
@@ -95,6 +96,7 @@ public class CustomerServiceTest {
     }
 
     @Test
+    @Rollback(false) //added by Princess
     void create() {
         System.out.println("=== Starting CREATE test ===");
         assertNotNull(service, "CustomerService should not be null");
@@ -174,6 +176,7 @@ public class CustomerServiceTest {
 
     // Remove @Order annotations from other tests
     @Test
+    @Rollback //added by Princess
     void read() {
         Customer readCustomer = service.read(customer1.getUserId());
         System.out.println("READ Result: " + readCustomer);

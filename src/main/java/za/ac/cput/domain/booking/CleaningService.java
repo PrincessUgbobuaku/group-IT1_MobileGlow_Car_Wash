@@ -6,16 +6,16 @@ import jakarta.persistence.*;
 public class CleaningService {
 
     @Id
-    private String cleaningServiceID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long cleaningServiceID;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "service_name", nullable = false, unique = true, length = 50)
-    private ServiceName serviceName;
+    @Column(name = "service_name", nullable = false, length = 50)
+    private String serviceName;
 
     private double priceOfService;
     private double duration;
 
-    @Column  // You can remove nullable=false if category is optional
+    @Column(nullable = false)
     private String category;
 
     // Required by JPA
@@ -29,11 +29,11 @@ public class CleaningService {
         this.category = builder.category;
     }
 
-    public String getCleaningServiceID() {
+    public Long getCleaningServiceID() {
         return cleaningServiceID;
     }
 
-    public ServiceName getServiceName() {
+    public String getServiceName() {
         return serviceName;
     }
 
@@ -52,8 +52,8 @@ public class CleaningService {
     @Override
     public String toString() {
         return "CleaningService{" +
-                "cleaningServiceID='" + cleaningServiceID + '\'' +
-                ", serviceName=" + serviceName +
+                "cleaningServiceID=" + cleaningServiceID +
+                ", serviceName='" + serviceName + '\'' +
                 ", priceOfService=" + priceOfService +
                 ", duration=" + duration +
                 ", category='" + category + '\'' +
@@ -61,18 +61,18 @@ public class CleaningService {
     }
 
     public static class Builder {
-        private String cleaningServiceID;
-        private ServiceName serviceName;
+        private Long cleaningServiceID;
+        private String serviceName;
         private double priceOfService;
         private double duration;
         private String category;
 
-        public Builder setCleaningServiceID(String cleaningServiceID) {
+        public Builder setCleaningServiceID(Long cleaningServiceID) {
             this.cleaningServiceID = cleaningServiceID;
             return this;
         }
 
-        public Builder setServiceName(ServiceName serviceName) {
+        public Builder setServiceName(String serviceName) {
             this.serviceName = serviceName;
             return this;
         }
@@ -104,17 +104,5 @@ public class CleaningService {
         public CleaningService build() {
             return new CleaningService(this);
         }
-    }
-
-    public enum ServiceName {
-        EXTERIOR_WASH,
-        INTERIOR_CLEANING,
-        WAXING_AND_POLISHING,
-        CERAMIC_COATING,
-        TIRE_AND_WHEEL_CLEANING,
-        ENGINE_CLEANING,
-        BASIC_HAND_WASH,
-        TOUCHLESS_CAR_WASH,
-        FOAM_CANNON_PRE_WASH
     }
 }

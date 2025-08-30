@@ -28,14 +28,14 @@ public class CleaningServiceController {
 
     // ✅ READ - GET /api/cleaningservice/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<CleaningService> read(@PathVariable String id) {
+    public ResponseEntity<CleaningService> read(@PathVariable Long id) {
         CleaningService found = cleaningServiceService.read(id);
         return found != null ? ResponseEntity.ok(found) : ResponseEntity.notFound().build();
     }
 
     // ✅ UPDATE - PUT /api/cleaningservice/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<CleaningService> update(@PathVariable String id, @RequestBody CleaningService cleaningService) {
+    public ResponseEntity<CleaningService> update(@PathVariable Long id, @RequestBody CleaningService cleaningService) {
         // Optional: Ensure path ID and body ID match (for integrity)
 //        if (!id.equals(cleaningService.getCleaningServiceID())) {
 //            return ResponseEntity.badRequest().build();
@@ -54,7 +54,7 @@ public class CleaningServiceController {
 
     // ✅ DELETE - DELETE /api/cleaningservice/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = cleaningServiceService.delete(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }

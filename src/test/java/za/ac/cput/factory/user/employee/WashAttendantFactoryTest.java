@@ -8,21 +8,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class WashAttendantFactoryTest {
     @Test
     public void testCreateWashAttendant() {
-        WashAttendant washAttendant= WashAttendantFactory.createWashAttendant(true,0);
+        WashAttendant washAttendant= WashAttendantFactory.createWashAttendant();
         System.out.println("WashAttendant created: " + washAttendant);
 
         assertNotNull(washAttendant);
-        assertNotNull(washAttendant.getWashAttendantID());
+        assertNotNull(washAttendant.getUserId());
 
     }
 
     @Test
     public void testCreateWashAttendantWithValidShiftHours() {
-        WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(false,10);
+        WashAttendant washAttendant = WashAttendantFactory.createWashAttendant();
         System.out.println("WashAttendant created: " + washAttendant);
 
         assertNotNull(washAttendant);
-        assertNotNull(washAttendant.getWashAttendantID());
+        assertNotNull(washAttendant.getUserId());
 
     }
 }
