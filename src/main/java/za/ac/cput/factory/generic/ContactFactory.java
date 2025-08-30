@@ -12,7 +12,7 @@ public class ContactFactory {
 
     public static Contact createContact(String phoneNumber) {
         // Validate phone number
-        if (!Helper.isValidString(phoneNumber) || !isValidPhoneNumber(phoneNumber)) {
+        if ( !isValidPhoneNumber(phoneNumber)) {
             return null;
         }
 
@@ -21,21 +21,6 @@ public class ContactFactory {
                 .build();
     }
 
-    public static Contact createContactWithId(Long contactID, String phoneNumber) {
-        // Validate phone number
-        if (!Helper.isValidString(phoneNumber) || !isValidPhoneNumber(phoneNumber)) {
-            return null;
-        }
-
-        return new Contact.Builder()
-                .setContactID(contactID)
-                .setPhoneNumber(phoneNumber)
-                .build();
-    }
-
-    private static boolean isValidPhoneNumber(String phoneNumber) {
-        // Basic phone number validation - adjust regex as needed
-        String phoneRegex = "^\\+?[0-9]{10,15}$";
-        return phoneNumber != null && phoneNumber.matches(phoneRegex);
-    }
+    
+   
 }

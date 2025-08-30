@@ -5,17 +5,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.user.employee.Accountant;
 import za.ac.cput.service.user.employee.IAccountantService;
+import za.ac.cput.service.user.employee.impl.AccountantService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/accountants")
+@RequestMapping("/accountants")
 public class AccountantController {
 
-    private final IAccountantService accountantService;
+    private final AccountantService accountantService;
 
     @Autowired
-    public AccountantController(IAccountantService accountantService) {
+    public AccountantController(AccountantService accountantService) {
         this.accountantService = accountantService;
     }
 

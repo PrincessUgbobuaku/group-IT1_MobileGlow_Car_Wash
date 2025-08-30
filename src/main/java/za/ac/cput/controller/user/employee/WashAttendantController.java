@@ -9,7 +9,7 @@ import za.ac.cput.service.user.employee.IWashAttendantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/wash-attendants")
+@RequestMapping("/wash-attendants")
 public class WashAttendantController {
 
     private final IWashAttendantService washAttendantService;
