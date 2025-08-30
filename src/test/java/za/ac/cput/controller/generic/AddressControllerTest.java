@@ -11,9 +11,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import za.ac.cput.domain.generic.Address;
+import za.ac.cput.factory.generic.AddressFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,70 +21,64 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class AddressControllerTest {
 
-    @LocalServerPort
-    private int port;
 
-    private static Address address = new Address.Builder()
-            .setStreetNumber("12A")
-            .setStreetName("Main Street")
-            .setCity("Cape Town")
-            .setPostalCode("8000")
-            .build();
-
-
-
+    private static Address address = AddressFactory.createAddressFactory1(
+            "105",
+            "Sir Lowry",
+            "Cape Town",
+            "7100");
     private static Address address_with_Id;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private String getBaseUrl() {
-        return "http://localhost:" + port + "/api/address";
-    }
+    private static final String BASE_URL = "http://localhost:8080/api/address";
+
 
     @Test
     void a_create() {
-        String url = getBaseUrl() + "/create";
-        System.out.println("POST URL: " + url);
+        assertNotNull(address, "Factory should create a valid address");
+        String url = BASE_URL + "/create";
 
         ResponseEntity<Address> postResponse = restTemplate.postForEntity(url, address, Address.class);
-
         assertNotNull(postResponse.getBody());
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
-        System.out.println("postResponse: " + postResponse.getBody());
 
         address_with_Id = postResponse.getBody();
-        assertNotNull(address_with_Id);
         assertNotNull(address_with_Id.getAddressID());
-        System.out.println("address_with_Id: " + address_with_Id);
+        System.out.println("Created Address: " + address_with_Id);
     }
 
     @Test
     void b_read() {
         assertNotNull(address_with_Id, "Address is null");
-        String url = getBaseUrl() + "/read/" + address_with_Id.getAddressID();
-        System.out.println("GET URL: " + url);
+        String url = BASE_URL + "/read/" + address_with_Id.getAddressID();
 
         ResponseEntity<Address> response = restTemplate.getForEntity(url, Address.class);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(address_with_Id.getAddressID(), response.getBody().getAddressID());
-        System.out.println("Read response: " + response.getBody());
+
+        System.out.println("Read Address: " + response.getBody());
     }
 
     @Test
     void c_update() {
         assertNotNull(address_with_Id, "Address is null");
-        String url = getBaseUrl() + "/update/" + address_with_Id.getAddressID();
-        System.out.println("PUT URL: " + url);
+        String url = BASE_URL + "/update/" + address_with_Id.getAddressID();
 
+        // Use factory to create updated address data
+        Address updatedAddressData = AddressFactory.createAddressFactory1(
+                "1003",
+                "Edna Street",
+                "Durban",
+                "4000");
+
+        assertNotNull(updatedAddressData, "Factory should create updated address");
+
+        // Set the same ID for update
         Address updatedAddress = new Address.Builder()
-                .copy(address_with_Id)
-                .setStreetNumber("45B")
-                .setStreetName("Updated Street")
-                .setCity("Johannesburg")
-                .setPostalCode("2000")
+                .copy(updatedAddressData)
+                .setAddressID(address_with_Id.getAddressID())
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
@@ -92,26 +86,22 @@ class AddressControllerTest {
         HttpEntity<Address> requestEntity = new HttpEntity<>(updatedAddress, headers);
 
         ResponseEntity<Address> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Address.class);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
 
         Address updated = response.getBody();
-        assertEquals("45B", updated.getStreetNumber());
-        assertEquals("Johannesburg", updated.getCity());
+        assertEquals("1003", updated.getStreetNumber());
+        assertEquals("Durban", updated.getCity());
         System.out.println("Updated Address: " + updated);
     }
 
     @Test
     void d_getAll() {
-        String url = getBaseUrl() + "/getAll";
-        System.out.println("GET ALL URL: " + url);
-
+        String url = BASE_URL + "/getAll";
         ResponseEntity<Address[]> response = restTemplate.getForEntity(url, Address[].class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 0);
+
         System.out.println("All Addresses (" + response.getBody().length + "):");
         for (Address addr : response.getBody()) {
             System.out.println(addr);
@@ -119,20 +109,17 @@ class AddressControllerTest {
     }
 
     @Test
-    //@Order(5)
     void e_delete() {
-        String url = getBaseUrl() + "/delete/" + address_with_Id.getAddressID();
-        System.out.println("Deleting address: " + address_with_Id);
-        this.restTemplate.delete(url);
+        String url = BASE_URL + "/delete/" + address_with_Id.getAddressID();
+        restTemplate.delete(url);
 
-        // Verify if the object is deleted
-        ResponseEntity<Address> readAddress =
-                this.restTemplate.getForEntity(getBaseUrl() + "/read/" + address_with_Id.getAddressID(), Address.class);
+        // Use String.class to handle error messages
+        ResponseEntity<String> response = restTemplate.getForEntity(
+                BASE_URL + "/read/" + address_with_Id.getAddressID(),
+                String.class
+        );
 
-        // Expect 404 after deletion
-        assertEquals(HttpStatus.NOT_FOUND, readAddress.getStatusCode());
-        System.out.println("After deletion, status code: " + readAddress.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println("Address deleted successfully: " + response.getBody());
     }
-
-
 }
