@@ -1,5 +1,10 @@
 package za.ac.cput.service.generic;
 
+/* MobileGlow Car Wash
+   Contact Service Test class
+   Author: Inga Zekani (221043756)
+ */
+
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -115,6 +120,6 @@ class ContactServiceTest {
 
         //assertEquals("Contact with ID " + savedContactId + " not found", exception.getMessage());
         System.out.println("Contact deleted successfully. ID: " + savedContactId);
-    }
+}
 
 }
