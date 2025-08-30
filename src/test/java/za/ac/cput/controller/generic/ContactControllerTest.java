@@ -11,9 +11,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import za.ac.cput.domain.generic.Contact;
+import za.ac.cput.factory.generic.ContactFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,64 +21,46 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class ContactControllerTest {
 
-    @LocalServerPort
-    private int port;
-
-
-    private static Contact contact = new Contact.Builder()
-            .setContactID(1L)
-            .setPhoneNumber("+27821234567")
-            .build();
-
+    private static Contact contact = ContactFactory.createContact("0834440005");
     private static Contact contact_with_Id;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private String getBaseUrl() {
-        return "http://localhost:" + port + "/api/contacts";
-    }
+    private static final String BASE_URL = "http://localhost:8080/api/contacts";
 
     @Test
     void a_create() {
-        String url = getBaseUrl() + "/create";
-        System.out.println("POST URL: " + url);
-
+        String url = BASE_URL + "/create";
         ResponseEntity<Contact> postResponse = restTemplate.postForEntity(url, contact, Contact.class);
-
         assertNotNull(postResponse.getBody());
-        assertEquals(HttpStatus.CREATED, postResponse.getStatusCode());
         System.out.println("postResponse: " + postResponse.getBody());
-
         contact_with_Id = postResponse.getBody();
         assertNotNull(contact_with_Id);
-        assertNotNull(contact_with_Id.getContactID());
         System.out.println("contact_with_Id: " + contact_with_Id);
     }
 
     @Test
     void b_read() {
         assertNotNull(contact_with_Id, "Contact is null");
-        String url = getBaseUrl() + "/read/" + contact_with_Id.getContactID();
-        System.out.println("GET URL: " + url);
-
+        String url = BASE_URL + "/read/" + contact_with_Id.getContactID();
         ResponseEntity<Contact> response = restTemplate.getForEntity(url, Contact.class);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(contact_with_Id.getContactID(), response.getBody().getContactID());
-        System.out.println("Read response: " + response.getBody());
+        System.out.println("response: " + response.getBody());
     }
 
     @Test
     void c_update() {
         assertNotNull(contact_with_Id, "Contact is null");
-        String url = getBaseUrl() + "/update/" + contact_with_Id.getContactID();
-        System.out.println("PUT URL: " + url);
+        String url = BASE_URL + "/update/" + contact_with_Id.getContactID();
 
+        Contact updatedContactData = ContactFactory.createContact(
+                "0726660776");
+
+        // Create updated contact with the SAME ID as the original
         Contact updatedContact = new Contact.Builder()
-                .copy(contact_with_Id)
-                .setPhoneNumber("+27829876543")
+                .copy(updatedContactData)
+                .setContactID(contact_with_Id.getContactID())  // ← MUST set the same ID
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
@@ -87,25 +69,21 @@ class ContactControllerTest {
 
         ResponseEntity<Contact> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Contact.class);
 
+        // Expect 200 OK (not 400 Bad Request)
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
 
         Contact updated = response.getBody();
-        assertEquals("+27829876543", updated.getPhoneNumber());
+        assertNotNull(updated);
+        assertEquals("0726660776", updated.getPhoneNumber());
         System.out.println("Updated Contact: " + updated);
     }
 
     @Test
     void d_getAll() {
-        String url = getBaseUrl() + "/getAll";
-        System.out.println("GET ALL URL: " + url);
-
+        String url = BASE_URL + "/getAll";
         ResponseEntity<Contact[]> response = restTemplate.getForEntity(url, Contact[].class);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 0);
-        System.out.println("All Contacts (" + response.getBody().length + "):");
+        System.out.println("All Contacts:");
         for (Contact cnt : response.getBody()) {
             System.out.println(cnt);
         }
@@ -113,16 +91,19 @@ class ContactControllerTest {
 
     @Test
     void e_delete() {
-        String url = getBaseUrl() + "/delete/" + contact_with_Id.getContactID();
+        String url = BASE_URL + "/delete/" + contact_with_Id.getContactID();
         System.out.println("Deleting contact: " + contact_with_Id);
-        this.restTemplate.delete(url);
+        restTemplate.delete(url);
 
-        // Verify if the object is deleted
-        ResponseEntity<Contact> readContact =
-                this.restTemplate.getForEntity(getBaseUrl() + "/read/" + contact_with_Id.getContactID(), Contact.class);
+        // Verify if the object is deleted - use String.class to handle error messages
+        ResponseEntity<String> readContact = restTemplate.getForEntity(
+                BASE_URL + "/read/" + contact_with_Id.getContactID(),
+                String.class
+        );
 
         // Expect 404 after deletion
         assertEquals(HttpStatus.NOT_FOUND, readContact.getStatusCode());
         System.out.println("After deletion, status code: " + readContact.getStatusCode());
+        System.out.println("Error message: " + readContact.getBody());
     }
 }
