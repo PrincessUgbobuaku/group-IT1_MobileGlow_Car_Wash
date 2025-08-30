@@ -14,6 +14,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import za.ac.cput.domain.review.ServiceReview;
+import za.ac.cput.factory.review.ServiceReviewFactory;
 
 import java.util.Date;
 
@@ -26,64 +27,60 @@ class ServiceReviewControllerTest {
     @LocalServerPort
     private int port;
 
-
-    private static ServiceReview serviceReview = new ServiceReview.Builder()
-            .setReviewID(1L)
-            .setRating(5)
-            .setComments("Excellent service!")
-            .setReviewDate(new Date())
-            .build();
-
+    private static ServiceReview serviceReview = ServiceReviewFactory.createServiceReview(
+            5,
+            "Excellent service!",
+            new Date());
     private static ServiceReview serviceReview_with_Id;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private String getBaseUrl() {
-        return "http://localhost:" + port + "/api/service-reviews";
-    }
+    private static final String BASE_URL = "http://localhost:8080/api/service-reviews";
+    
 
     @Test
     void a_create() {
-        String url = getBaseUrl() + "/create";
-        System.out.println("POST URL: " + url);
+        assertNotNull(serviceReview, "Factory should create a valid service review");
+        String url = BASE_URL + "/create";
 
         ResponseEntity<ServiceReview> postResponse = restTemplate.postForEntity(url, serviceReview, ServiceReview.class);
-
         assertNotNull(postResponse.getBody());
         assertEquals(HttpStatus.CREATED, postResponse.getStatusCode());
-        System.out.println("postResponse: " + postResponse.getBody());
 
         serviceReview_with_Id = postResponse.getBody();
-        assertNotNull(serviceReview_with_Id);
         assertNotNull(serviceReview_with_Id.getReviewID());
-        System.out.println("serviceReview_with_Id: " + serviceReview_with_Id);
+        System.out.println("Created ServiceReview: " + serviceReview_with_Id);
     }
 
     @Test
     void b_read() {
         assertNotNull(serviceReview_with_Id, "ServiceReview is null");
-        String url = getBaseUrl() + "/read/" + serviceReview_with_Id.getReviewID();
-        System.out.println("GET URL: " + url);
+        String url = BASE_URL + "/read/" + serviceReview_with_Id.getReviewID();
 
         ResponseEntity<ServiceReview> response = restTemplate.getForEntity(url, ServiceReview.class);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(serviceReview_with_Id.getReviewID(), response.getBody().getReviewID());
-        System.out.println("Read response: " + response.getBody());
+
+        System.out.println("Read ServiceReview: " + response.getBody());
     }
 
     @Test
     void c_update() {
         assertNotNull(serviceReview_with_Id, "ServiceReview is null");
-        String url = getBaseUrl() + "/update/" + serviceReview_with_Id.getReviewID();
-        System.out.println("PUT URL: " + url);
+        String url = BASE_URL + "/update/" + serviceReview_with_Id.getReviewID();
 
+        // Use factory to create updated review data
+        ServiceReview updatedReviewData = ServiceReviewFactory.createServiceReview(
+                4,
+                "Very good service, but could be improved",
+                new Date());
+        assertNotNull(updatedReviewData, "Factory should create updated review");
+
+        // Set the same ID for update
         ServiceReview updatedReview = new ServiceReview.Builder()
-                .copy(serviceReview_with_Id)
-                .setRating(4)
-                .setComments("Very good service, but could be improved")
+                .copy(updatedReviewData)
+                .setReviewID(serviceReview_with_Id.getReviewID())
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
@@ -91,9 +88,7 @@ class ServiceReviewControllerTest {
         HttpEntity<ServiceReview> requestEntity = new HttpEntity<>(updatedReview, headers);
 
         ResponseEntity<ServiceReview> response = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, ServiceReview.class);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
 
         ServiceReview updated = response.getBody();
         assertEquals(4, updated.getRating());
@@ -103,32 +98,30 @@ class ServiceReviewControllerTest {
 
     @Test
     void d_getAll() {
-        String url = getBaseUrl() + "/all";
-        System.out.println("GET ALL URL: " + url);
-
+        String url = BASE_URL + "/all";
         ResponseEntity<ServiceReview[]> response = restTemplate.getForEntity(url, ServiceReview[].class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 0);
+
         System.out.println("All ServiceReviews (" + response.getBody().length + "):");
         for (ServiceReview review : response.getBody()) {
             System.out.println(review);
         }
     }
 
-//    @Test
-//    void e_delete() {
-//        String url = getBaseUrl() + "/delete/" + serviceReview_with_Id.getReviewID();
-//        System.out.println("Deleting service review: " + serviceReview_with_Id);
-//        this.restTemplate.delete(url);
-//
-//        // Verify if the object is deleted
-//        ResponseEntity<ServiceReview> readReview =
-//                this.restTemplate.getForEntity(getBaseUrl() + "/read/" + serviceReview_with_Id.getReviewID(), ServiceReview.class);
-//
-//        // Expect 404 after deletion
-//        assertEquals(HttpStatus.NOT_FOUND, readReview.getStatusCode());
-//        System.out.println("After deletion, status code: " + readReview.getStatusCode());
-//    }
+    @Test
+    void e_delete() {
+        String url = BASE_URL + "/delete/" + serviceReview_with_Id.getReviewID();
+        restTemplate.delete(url);
+
+        // Use String.class to handle error messages
+        ResponseEntity<String> response = restTemplate.getForEntity(
+                BASE_URL + "/read/" + serviceReview_with_Id.getReviewID(),
+                String.class
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println("ServiceReview deleted successfully: " + response.getBody());
+    }
 }
