@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import za.ac.cput.domain.booking.CleaningService;
 import za.ac.cput.factory.booking.CleaningServiceFactory;
 import za.ac.cput.repository.booking.ICleaningServiceRepository;
-import za.ac.cput.util.Helper;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class CleaningServiceService implements ICleaningServiceService {
         this.cleaningServiceRepository = cleaningServiceRepository;
     }
 
-    public CleaningService readByServiceName(CleaningService.ServiceName serviceName) {
+    public CleaningService readByServiceName(String serviceName) {
         return cleaningServiceRepository.findByServiceName(serviceName)
                 .orElseThrow(() -> new IllegalArgumentException("Service not found: " + serviceName));
     }
@@ -29,14 +28,14 @@ public class CleaningServiceService implements ICleaningServiceService {
         System.out.println("Received service input: " + cleaningServiceInput);
 
         if (cleaningServiceRepository.existsByServiceName(cleaningServiceInput.getServiceName())) {
-            throw new IllegalArgumentException("CleaningServiceService: Service already exists");
+            throw new IllegalArgumentException("CleaningService already exists with name: " + cleaningServiceInput.getServiceName());
         }
 
         CleaningService created = CleaningServiceFactory.createCleaningService(
                 cleaningServiceInput.getServiceName(),
                 cleaningServiceInput.getPriceOfService(),
                 cleaningServiceInput.getDuration(),
-                cleaningServiceInput.getCategory() // ✅ NEW
+                cleaningServiceInput.getCategory()
         );
 
         if (created == null) {
@@ -47,17 +46,20 @@ public class CleaningServiceService implements ICleaningServiceService {
     }
 
     @Override
-    public CleaningService read(String id) {
+    public CleaningService read(Long id) {
         return cleaningServiceRepository.findById(id).orElse(null);
     }
 
     @Override
     public CleaningService update(CleaningService cleaningService) {
+        if (!cleaningServiceRepository.existsById(cleaningService.getCleaningServiceID())) {
+            throw new IllegalArgumentException("Service with ID " + cleaningService.getCleaningServiceID() + " not found.");
+        }
         return cleaningServiceRepository.save(cleaningService);
     }
 
     @Override
-    public boolean delete(String id) {
+    public boolean delete(Long id) {
         if (cleaningServiceRepository.existsById(id)) {
             cleaningServiceRepository.deleteById(id);
             return true;
@@ -70,22 +72,17 @@ public class CleaningServiceService implements ICleaningServiceService {
         return cleaningServiceRepository.findAll();
     }
 
-    // ✅ Optional: Add support for querying by category
     public List<CleaningService> getByCategory(String category) {
         return cleaningServiceRepository.findAllByCategory(category);
     }
 
-    // Optional: Preload services
-    private void addIfNotExists(CleaningService.ServiceName serviceName, double price, double duration, String category) {
+    // Optional: preload services
+    // Useful for preloading default or initial cleaning services.
+    private void addIfNotExists(String serviceName, double price, double duration, String category) {
         if (!cleaningServiceRepository.existsByServiceName(serviceName)) {
-            String id = Helper.generateID();
-            CleaningService cleaningService = new CleaningService.Builder()
-                    .setCleaningServiceID(id)
-                    .setServiceName(serviceName)
-                    .setPriceOfService(price)
-                    .setDuration(duration)
-                    .setCategory(category) // ✅ NEW
-                    .build();
+            CleaningService cleaningService = CleaningServiceFactory.createCleaningService(
+                    serviceName, price, duration, category
+            );
             cleaningServiceRepository.save(cleaningService);
         }
     }

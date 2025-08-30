@@ -17,6 +17,10 @@ public class Helper {
         return UUID.randomUUID().toString();
     }
 
+    public static boolean isInstanceOf(Object obj, Class<?> clazz) {
+        return obj != null && clazz.isInstance(obj);
+    }
+
     public static boolean validateStringDetails(String str) {
         // Ensure that none of the fields are empty or null
 
@@ -197,20 +201,20 @@ public class Helper {
     }
 
     public static boolean isValidPhoneNumber(String phoneNumber) {
-        if (isNullorEmpty(phoneNumber)) {
-            return false;
-        }
+//        if (isNullorEmpty(phoneNumber)) {
+//            return false;
+//        }
 
         //Checks for e.g 0725637252 or +27 72 563...
         String regex = "^(\\+27|0)[6-8][0-9]{8}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.matches();
-    }
+}
 
     public static boolean isValidRating(int rating) {
-        return rating >= 1 && rating <= 5;
-    }
+        return rating >= 1 && rating <= 5;
+}
 
 }
 

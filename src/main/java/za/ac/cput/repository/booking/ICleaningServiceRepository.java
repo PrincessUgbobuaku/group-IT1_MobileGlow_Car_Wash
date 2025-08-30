@@ -2,20 +2,18 @@ package za.ac.cput.repository.booking;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import za.ac.cput.domain.booking.CleaningService;
-import za.ac.cput.repository.IRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ICleaningServiceRepository extends JpaRepository<CleaningService, String> {
+public interface ICleaningServiceRepository extends JpaRepository<CleaningService, Long> {
 
-//        List<CleaningService> getAll(); //going into the database, getting all the objects and returning them as a list
-    boolean existsByServiceName(CleaningService.ServiceName serviceName);
+    // Check existence by service name
+    boolean existsByServiceName(String serviceName);
 
-    Optional<CleaningService> findByServiceName(CleaningService.ServiceName serviceName); // ✅ method declaration only
+    // Find one by service name
+    Optional<CleaningService> findByServiceName(String serviceName);
 
-    // ✅ New method: fetch all services by category
+    // Find all services by category
     List<CleaningService> findAllByCategory(String category);
 }
-
-

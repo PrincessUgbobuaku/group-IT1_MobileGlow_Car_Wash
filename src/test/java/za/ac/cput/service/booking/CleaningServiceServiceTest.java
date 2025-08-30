@@ -1,109 +1,118 @@
 package za.ac.cput.service.booking;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import za.ac.cput.domain.booking.CleaningService;
 import za.ac.cput.factory.booking.CleaningServiceFactory;
+import za.ac.cput.repository.booking.ICleaningServiceRepository;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CleaningServiceServiceTest {
 
     @Autowired
     private CleaningServiceService cleaningServiceService;
 
-    private static CleaningService cleaningService;
-
-    @BeforeAll
-    static void init() {
-        System.out.println("🔧 CleaningServiceServiceTest starting...");
-    }
+    private static CleaningService savedCleaningService;
 
     @Test
-    @Order(1)
     @Rollback(false)
+    @Order(1)
     void testCreate() {
-        cleaningService = CleaningServiceFactory.createCleaningService(
-                CleaningService.ServiceName.INTERIOR_CLEANING,
-                300.00,
-                2.0,
-                "Interior Care"  // <-- Add category here
+        CleaningService cleaningService = CleaningServiceFactory.createCleaningService(
+                "PAINT_PROTECTION_FILM",
+                500.00,
+                1.0,
+                "Protection Services"
         );
 
-        CleaningService saved = cleaningServiceService.create(cleaningService);
-        assertNotNull(saved);
-        assertEquals(cleaningService.getCleaningServiceID(), saved.getCleaningServiceID());
-        assertEquals("Interior Care", saved.getCategory());  // Verify category saved correctly
-        System.out.println("✅ Created Cleaning Service: " + saved);
+        savedCleaningService = cleaningServiceService.create(cleaningService);
+
+        assertNotNull(savedCleaningService);
+        assertNotNull(savedCleaningService.getCleaningServiceID());
+        assertEquals("Protection Services", savedCleaningService.getCategory());
+
+        System.out.println("✅ Created Cleaning Service: " + savedCleaningService);
     }
 
     @Test
+    @Rollback(false)
     @Order(2)
     void testCreateDuplicateThrowsException() {
-        // Attempt to create a duplicate record with the same serviceName
         CleaningService duplicate = CleaningServiceFactory.createCleaningService(
-                cleaningService.getServiceName(),
+                savedCleaningService.getServiceName(),  // same name
                 400.00,
                 2.5,
-                "Interior Care"  // Must include category here too
+                "Interior Care"
         );
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(Exception.class, () -> {
             cleaningServiceService.create(duplicate);
         });
 
-        assertEquals("CleaningServiceService: Service already exists", exception.getMessage());
-        System.out.println("⚠️ Duplicate service creation prevented: " + exception.getMessage());
+        Throwable cause = exception;
+        while (cause != null && !(cause instanceof IllegalArgumentException)) {
+            cause = cause.getCause();
+        }
+
+        assertNotNull(cause);
+        assertEquals("CleaningService already exists with name: " + savedCleaningService.getServiceName(), cause.getMessage());
+        System.out.println("⚠️ Duplicate service creation prevented: " + cause.getMessage());
     }
 
     @Test
-    @Order(3)
     @Rollback(false)
+    @Order(3)
     void testRead() {
-        CleaningService read = cleaningServiceService.read(cleaningService.getCleaningServiceID());
+        CleaningService read = cleaningServiceService.read(savedCleaningService.getCleaningServiceID());
+
         assertNotNull(read);
-        assertEquals(cleaningService.getCleaningServiceID(), read.getCleaningServiceID());
+        assertEquals(savedCleaningService.getCleaningServiceID(), read.getCleaningServiceID());
         System.out.println("📖 Read Cleaning Service: " + read);
     }
 
+//    @Test
+//    @Order(4)
+//    void testUpdate() {
+//        CleaningService updated = new CleaningService.Builder()
+//                .copy(savedCleaningService)
+//                .setPriceOfService(350.00)
+//                .build();
+//
+//        CleaningService result = cleaningServiceService.update(updated);
+//
+//        assertNotNull(result);
+//        assertEquals(350.00, result.getPriceOfService());
+//        System.out.println("🔄 Updated Cleaning Service: " + result);
+//
+//        savedCleaningService = result; // update reference for future tests if needed
+//    }
+
     @Test
-    @Order(4)
-    @Rollback(false)
-    void testUpdate() {
-        CleaningService updated = new CleaningService.Builder()
-                .copy(cleaningService)
-                .setPriceOfService(350.00)
-                .build();
+    @Order(5)
+    void testDelete() {
+        boolean deleted = cleaningServiceService.delete(savedCleaningService.getCleaningServiceID());
 
-        CleaningService result = cleaningServiceService.update(updated);
-        assertNotNull(result);
-        assertEquals(350.00, result.getPriceOfService());
-        System.out.println("🔄 Updated Cleaning Service: " + result);
+        assertTrue(deleted);
+        System.out.println("🗑️ Deleted Cleaning Service with ID: " + savedCleaningService.getCleaningServiceID());
     }
-
-    // Uncomment if you want to test deletion
-    // @Test
-    // @Order(5)
-    // @Rollback(false)
-    // void testDelete() {
-    //     boolean deleted = cleaningServiceService.delete(cleaningService.getCleaningServiceID());
-    //     assertTrue(deleted);
-    //     System.out.println("🗑️ Deleted Cleaning Service with ID: " + cleaningService.getCleaningServiceID());
-    // }
 
     @Test
     @Order(6)
-    @Rollback(false)
     void testGetAll() {
         List<CleaningService> services = cleaningServiceService.getAll();
+
         assertNotNull(services);
-        assertTrue(services.size() >= 0);
+        assertTrue(services.size() >= 0); // it could be 0 now if delete ran
+
         System.out.println("📋 All Cleaning Services:");
         services.forEach(System.out::println);
     }

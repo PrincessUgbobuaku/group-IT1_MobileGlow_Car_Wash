@@ -2,12 +2,7 @@ package za.ac.cput.domain.payment;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import za.ac.cput.domain.booking.Booking;
 
 import java.io.Serializable;
@@ -16,7 +11,8 @@ import java.io.Serializable;
 public class Payment implements Serializable {
 
     @Id
-    private String paymentID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long paymentID;  // Changed from String to Long
 
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
@@ -41,7 +37,7 @@ public class Payment implements Serializable {
         this.paymentStatus = builder.paymentStatus;
     }
 
-    public String getPaymentID() {
+    public Long getPaymentID() {  // Changed return type
         return paymentID;
     }
 
@@ -49,9 +45,8 @@ public class Payment implements Serializable {
         return booking;
     }
 
-    // Add this method to expose bookingID in JSON response
     @JsonProperty("bookingID")
-    public String getBookingID() {
+    public Long getBookingID() {
         return booking != null ? booking.getBookingID() : null;
     }
 
@@ -70,8 +65,8 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         return "Payment{" +
-                "paymentID='" + paymentID + '\'' +
-                ", booking='" + booking + '\'' +
+                "paymentID=" + paymentID +  // no quotes for Long
+                ", bookingID=" + (booking != null ? booking.getBookingID() : "null") +  // 👈 Changed
                 ", paymentAmount=" + paymentAmount +
                 ", paymentMethod=" + paymentMethod +
                 ", paymentStatus=" + paymentStatus +
@@ -80,13 +75,13 @@ public class Payment implements Serializable {
 
     public static class Builder {
 
-        private String paymentID;
+        private Long paymentID;  // Changed from String to Long
         private Booking booking;
         private double paymentAmount;
         private PaymentMethod paymentMethod;
         private PaymentStatus paymentStatus;
 
-        public Builder setPaymentID(String paymentID) {
+        public Builder setPaymentID(Long paymentID) {  // Changed parameter type
             this.paymentID = paymentID;
             return this;
         }

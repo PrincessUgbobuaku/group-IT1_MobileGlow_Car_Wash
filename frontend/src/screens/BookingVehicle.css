@@ -1,0 +1,61 @@
+.booking-vehicle-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 40px;
+  font-family: 'Arial', sans-serif;
+}
+
+.left-panel {
+  flex: 2;
+}
+
+.booking-page-heading {
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.vehicle-selection {
+  margin-top: 20px;
+}
+
+.vehicle-selection select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  background-color: #f9f9f9;
+}
+
+.continue-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background-color: #7c3aed;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.continue-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.right-panel {
+  flex: 1;
+  padding: 2rem;
+  background: #f8f8f8;
+  border-radius: 10px;
+}
+
+.business-info h3 {
+  margin-bottom: 0;
+}
+
+.business-info p {
+  margin-top: 5px;
+}
