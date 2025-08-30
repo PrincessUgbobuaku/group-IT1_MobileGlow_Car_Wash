@@ -11,8 +11,6 @@ import za.ac.cput.util.Helper;
 public class AddressFactory {
 
  public static Address createAddressFactory1( String streetNumber, String streetName, String city, String postalCode) {
-     //Create Unique Address ID
-     String addressID = UUID.randomUUID().toString();
 
 
      if (!Helper.isValidString(streetNumber) ||
@@ -23,7 +21,6 @@ public class AddressFactory {
      }
 
      return new Address.Builder()
-             .setAddressID(addressID)
              .setStreetNumber(streetNumber)
              .setStreetName(streetName)
              .setCity(city)

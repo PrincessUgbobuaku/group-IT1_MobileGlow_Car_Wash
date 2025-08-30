@@ -1,15 +1,19 @@
 package za.ac.cput.service.generic;
 
+/* MobileGlow Car Wash
+   Contact Service
+   Author: Inga Zekani (221043756)
+ */
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.repository.generic.IContactRepository;
-import za.ac.cput.service.IService;
 
 import java.util.List;
 
 @Service
-public class ContactService implements IService<Contact, Long> {
+public class ContactService implements IContactService {
 
     private final IContactRepository contactRepository;
 
@@ -35,7 +39,8 @@ public class ContactService implements IService<Contact, Long> {
 
     @Override
     public Contact update(Contact contact) {
-        if (!contactRepository.existsByContactID(contact.getContactID())) {
+        // Use existsById() instead of existsByContactID()
+        if (!contactRepository.existsById(contact.getContactID())) {
             throw new RuntimeException("Contact with ID " + contact.getContactID() + " not found");
         }
         return contactRepository.save(contact);
@@ -43,25 +48,17 @@ public class ContactService implements IService<Contact, Long> {
 
     @Override
     public boolean delete(Long contactID) {
-        if (!contactRepository.existsByContactID(contactID)) {
+        // Use existsById() instead of existsByContactID()
+        if (!contactRepository.existsById(contactID)) {
             throw new RuntimeException("Contact with ID " + contactID + " not found");
         }
         contactRepository.deleteById(contactID);
         return true;
     }
 
-//    @Override
-//    public List<Contact> getAll() {
-//        return contactRepository.findAll();
-//    }
-//
-//    @Override
-//    public Contact findByPhoneNumber(String phoneNumber) {
-//        return contactRepository.findByPhoneNumber(phoneNumber)
-//                .orElseThrow(() -> new RuntimeException("Contact with phone number " + phoneNumber + " not found"));
-//    }
-//
-//    @Override
-//    public boolean existsByPhoneNumber(String phoneNumber) {
-//        return contactRepository.existsByPhoneNumber(phoneNumber);
-    }
+    @Override
+    public List<Contact> getAll() {
+
+        return contactRepository.findAll();
+    }
+}
