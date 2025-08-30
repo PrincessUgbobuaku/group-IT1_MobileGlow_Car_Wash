@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.user.Login;
-import za.ac.cput.service.user.implementation.LoginServiceImpl;
+import za.ac.cput.service.user.LoginService;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ import java.util.List;
 @RequestMapping("/Login")
 public class LoginController {
 
-    private final LoginServiceImpl loginService;
+    private final LoginService loginService;
 
     @Autowired
-    public LoginController(LoginServiceImpl loginService) {
+    public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
@@ -60,8 +60,9 @@ public class LoginController {
     }
 
     @DeleteMapping("/delete/{Id}")
-    public void delete(@PathVariable Long Id) {
+    public boolean delete(@PathVariable Long Id) {
         loginService.delete(Id);
+        return true;
     }
 
 }

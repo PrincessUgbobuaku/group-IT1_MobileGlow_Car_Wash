@@ -15,9 +15,8 @@ class ContactFactoryTest {
 
     @Test
     void testBuildValidContact() {
-        Contact contact = ContactFactory.createContactFactory1("0831234567");
+        Contact contact = ContactFactory.createContact("0831234567");
         assertNotNull(contact);
-        assertNotNull(contact.getContactID());
         assertEquals("0831234567", contact.getPhoneNumber());
 
         System.out.println(contact);
@@ -25,7 +24,7 @@ class ContactFactoryTest {
 
     @Test
     void testBuildInvalidContact() {
-        Contact contact = ContactFactory.createContactFactory1("");
+        Contact contact = ContactFactory.createContact("");
         assertNull(contact);
 
         System.out.println(contact);

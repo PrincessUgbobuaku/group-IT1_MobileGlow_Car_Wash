@@ -8,4 +8,6 @@ import za.ac.cput.domain.user.employee.Manager;
 
 @Repository
 public interface IManagerRepository extends JpaRepository<Manager,Long> {
+
+  //delete this class
 }

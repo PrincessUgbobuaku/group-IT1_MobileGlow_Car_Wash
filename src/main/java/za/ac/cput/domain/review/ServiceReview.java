@@ -5,13 +5,21 @@ package za.ac.cput.domain.review;
    Author: Inga Zekani (221043756)
  */
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
+@Table(name = "review")
 public class ServiceReview {
 
-    private String reviewID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// or IDENTITY
+    @Column( name = "reviewid")
+    private Long reviewID;
     private int rating;
     private String comments;
+    @Column(name = "review_date")
     private Date reviewDate;
 
     //default constructor
@@ -27,16 +35,20 @@ public class ServiceReview {
 
     }
 
-    public String getReviewID() {
+    public Long getReviewID() {
+
         return reviewID;
     }
     public int getRating() {
+
         return rating;
     }
     public String getComments() {
+
         return comments;
     }
     public Date getReviewDate() {
+
         return reviewDate;
     }
 
@@ -51,22 +63,26 @@ public class ServiceReview {
     }
 
     public static class Builder{
-        private String reviewID;
+        private Long reviewID;
         private int rating;
         private String comments;
         private Date reviewDate;
 
-        public void setReviewID(String reviewID) {
+        public Builder setReviewID(Long reviewID) {
             this.reviewID = reviewID;
+            return this;
         }
-        public void setRating(int rating) {
+        public Builder setRating(int rating) {
             this.rating = rating;
+            return this;
         }
-        public void setComments(String comments) {
+        public Builder setComments(String comments) {
             this.comments = comments;
+            return this;
         }
-        public void setReviewDate(Date reviewDate) {
+        public Builder setReviewDate(Date reviewDate) {
             this.reviewDate = reviewDate;
+            return this;
         }
         public Builder copy(ServiceReview review){
             this.reviewID = review.reviewID;
