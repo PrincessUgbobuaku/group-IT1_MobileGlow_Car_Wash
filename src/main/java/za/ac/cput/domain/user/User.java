@@ -32,7 +32,7 @@ public abstract class User {
     protected Contact contact;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_Id", referencedColumnName = "addressID")
+    @JoinColumn(name = "address_Id", referencedColumnName = "addressid")
     protected Address address;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

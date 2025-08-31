@@ -1,6 +1,7 @@
 package za.ac.cput.controller.booking;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.booking.Booking;
@@ -20,7 +21,7 @@ public class BookingController {
     }
 
     // ✅ CREATE - POST /api/bookings
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Booking> create(@RequestBody Booking booking) {
         Booking created = bookingService.create(booking);
         return ResponseEntity.ok(created);

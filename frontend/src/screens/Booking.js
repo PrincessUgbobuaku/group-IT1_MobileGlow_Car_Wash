@@ -1,3 +1,4 @@
+// ...imports remain unchanged
 import React, { useState, useEffect } from 'react';
 import './Booking.css';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -11,11 +12,11 @@ const Booking = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8080/mobileglow/api/cleaningservice') // Your API endpoint
+    fetch('http://localhost:8080/mobileglow/api/cleaningservice')
       .then((response) => response.json())
       .then((data) => {
-        console.log('Fetched Services:', data); // Log the fetched data
-        setServices(data); // Store the services in state
+        console.log('Fetched Services:', data);
+        setServices(data);
       })
       .catch((error) => console.error('Error fetching services:', error));
   }, []);
@@ -24,7 +25,9 @@ const Booking = () => {
     if (newCategory !== null) setSelectedCategory(newCategory);
   };
 
-  const filteredServices = services.filter(service => service.category === selectedCategory);
+const filteredServices = services.filter(
+  (service) => service.category?.trim().toLowerCase() === selectedCategory.trim().toLowerCase()
+);
 
   const addToCart = (service) => {
     if (!cart.includes(service)) {
@@ -38,7 +41,6 @@ const Booking = () => {
 
   const totalPrice = cart.reduce((sum, item) => sum + item.priceOfService, 0);
 
-  // Navigate to BookingTwo page with the selected services and total price
   const handleContinue = () => {
     navigate("/bookingtwo", {
       state: {
@@ -47,6 +49,9 @@ const Booking = () => {
       },
     });
   };
+
+  console.log("Selected category:", selectedCategory);
+  console.log("All services from API:", services);
 
   return (
     <div className="booking-layout">
@@ -79,8 +84,12 @@ const Booking = () => {
             filteredServices.map(service => (
               <div key={service.id} className="service-card">
                 <div>
-                  <h4>{service.serviceName}</h4>
-                  <p className="duration">{service.duration}</p>
+                  {/* 🔁 Replace underscores in service name */}
+                  <h4>{service.serviceName.replace(/_/g, ' ')}</h4>
+
+                  {/* 🕒 Add 'Duration:' label */}
+                  <p className="duration">Duration: {service.duration} <strong>hours</strong></p>
+
                   <p className="price">R {service.priceOfService}</p>
                 </div>
                 <button className="add-btn" onClick={() => addToCart(service)}>+</button>
@@ -104,7 +113,8 @@ const Booking = () => {
             <ul>
               {cart.map(item => (
                 <li key={item.id}>
-                  {item.serviceName} - R {item.priceOfService}
+                  {/* Replace underscores in cart items as well */}
+                  {item.serviceName.replace(/_/g, ' ')} - R {item.priceOfService}
                   <button className="remove-btn" onClick={() => removeFromCart(item.id)}>x</button>
                 </li>
               ))}

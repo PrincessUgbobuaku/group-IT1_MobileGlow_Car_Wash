@@ -69,7 +69,7 @@ class PaymentServiceTest {
     @Order(1)
     void testCreatePaymentWithExistingBooking() {
         // Fetch an existing booking from DB
-        booking = bookingService.read(36L); // Use real booking ID
+        booking = bookingService.read(1L); // Use real booking ID
         assertNotNull(booking, "Booking should exist");
 
         // 💡 Force loading of cleaning services (avoids lazy init errors)
