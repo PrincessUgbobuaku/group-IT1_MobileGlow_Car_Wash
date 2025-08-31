@@ -31,15 +31,15 @@ class ContactServiceTest {
     @Test
     void a_testCreateContact() {
         // Use Factory class to create contact - this will test your factory validation
-        testContact = ContactFactory.createContact("0728280792");
+        testContact = ContactFactory.createContact("0617774444");
         assertNotNull(testContact, "Factory should create a valid contact");
         assertNull(testContact.getContactID(), "New contact should not have ID before saving");
-        assertEquals("0728280792", testContact.getPhoneNumber());
+        assertEquals("0617774444", testContact.getPhoneNumber());
 
         Contact created = contactService.create(testContact);
         assertNotNull(created);
         assertNotNull(created.getContactID(), "Saved contact should have an ID");
-        assertEquals("0728280792", created.getPhoneNumber());
+        assertEquals("0617774444", created.getPhoneNumber());
 
         savedContactId = created;
         System.out.println("Created contact: " + savedContactId);
@@ -54,7 +54,7 @@ class ContactServiceTest {
         Contact found = contactService.read(savedContactId.getContactID());
         assertNotNull(found);
         //assertEquals(savedContactId, found.getContactID());
-        assertEquals("0728280792", found.getPhoneNumber());
+        assertEquals("0617774444", found.getPhoneNumber());
         System.out.println("Read contact: " + found);
     }
 
@@ -69,7 +69,7 @@ class ContactServiceTest {
         // Create updated contact using the existing contact as base
         Contact updatedContact = new Contact.Builder()
                 .copy(existingContact)
-                .setPhoneNumber("0728280792") // New phone number
+                .setPhoneNumber("0728280798") // New phone number
                 .build();
 
         // Verify the updated phone number is valid using factory logic
@@ -79,7 +79,7 @@ class ContactServiceTest {
         Contact updated = contactService.update(updatedContact);
         assertNotNull(updated);
         //assertEquals(savedContactId.getContactID(), updated.getContactID());
-        assertEquals("0728280792", updated.getPhoneNumber());
+        assertEquals("0728280798", updated.getPhoneNumber());
         System.out.println("Updated contact: " + updated);
 
         // Update the test reference
