@@ -62,7 +62,7 @@ public class WashAttendant extends User {
                 ", contact=" + getContact() +
                 ", address=" + getAddress() +
                 ", login=" + getLogin()+
-        '}';
+                '}';
     }
 
     public static class Builder {
@@ -144,7 +144,7 @@ public class WashAttendant extends User {
             this.shiftHours = washAttendant.shiftHours;
             this.contact = washAttendant.contact;
             this.address = washAttendant.address;
-            this.login - washAttendant.login;
+            this.login = washAttendant.login;
             return this;
         }
 

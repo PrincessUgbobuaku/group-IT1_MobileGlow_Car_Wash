@@ -1,28 +1,19 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import Payment from "./screens/Payment";
-import Booking from "./screens/Booking"; // ⬅️ Import the Booking component
-import BookingTwo from "./screens/BookingTwo"; // ⬅️ Import the Booking component
-import ConfirmBookingPage from "./screens/ConfirmBookingPage"; // ⬅️ Import the Booking component
-
-
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Booking from "./screens/Booking";
+import BookingVehicle from "./screens/BookingVehicle"; // Ensure this is imported correctly
+import BookingTwo from "./screens/BookingTwo"; // Ensure this is imported correctly
+import ConfirmBookingPage from "./screens/ConfirmBookingPage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/payment" />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/booking" element={<Booking />} /> {/* ⬅️ Add this line */}
-        <Route path="/bookingtwo" element={<BookingTwo />} /> {/* ⬅️ Add this line */}
-        <Route path="/confirm" element={<ConfirmBookingPage />} /> {/* ⬅️ Add this line */}
-
-
+        <Route path="/" element={<Navigate to="/booking" />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/bookingtwo" element={<BookingTwo />} />
+        <Route path="/bookingvehicle" element={<BookingVehicle />} /> {/* Vehicle selection */}
+        <Route path="/confirm" element={<ConfirmBookingPage />} />
       </Routes>
     </Router>
   );

@@ -13,11 +13,21 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "addressid")
     private Long addressID;
+
+    @Column(name = "street_number", nullable = false)
     private String streetNumber;
+
+    @Column(name = "street_name", nullable = false)
     private String streetName;
+
+    @Column(name = "city", nullable = false)
     private String city;
+
+    @Column(name = "postal_code", nullable = false)
     private String postalCode;
+
 
     //Default Constructors
     public Address() {

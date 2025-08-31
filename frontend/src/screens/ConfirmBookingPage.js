@@ -1,19 +1,40 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './ConfirmBookingPage.css';
 
 function ConfirmBookingPage() {
-  const booking = {
-    service: "Gel Polish Application on Natural Hands",
-    professional: "Lynn",
-    date: "Monday, 25 August",
-    time: "09:00–10:00",
-    price: 275,
-    duration: "1 hr"
-  };
+  const location = useLocation();
+  const { cart = [], totalPrice = 0, selectedDate, selectedTime, selectedVehicle } = location.state || {};
+
+  const [washAttendant, setWashAttendant] = useState(null);
+  const [loadingAttendant, setLoadingAttendant] = useState(true);
+  const [attendantError, setAttendantError] = useState(null);
+
+  // Fetch random wash attendant on mount
+  useEffect(() => {
+    setLoadingAttendant(true);
+    fetch('http://localhost:8080/mobileglow/wash-attendants/random')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch wash attendant');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setWashAttendant(data);
+        setLoadingAttendant(false);
+      })
+      .catch(error => {
+        console.error('Error fetching wash attendant:', error);
+        setAttendantError(error.message);
+        setLoadingAttendant(false);
+      });
+  }, []);
 
   return (
     <div className="confirm-container">
       <div className="breadcrumb">
-        Services &gt; Professional &gt; Time &gt; <strong>Confirm</strong>
+        Services &gt; Professional &gt; Time &gt; Vehicle &gt; <strong>Confirm</strong>
       </div>
 
       <h1>Review and confirm</h1>
@@ -29,38 +50,47 @@ function ConfirmBookingPage() {
           </div>
 
           <div className="form-section">
-            <h3>Discount code</h3>
-            <div className="discount-row">
-              <input type="text" placeholder="Enter discount code" />
-              <button className="apply-btn">Apply</button>
-            </div>
-          </div>
-
-          <div className="form-section">
             <h3>Booking notes</h3>
-            <textarea
-              placeholder="Include comments or requests about your booking"
-            />
+            <textarea placeholder="Include comments or requests about your booking" />
           </div>
         </div>
 
         {/* RIGHT PANEL */}
         <div className="confirm-summary">
-          <h3>Blush and Buff</h3>
-          <p className="location">Intercare Blaauwberg, Cnr Link Rd & Park Dr...</p>
-          <div className="date-time">
-            <p><strong>{booking.date}</strong></p>
-            <p>{booking.time} ({booking.duration} duration)</p>
-          </div>
+          <h3>MobileGlow Car Wash</h3>
+          <p className="location">Parklands, Cape Town</p>
+          {selectedDate && <p><strong>{selectedDate.toLocaleDateString()}</strong></p>}
+          {selectedDate && <p>{selectedTime} ({selectedDate.toLocaleTimeString()})</p>}
 
           <hr />
 
-          <p>{booking.service}</p>
-          <p>{booking.duration} with {booking.professional}</p>
+          <div className="vehicle-info">
+            <p><strong>Vehicle:</strong> {selectedVehicle}</p>
+          </div>
+
+          {/* Wash Attendant Section */}
+          <div className="attendant-info">
+            <h4>Assigned Wash Attendant</h4>
+            {loadingAttendant && <p>Loading wash attendant...</p>}
+            {attendantError && <p className="error">Error: {attendantError}</p>}
+            {washAttendant && !loadingAttendant && !attendantError && (
+              <>
+                <p><strong>ID:</strong> #{washAttendant.userId}</p>
+                <p><strong>Shift Hours:</strong> {washAttendant.shiftHours} hrs</p>
+                <p><strong>Type:</strong> {washAttendant.employeeType}</p>
+              </>
+            )}
+          </div>
+
+          {cart.map(service => (
+            <div key={service.id} className="service-info">
+              <p>{service.serviceName} - R {service.priceOfService}</p>
+            </div>
+          ))}
 
           <div className="price-row">
             <span>Subtotal</span>
-            <span>R {booking.price}</span>
+            <span>R {totalPrice}</span>
           </div>
 
           <hr />
@@ -71,7 +101,7 @@ function ConfirmBookingPage() {
               <div className="pay-now">Pay now</div>
               <div className="pay-at-venue">Pay at venue</div>
             </div>
-            <div className="total-price">R {booking.price}</div>
+            <div className="total-price">R {totalPrice}</div>
           </div>
 
           <button className="confirm-btn">Confirm</button>

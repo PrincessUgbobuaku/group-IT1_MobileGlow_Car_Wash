@@ -1,105 +1,86 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import './BookingTwo.css';
 
-function BookingTwo() {
+const BookingTwo = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState("2025-08-23");
 
-  const fullyBookedDates = ["2025-08-23", "2025-08-24"];
-  const dates = [
-    "2025-08-23",
-    "2025-08-24",
-    "2025-08-25",
-    "2025-08-26",
-    "2025-08-27",
-    "2025-08-28",
-    "2025-08-29",
-  ];
+  const { cart, totalPrice } = location.state; // Get cart and total price from the previous page
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(null); // Initialize as null, so no time is selected by default
 
   const availableTimes = [
     "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30"
   ];
 
-  const handleContinue = () => {
-    navigate("/confirm", { state: { date: selectedDate } });
+  // Handle time selection
+  const handleTimeChange = (time) => {
+    setSelectedTime(time); // This will update the selectedTime state when a time is clicked
   };
 
-  const isFullyBooked = fullyBookedDates.includes(selectedDate);
+  // Handle continue action
+  const handleContinue = () => {
+    // Ensure selectedTime and selectedDate are set before navigating
+    if (!selectedTime || !selectedDate) {
+      alert("Please select both a time and a date!");
+      return;
+    }
 
-  const selectedDateObj = new Date(selectedDate);
-  const monthName = selectedDateObj.toLocaleString("en-US", { month: "long", year: "numeric" });
+    // Proceed to the next page
+    navigate("/bookingvehicle", {
+      state: {
+        cart,
+        totalPrice,
+        selectedDate,
+        selectedTime, // Pass selected time to the vehicle selection page
+      }
+    });
+  };
 
   return (
-    <div className="booking-container">
-      {/* Left Section */}
-      <div className="booking-calendar">
-        <h1>Select time</h1>
-        <div className="month-label">{monthName}</div>
-
-        <div className="date-grid">
-          {dates.map((date) => {
-            const d = new Date(date);
-            const day = d.toLocaleDateString("en-US", { weekday: "short" });
-            const dayNum = d.getDate();
-            return (
-              <button
-                key={date}
-                onClick={() => setSelectedDate(date)}
-                className={`date-btn ${
-                  selectedDate === date ? "selected" : ""
-                }`}
-                disabled={fullyBookedDates.includes(date)}
-              >
-                <div>{dayNum}</div>
-                <div>{day}</div>
-              </button>
-            );
-          })}
+    <div className="booking-two-container">
+      <div className="left-panel">
+        <h1>Select Date and Time</h1>
+        <div className="calendar">
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)} // Set the selected date
+            showTimeSelect
+            dateFormat="Pp"
+            minDate={new Date()} // Ensure the user can't pick a past date
+          />
         </div>
 
-        {isFullyBooked ? (
-          <div className="info-card">
-            <p>Lynn is fully booked on this date</p>
-            <p>Available from Mon, 25 Aug</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <button className="outline-btn">Go to next available date</button>
-              <button className="outline-btn">Join waitlist</button>
-            </div>
+        <div className="time-selector">
+          <h2>Select Time</h2>
+          <div className="time-buttons">
+            {availableTimes.map(time => (
+              <button
+                key={time}
+                onClick={() => handleTimeChange(time)} // Update selectedTime when clicked
+                className={`time-btn ${selectedTime === time ? "selected" : ""}`}
+              >
+                {time}
+              </button>
+            ))}
           </div>
-        ) : (
-          <>
-            <div className="info-card">
-              <p>Available slots for {selectedDate}</p>
-              <p>Choose your time at confirmation</p>
-            </div>
-            <div className="time-grid">
-              {availableTimes.map((time) => (
-                <button key={time} className="time-btn">{time}</button>
-              ))}
-            </div>
-          </>
-        )}
+        </div>
       </div>
 
-      {/* Right Section */}
-      <div className="booking-summary">
-        <h3>Blush and Buff</h3>
+      <div className="right-panel">
+        <h3>MobileGlow Car Wash</h3>
         <p>Gel Polish Application on Natural Hands</p>
         <p>1 hr with Lynn</p>
-        <div style={{ marginTop: "20px", fontWeight: "bold" }}>
-          Total: <span style={{ float: "right" }}>R 275</span>
+        <div className="total-price">
+          <strong>Total:</strong> <span>R {totalPrice}</span>
         </div>
-        <button
-          className="continue-btn"
-          disabled={isFullyBooked}
-          onClick={handleContinue}
-        >
-          Continue
-        </button>
+        <button className="continue-btn" onClick={handleContinue}>Continue</button>
       </div>
     </div>
   );
-}
+};
 
 export default BookingTwo;
