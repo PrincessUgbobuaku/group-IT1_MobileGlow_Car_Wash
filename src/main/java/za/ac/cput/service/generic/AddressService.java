@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.generic.Address;
 import za.ac.cput.repository.generic.IAddressRepository;
-import za.ac.cput.service.generic.AddressService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AddressService implements IAddressService {
@@ -16,10 +14,8 @@ public class AddressService implements IAddressService {
 
     @Autowired
     public AddressService(IAddressRepository repository) {
-
         this.repository = repository;
     }
-
 
     @Override
     public Address create(Address address) {
@@ -27,26 +23,29 @@ public class AddressService implements IAddressService {
     }
 
     @Override
-    public Address read(Long aLong) {
-        return repository.findById(aLong).orElse(null);
+    public Address read(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public Address update(Address address) {
+        if (read(address.getAddressID()) == null) {
+            return null; // or throw exception
+        }
         return repository.save(address);
     }
 
     @Override
-    public boolean delete(Long aLong) {
-        repository.deleteById(aLong);
-        return true;
+    public boolean delete(Long id) {
+        if (read(id) != null) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public List<Address> getAllAddresses() {
         return repository.findAll();
     }
-
-
-    }
-
+}
