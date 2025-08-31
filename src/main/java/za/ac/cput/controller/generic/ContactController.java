@@ -3,23 +3,22 @@ package za.ac.cput.controller.generic;
 /* MobileGlow Car Wash
    Contact Controller Class
    Author: Inga Zekani (221043756)
- */
+*/
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.service.generic.ContactService;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/contacts")
 @CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/contact")
 public class ContactController {
+
+
 
     private final ContactService contactService;
 
@@ -30,66 +29,46 @@ public class ContactController {
 
     // CREATE - Add new contact
     @PostMapping("/create")
-    public ResponseEntity<?> createContact(@Valid @RequestBody Contact contact, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body("Validation error: " + result.getFieldError().getDefaultMessage());
-        }
-
-        try {
-            Contact createdContact = contactService.create(contact);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdContact);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Contact> create(@RequestBody Contact contact) {
+        Contact created = contactService.create(contact);
+        return ResponseEntity.ok(created);
     }
 
     // READ - Get contact by ID
     @GetMapping("/read/{contactID}")
-    public ResponseEntity<?> readContact(@PathVariable Long contactID) {
-        try {
-            Contact contact = contactService.read(contactID);
-            return ResponseEntity.ok(contact);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Contact> read(@PathVariable Long contactID) {
+        Contact contact = contactService.read(contactID);
+        return contact != null ? ResponseEntity.ok(contact) : ResponseEntity.notFound().build();
     }
-
 
     // UPDATE - Update existing contact
     @PutMapping("/update/{contactID}")
-    public ResponseEntity<?> updateContact(@PathVariable Long contactID, @Valid @RequestBody Contact contact, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body("Validation error: " + result.getFieldError().getDefaultMessage());
-        }
-
+    public ResponseEntity<Contact> update(@PathVariable Long contactID, @RequestBody Contact contact) {
         if (!contactID.equals(contact.getContactID())) {
-            return ResponseEntity.badRequest().body("ID in path and body do not match");
+            return ResponseEntity.badRequest().build();
         }
 
-        try {
-            Contact updatedContact = contactService.update(contact);
-            return ResponseEntity.ok(updatedContact);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        Contact updated = contactService.update(contact);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     // DELETE - Delete contact
     @DeleteMapping("/delete/{contactID}")
-    public ResponseEntity<?> deleteContact(@PathVariable Long contactID) {
-        try {
-            boolean deleted = contactService.delete(contactID);
-            return ResponseEntity.ok().body("Contact deleted successfully");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Void> delete(@PathVariable Long contactID) {
+        boolean deleted = contactService.delete(contactID);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // GET - Get all contacts
+    // GET ALL - Get all contacts
     @GetMapping("/getAll")
-    public ResponseEntity<List<Contact>> getAllContacts() {
+    public ResponseEntity<List<Contact>> getAll() {
         List<Contact> contacts = contactService.getAll();
         return ResponseEntity.ok(contacts);
     }
 
+    // TEST - Simple endpoint to check API
+    @GetMapping("/test")
+    public String test() {
+        return "Contact API is working!";
+    }
 }
