@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 import za.ac.cput.domain.review.ServiceReview;
 
 @Repository
-public interface IServiceReviewRepository extends JpaRepository<ServiceReview, Long> {
+public interface IServiceReviewRepository extends JpaRepository<ServiceReview, Long> {
 }

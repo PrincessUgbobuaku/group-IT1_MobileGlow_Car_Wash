@@ -8,34 +8,20 @@ const BookingTwo = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { cart, totalPrice } = location.state; // Get cart and total price from the previous page
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(null); // Initialize as null, so no time is selected by default
+  const { cart, totalPrice } = location.state;
+  const [selectedDateTime, setSelectedDateTime] = useState(null);
 
-  const availableTimes = [
-    "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30"
-  ];
-
-  // Handle time selection
-  const handleTimeChange = (time) => {
-    setSelectedTime(time); // This will update the selectedTime state when a time is clicked
-  };
-
-  // Handle continue action
   const handleContinue = () => {
-    // Ensure selectedTime and selectedDate are set before navigating
-    if (!selectedTime || !selectedDate) {
-      alert("Please select both a time and a date!");
+    if (!selectedDateTime) {
+      alert("Please select both a date and time!");
       return;
     }
 
-    // Proceed to the next page
     navigate("/bookingvehicle", {
       state: {
         cart,
         totalPrice,
-        selectedDate,
-        selectedTime, // Pass selected time to the vehicle selection page
+        selectedDateTime, // Now this is a full date-time object
       }
     });
   };
@@ -46,27 +32,16 @@ const BookingTwo = () => {
         <h1>Select Date and Time</h1>
         <div className="calendar">
           <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)} // Set the selected date
+            selected={selectedDateTime}
+            onChange={(date) => setSelectedDateTime(date)}
             showTimeSelect
-            dateFormat="Pp"
-            minDate={new Date()} // Ensure the user can't pick a past date
+            timeIntervals={15} // e.g., 15-minute intervals
+            timeCaption="Time"
+            dateFormat="MMMM d, yyyy h:mm aa"
+            minDate={new Date()}
+            placeholderText="Click to select date and time"
+            className="custom-datepicker"
           />
-        </div>
-
-        <div className="time-selector">
-          <h2>Select Time</h2>
-          <div className="time-buttons">
-            {availableTimes.map(time => (
-              <button
-                key={time}
-                onClick={() => handleTimeChange(time)} // Update selectedTime when clicked
-                className={`time-btn ${selectedTime === time ? "selected" : ""}`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -77,7 +52,9 @@ const BookingTwo = () => {
         <div className="total-price">
           <strong>Total:</strong> <span>R {totalPrice}</span>
         </div>
-        <button className="continue-btn" onClick={handleContinue}>Continue</button>
+        <button className="continue-btn" onClick={handleContinue}>
+          Continue
+        </button>
       </div>
     </div>
   );

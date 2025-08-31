@@ -6,32 +6,26 @@
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/Booking.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/Booking.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/BookingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/AddressController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/ContactController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/ContactController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/user/employee/WashAttendantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/user/employee/WashAttendantController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/generic/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/generic/Address.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/generic/ContactFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/generic/ContactFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/UserFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/UserFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/review/IServiceReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/review/IServiceReviewRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/user/employee/IWashAttendantRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/user/employee/IWashAttendantRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/user/employee/impl/IManagerRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/BookingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/generic/ContactService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/generic/ContactService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/IWashAttendantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/IWashAttendantService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/WashAttendantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/WashAttendantService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/util/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/util/Helper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/AccountantControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/AccountantControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/ManagerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/ManagerControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/CustomerFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/CustomerFactoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/UserFactoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/AccountantFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/AccountantFactoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/WashAttendantFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/WashAttendantFactoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/BookingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/BookingServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/payment/PaymentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/payment/PaymentServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/CustomerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/LoginServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/LoginServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/AccountantServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/AccountantServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/WashAttendantServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/WashAttendantServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,15 +72,20 @@
     "JUnit.BookingFactoryTest.testCreateBookingWithMultiplePayments.executor": "Run",
     "JUnit.BookingFactoryTest.testCreateBookingWithoutPayments.executor": "Run",
     "JUnit.BookingServiceTest.executor": "Run",
+    "JUnit.BookingServiceTest.setupEntities.executor": "Run",
+    "JUnit.BookingServiceTest.testCreate.executor": "Run",
     "JUnit.CleaningServiceFactoryTest.executor": "Run",
     "JUnit.CleaningServiceFactoryTest.testCreateSingleCleaningService.executor": "Run",
     "JUnit.CleaningServiceServiceTest.executor": "Run",
     "JUnit.CleaningServiceServiceTest.testCreate.executor": "Run",
+    "JUnit.CustomerServiceTest.create.executor": "Run",
     "JUnit.CustomerServiceTest.executor": "Run",
     "JUnit.PaymentFactoryTest.executor": "Run",
     "JUnit.PaymentFactoryTest.testCreatePaymentForExistingBooking.executor": "Run",
     "JUnit.PaymentServiceTest.executor": "Run",
     "JUnit.PaymentServiceTest.setupEntities.executor": "Run",
+    "JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking.executor": "Run",
+    "JUnit.VehicleServiceTest.create.executor": "Run",
     "JUnit.VehicleServiceTest.executor": "Run",
     "JUnit.WashAttendantServiceTest.a_create.executor": "Run",
     "JUnit.WashAttendantServiceTest.executor": "Run",
@@ -98,7 +97,7 @@
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.WashAttendantServiceTest.a_create">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="za.ac.cput.Main" />
       <module name="MobileGlow_Car_Wash" />
@@ -112,7 +111,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CleaningServiceServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BookingServiceTest.setupEntities" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MobileGlow_Car_Wash" />
       <extension name="coverage">
         <pattern>
@@ -121,8 +120,25 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="za.ac.cput.service.booking" />
-      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.booking.CleaningServiceServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.booking.BookingServiceTest" />
+      <option name="METHOD_NAME" value="setupEntities" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BookingServiceTest.testCreate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="MobileGlow_Car_Wash" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="za.ac.cput.service.booking.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="za.ac.cput.service.booking" />
+      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.booking.BookingServiceTest" />
+      <option name="METHOD_NAME" value="testCreate" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -143,32 +159,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="WashAttendantServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PaymentServiceTest.testCreatePaymentWithExistingBooking" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MobileGlow_Car_Wash" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="za.ac.cput.service.user.employee.*" />
+          <option name="PATTERN" value="za.ac.cput.service.payment.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="za.ac.cput.service.user.employee" />
-      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.user.employee.WashAttendantServiceTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="WashAttendantServiceTest.a_create" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="MobileGlow_Car_Wash" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="za.ac.cput.service.user.employee.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="za.ac.cput.service.user.employee" />
-      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.user.employee.WashAttendantServiceTest" />
-      <option name="METHOD_NAME" value="a_create" />
+      <option name="PACKAGE_NAME" value="za.ac.cput.service.payment" />
+      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.payment.PaymentServiceTest" />
+      <option name="METHOD_NAME" value="testCreatePaymentWithExistingBooking" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -177,10 +178,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
-        <item itemvalue="JUnit.WashAttendantServiceTest.a_create" />
-        <item itemvalue="JUnit.WashAttendantServiceTest" />
+        <item itemvalue="JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking" />
+        <item itemvalue="JUnit.BookingServiceTest.testCreate" />
+        <item itemvalue="JUnit.BookingServiceTest.setupEntities" />
         <item itemvalue="JUnit.CleaningServiceServiceTest.testCreate" />
-        <item itemvalue="JUnit.CleaningServiceServiceTest" />
       </list>
     </recent_temporary>
   </component>

@@ -46,15 +46,16 @@ class BookingServiceTest {
 
     @Test
     @Rollback(value = false)
+    @BeforeEach
     @Order(0)
     void setupEntities() {
         // ✅ Fetch an existing vehicle (ensure this ID exists in DB)
-        vehicle = vehicleService.read(62L);
+        vehicle = vehicleService.read(1L);
         assertNotNull(vehicle, "Vehicle should exist in the database");
         assertNotNull(vehicle.getCustomer(), "Vehicle should have a customer");
 
         // ✅ Fetch an existing wash attendant (ensure this ID exists in DB)
-        washAttendant = washAttendantService.read(59L);
+        washAttendant = washAttendantService.read(1L);
         assertNotNull(washAttendant, "WashAttendant should exist in the database");
     }
 
@@ -62,8 +63,8 @@ class BookingServiceTest {
     @Rollback(false)
     @Order(1)
     void testCreate() {
-        CleaningService cleaningService_1 = cleaningServiceService.readByServiceName("SURFACE_WIPE");
-        CleaningService cleaningService_2 = cleaningServiceService.readByServiceName("DASHBOARD_POLISH");
+        CleaningService cleaningService_1 = cleaningServiceService.readByServiceName("INTERIOR_STEAM");
+        CleaningService cleaningService_2 = cleaningServiceService.readByServiceName("DEP_FULL_WASH");
 
         List<CleaningService> services = new ArrayList<>();
         services.add(cleaningService_1);

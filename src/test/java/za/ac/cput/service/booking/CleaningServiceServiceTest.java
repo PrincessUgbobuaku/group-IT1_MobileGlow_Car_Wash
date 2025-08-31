@@ -28,10 +28,10 @@ public class CleaningServiceServiceTest {
     @Order(1)
     void testCreate() {
         CleaningService cleaningService = CleaningServiceFactory.createCleaningService(
-                "PAINT_PROTECTION_FILM",
-                500.00,
-                1.0,
-                "Protection Services"
+                "DEP_FULL_WASH",
+                300.00,
+                1.5,
+                "Exterior Wash"
         );
 
         savedCleaningService = cleaningServiceService.create(cleaningService);

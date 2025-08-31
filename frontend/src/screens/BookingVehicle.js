@@ -6,11 +6,11 @@ const BookingVehicle = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { cart, totalPrice, selectedDate, selectedTime } = location.state || {};
+  const { cart, totalPrice, selectedDateTime } = location.state || {};
   const [vehicles, setVehicles] = useState([]);
-  const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
-  const userId = 51; // Example: get this dynamically for production
+  const userId = 7; // Example: get this dynamically for production
 
   useEffect(() => {
     fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
@@ -26,21 +26,22 @@ const BookingVehicle = () => {
   }, [userId]);
 
   const handleVehicleChange = (event) => {
-    setSelectedVehicle(event.target.value);
-    console.log("Selected Vehicle:", event.target.value);
+    const vehicleId = event.target.value;
+    setSelectedVehicleId(vehicleId);
+    console.log("Selected Vehicle ID:", vehicleId);
   };
 
   const handleContinue = () => {
-    if (!selectedVehicle) {
+    if (!selectedVehicleId) {
       alert("Please select a vehicle!");
     } else {
+      const vehicleObj = vehicles.find(v => String(v.vehicleID) === selectedVehicleId);
       navigate("/confirm", {
         state: {
           cart,
           totalPrice,
-          selectedDate,
-          selectedTime,
-          selectedVehicle,
+          selectedDateTime,
+          selectedVehicle: vehicleObj,  // pass full vehicle object here
         }
       });
     }
@@ -54,13 +55,13 @@ const BookingVehicle = () => {
 
         <div className="vehicle-selection">
           <label>Select your vehicle:</label>
-          <select onChange={handleVehicleChange} value={selectedVehicle}>
+          <select onChange={handleVehicleChange} value={selectedVehicleId}>
             <option value="">Select Vehicle</option>
             {vehicles.length > 0 ? (
               vehicles.map(vehicle => (
                 <option
                   key={vehicle.vehicleID}
-                  value={vehicle.vehicleid}
+                  value={String(vehicle.vehicleID)}
                 >
                   {vehicle.carMake} {vehicle.carModel}
                 </option>
@@ -74,7 +75,7 @@ const BookingVehicle = () => {
         <button
           className="continue-btn"
           onClick={handleContinue}
-          disabled={!selectedVehicle}
+          disabled={!selectedVehicleId}
         >
           Continue
         </button>

@@ -1,5 +1,6 @@
 package za.ac.cput.domain.booking;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.domain.payment.Payment;
@@ -41,6 +42,7 @@ public class Booking {
     private boolean tipAdd;
     private double bookingCost;
 
+    @JsonCreator
     protected Booking() {}
 
     private Booking(Builder builder) {
