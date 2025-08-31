@@ -14,7 +14,7 @@ import za.ac.cput.service.generic.AddressService;
 
 import java.util.List;
 
-@CrossOrigin(origins = " http://localhost:3000")
+@CrossOrigin(origins = " http://localhost:3002")
 @RestController
 @RequestMapping("/api/address")
 public class AddressController {
@@ -48,13 +48,31 @@ public class AddressController {
             return ResponseEntity.badRequest().build();
         }
 
-        if (!addressService.delete(id)) {
-            return ResponseEntity.notFound().build();
-        }
+        try {
+            Address existing = addressService.read(id); // fetch existing
+            if (existing == null) {
+                return ResponseEntity.notFound().build();
+            }
 
-        Address updated = addressService.create(address);
-        return ResponseEntity.ok(updated);
+            // Create a new Address object with updated fields using Builder
+            Address updated = new Address.Builder()
+                    .copy(existing) // copy existing data
+                    .setStreetNumber(address.getStreetNumber()) // update new values
+                    .setStreetName(address.getStreetName())
+                    .setCity(address.getCity())
+                    .setPostalCode(address.getPostalCode())
+                    .build();
+
+            // Save updated address
+            Address saved = addressService.create(updated);
+            return ResponseEntity.ok(saved);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
