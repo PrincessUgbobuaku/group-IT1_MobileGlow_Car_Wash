@@ -31,7 +31,7 @@ class ContactControllerTest {
     private TestRestTemplate restTemplate;
 
     private String getBaseUrl() {
-        return "http://localhost:" + port + "/mobileglow/api/contact";
+        return "http://localhost:" + port + "/mobileglow/api/contacts";
     }
 
     //private static final String BASE_URL = "http://localhost:8080/api/contacts";
