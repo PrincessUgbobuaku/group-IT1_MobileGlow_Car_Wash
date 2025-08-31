@@ -65,4 +65,32 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> findActiveCustomers() {
         return ResponseEntity.ok(service.findActiveCustomers());
     }
+
+    // Deactivate/Activate customer
+    @PutMapping("/{id}/toggle-status")
+    public ResponseEntity<Customer> toggleCustomerStatus(@PathVariable Long id) {
+        Customer customer = service.read(id);
+        if (customer == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Handle null isActive (default to true if null)
+        Boolean currentStatus = customer.getIsActive();
+        if (currentStatus == null) {
+            currentStatus = true;
+        }
+
+        // Toggle the active status
+        Customer updatedCustomer = new Customer.Builder()
+                .copy(customer)
+                .setIsActive(!currentStatus)
+                .build();
+
+        System.out.println("Toggling customer " + id + " from " + currentStatus + " to " + !currentStatus);
+
+        Customer saved = service.update(updatedCustomer);
+        System.out.println("Saved customer with isActive: " + saved.getIsActive());
+
+        return ResponseEntity.ok(saved);
+    }
 }
