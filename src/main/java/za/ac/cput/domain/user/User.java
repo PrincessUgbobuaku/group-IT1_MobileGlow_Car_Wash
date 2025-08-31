@@ -27,16 +27,17 @@ public abstract class User {
         EMPLOYEE,
     }
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "contact_Id", referencedColumnName = "id")
+   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "contact_Id", referencedColumnName = "contact_Id")
     protected Contact contact;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_Id", referencedColumnName = "addressid")
+
+    @JoinColumn(name = "addressid", referencedColumnName = "addressid")
     protected Address address;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "login_Id", referencedColumnName = "loginID")
+    @JoinColumn(name = "loginid", referencedColumnName = "loginid")
     protected Login login;
 
     public Long getUserId() {
