@@ -71,7 +71,7 @@ const BookingTwo = () => {
       </div>
 
       <div className="right-panel">
-        <h3>Blush and Buff</h3>
+        <h3>MobileGlow Car Wash</h3>
         <p>Gel Polish Application on Natural Hands</p>
         <p>1 hr with Lynn</p>
         <div className="total-price">

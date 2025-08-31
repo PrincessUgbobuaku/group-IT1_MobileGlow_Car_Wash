@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './ConfirmBookingPage.css';
 
 function ConfirmBookingPage() {
   const location = useLocation();
-  const { cart, totalPrice, selectedDate, selectedTime, selectedVehicle } = location.state || {}; // Get the passed data
+  const { cart = [], totalPrice = 0, selectedDate, selectedTime, selectedVehicle } = location.state || {};
+
+  const [washAttendant, setWashAttendant] = useState(null);
+  const [loadingAttendant, setLoadingAttendant] = useState(true);
+  const [attendantError, setAttendantError] = useState(null);
+
+  // Fetch random wash attendant on mount
+  useEffect(() => {
+    setLoadingAttendant(true);
+    fetch('http://localhost:8080/mobileglow/wash-attendants/random')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch wash attendant');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setWashAttendant(data);
+        setLoadingAttendant(false);
+      })
+      .catch(error => {
+        console.error('Error fetching wash attendant:', error);
+        setAttendantError(error.message);
+        setLoadingAttendant(false);
+      });
+  }, []);
 
   return (
     <div className="confirm-container">
@@ -26,23 +51,35 @@ function ConfirmBookingPage() {
 
           <div className="form-section">
             <h3>Booking notes</h3>
-            <textarea
-              placeholder="Include comments or requests about your booking"
-            />
+            <textarea placeholder="Include comments or requests about your booking" />
           </div>
         </div>
 
         {/* RIGHT PANEL */}
         <div className="confirm-summary">
-          <h3>Blush and Buff</h3>
+          <h3>MobileGlow Car Wash</h3>
           <p className="location">Parklands, Cape Town</p>
-          <p><strong>{selectedDate.toLocaleDateString()}</strong></p>
-          <p>{selectedTime} ({selectedDate.toLocaleTimeString()})</p>
+          {selectedDate && <p><strong>{selectedDate.toLocaleDateString()}</strong></p>}
+          {selectedDate && <p>{selectedTime} ({selectedDate.toLocaleTimeString()})</p>}
 
           <hr />
 
           <div className="vehicle-info">
-            <p>Vehicle: {selectedVehicle}</p>
+            <p><strong>Vehicle:</strong> {selectedVehicle}</p>
+          </div>
+
+          {/* Wash Attendant Section */}
+          <div className="attendant-info">
+            <h4>Assigned Wash Attendant</h4>
+            {loadingAttendant && <p>Loading wash attendant...</p>}
+            {attendantError && <p className="error">Error: {attendantError}</p>}
+            {washAttendant && !loadingAttendant && !attendantError && (
+              <>
+                <p><strong>ID:</strong> #{washAttendant.userId}</p>
+                <p><strong>Shift Hours:</strong> {washAttendant.shiftHours} hrs</p>
+                <p><strong>Type:</strong> {washAttendant.employeeType}</p>
+              </>
+            )}
           </div>
 
           {cart.map(service => (

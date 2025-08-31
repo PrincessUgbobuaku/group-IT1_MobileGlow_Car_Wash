@@ -92,7 +92,7 @@ const Booking = () => {
 
       <div className="right-panel">
         <div className="business-info">
-          <h3>Blush and Buff</h3>
+          <h3>MobileGlow Car Wash</h3>
           <p>4.9 ⭐ (32)</p>
           <p>Parklands, Cape Town</p>
         </div>

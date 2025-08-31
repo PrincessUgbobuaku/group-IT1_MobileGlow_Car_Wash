@@ -12,7 +12,7 @@ public class ContactFactory {
 
     public static Contact createContact(String phoneNumber) {
         // Validate phone number
-        if ( !isValidPhoneNumber(phoneNumber)) {
+        if (!Helper.isValidPhoneNumber(phoneNumber)) {
             return null;
         }
 
@@ -21,6 +21,6 @@ public class ContactFactory {
                 .build();
     }
 
-    
-   
+
+
 }

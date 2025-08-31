@@ -6,6 +6,7 @@ import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.repository.user.employee.IWashAttendantRepository;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class WashAttendantService implements IWashAttendantService {
@@ -41,6 +42,20 @@ public class WashAttendantService implements IWashAttendantService {
     public boolean delete(Long Id) {
         washAttendantRepository.deleteById(Id);
         return false;
+    }
+
+
+    @Override
+    public WashAttendant getRandomWashAttendant() {
+        List<WashAttendant> allAttendants = washAttendantRepository.findAll();
+
+        if (allAttendants.isEmpty()) {
+            return null; // Or throw exception if you prefer
+        }
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(allAttendants.size());
+        return allAttendants.get(randomIndex);
     }
 
 //    @Override

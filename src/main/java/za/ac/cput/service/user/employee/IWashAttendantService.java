@@ -8,5 +8,7 @@ import java.util.List;
 public interface IWashAttendantService extends IService<WashAttendant, Long> {
     List<WashAttendant> getAllWashAttendants();
 
+    WashAttendant getRandomWashAttendant();
+
 //    List<WashAttendant> findAll();
 }

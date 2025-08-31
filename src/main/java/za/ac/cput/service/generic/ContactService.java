@@ -60,5 +60,5 @@ public class ContactService implements IContactService {
     public List<Contact> getAll() {
 
         return contactRepository.findAll();
-    }
+}
 }

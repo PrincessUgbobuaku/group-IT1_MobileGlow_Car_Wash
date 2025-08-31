@@ -6,23 +6,19 @@ const BookingVehicle = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { cart, totalPrice, selectedDate, selectedTime } = location.state || {}; // Get cart and total price from previous page
-  const [vehicles, setVehicles] = useState([]); // Initialize as empty array
-  const [selectedVehicle, setSelectedVehicle] = useState(""); // Store selected vehicle ID (ensure it's an empty string)
+  const { cart, totalPrice, selectedDate, selectedTime } = location.state || {};
+  const [vehicles, setVehicles] = useState([]);
+  const [selectedVehicle, setSelectedVehicle] = useState("");
 
-  const userId = 51;  // Example: Get this dynamically based on logged-in user
+  const userId = 51; // Example: get this dynamically for production
 
   useEffect(() => {
-    // Fetch vehicles for the logged-in user
-    fetch(`http://localhost:8080/mobileglow/api/vehicle?customerId=${userId}`)  // Adjust endpoint
+    fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched vehicles:", data);  // Debugging log to check the data
-        if (Array.isArray(data) && data.length > 0) {
-          setVehicles(data);  // Store vehicles if they are returned correctly
-        } else {
-          setVehicles([]);  // Ensure an empty array if no vehicles exist
-        }
+        console.log("Fetched vehicles:", data);
+        console.log("First vehicle object:", data[0]);
+        setVehicles(Array.isArray(data) ? data : []);
       })
       .catch((error) => {
         console.error('Error fetching vehicles:', error);
@@ -30,22 +26,21 @@ const BookingVehicle = () => {
   }, [userId]);
 
   const handleVehicleChange = (event) => {
-    setSelectedVehicle(event.target.value); // Update selected vehicle when the user selects one
-    console.log("Selected Vehicle:", event.target.value); // Debugging log to check the selected vehicle ID
+    setSelectedVehicle(event.target.value);
+    console.log("Selected Vehicle:", event.target.value);
   };
 
   const handleContinue = () => {
     if (!selectedVehicle) {
       alert("Please select a vehicle!");
     } else {
-      // Pass the selected vehicle to the confirm page along with other details
       navigate("/confirm", {
         state: {
           cart,
           totalPrice,
           selectedDate,
           selectedTime,
-          selectedVehicle,  // Add the selected vehicle to the state
+          selectedVehicle,
         }
       });
     }
@@ -64,29 +59,48 @@ const BookingVehicle = () => {
             {vehicles.length > 0 ? (
               vehicles.map(vehicle => (
                 <option
-                  key={vehicle.vehicleid}
-                  value={vehicle.vehicleid}>
-                  {vehicle.car_make} {vehicle.car_model} ({vehicle.car_colour}) - {vehicle.car_plate_number}
+                  key={vehicle.vehicleID}
+                  value={vehicle.vehicleid}
+                >
+                  {vehicle.carMake} {vehicle.carModel}
                 </option>
               ))
             ) : (
-              <option disabled>No vehicles available</option> // Display when no vehicles are available
+              <option disabled>No vehicles available</option>
             )}
           </select>
         </div>
 
-        <button className="continue-btn" onClick={handleContinue} disabled={!selectedVehicle}>
+        <button
+          className="continue-btn"
+          onClick={handleContinue}
+          disabled={!selectedVehicle}
+        >
           Continue
         </button>
       </div>
 
       <div className="right-panel">
         <div className="business-info">
-          <h3>Blush and Buff</h3>
+          <h3>MobileGlow Car Wash</h3>
           <p>4.9 ⭐ (32)</p>
           <p>Parklands, Cape Town</p>
         </div>
       </div>
+
+      {/*
+      // DEBUG VIEW – Uncomment if needed for troubleshooting
+      <div className="vehicle-debug">
+        <h4>Debug: Vehicles List</h4>
+        <ul>
+          {vehicles.map(vehicle => (
+            <li key={vehicle.vehicleID}>
+              ID: {vehicle.vehicleID}, Model: {vehicle.carModel}, Make: {vehicle.carMake}, Plate: {vehicle.carPlateNumber}, Colour: {vehicle.carColour}
+            </li>
+          ))}
+        </ul>
+      </div>
+      */}
     </div>
   );
 };

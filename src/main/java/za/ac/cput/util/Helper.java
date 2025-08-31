@@ -201,11 +201,11 @@ public class Helper {
     }
 
     public static boolean isValidPhoneNumber(String phoneNumber) {
-//        if (isNullorEmpty(phoneNumber)) {
-//            return false;
-//        }
+        if (phoneNumber == null) {
+            return false;
+        }
 
-        //Checks for e.g 0725637252 or +27 72 563...
+        // Checks for e.g. 0725637252 or +27 72 563 7252
         String regex = "^(\\+27|0)[6-8][0-9]{8}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(phoneNumber);
