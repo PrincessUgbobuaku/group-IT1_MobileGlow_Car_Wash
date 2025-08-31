@@ -58,9 +58,30 @@ public class WashAttendantController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<WashAttendant> getRandomAttendant() {
+        try {
+            WashAttendant randomAttendant = washAttendantService.getRandomWashAttendant();
+
+            if (randomAttendant == null) {
+                System.out.println("⚠️ No wash attendants available in DB.");
+                return ResponseEntity.notFound().build();
+            }
+
+            System.out.println("✅ Returning wash attendant: " + randomAttendant);
+            return ResponseEntity.ok(randomAttendant);
+        } catch (Exception e) {
+            System.err.println("❌ Error in getRandomAttendant: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).build(); // Internal Server Error
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<WashAttendant>> getAll() {
         List<WashAttendant> washAttendants = washAttendantService.getAllWashAttendants();
         return ResponseEntity.ok(washAttendants);
     }
+
+
 }

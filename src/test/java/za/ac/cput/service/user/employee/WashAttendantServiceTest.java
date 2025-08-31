@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 class WashAttendantServiceTest {
 
@@ -39,8 +39,8 @@ class WashAttendantServiceTest {
     private final Login login = LoginFactory.createLogin("washattendant@gmail.com", "password123");
 
     private final WashAttendant washAttendant = new WashAttendant.Builder()
-            .setUserName("Mike")
-            .setUserSurname("Johnson")
+            .setUserName("Timothy")
+            .setUserSurname("Toon")
             .setIsActive(true)
             .setRoleDescription(User.RoleDescription.EMPLOYEE)
             .setEmployeeType("Wash Attendant")

@@ -7,4 +7,6 @@ import za.ac.cput.domain.user.employee.WashAttendant;
 
 @Repository
 public interface IWashAttendantRepository extends JpaRepository<WashAttendant,Long> {
+//    WashAttendant getRandomWashAttendant();
+
 }

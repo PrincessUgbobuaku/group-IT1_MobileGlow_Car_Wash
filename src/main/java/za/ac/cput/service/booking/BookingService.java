@@ -87,10 +87,6 @@ public class BookingService implements IBookingService{
                 .mapToDouble(CleaningService::getPriceOfService)
                 .sum();
 
-
-
-
-
         // Use factory to create booking (payments null, booking cost calculated)
         Booking created = BookingFactory.createBooking(
                 validatedServices,
