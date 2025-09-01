@@ -8,11 +8,9 @@ import za.ac.cput.domain.payment.Payment;
 import za.ac.cput.domain.user.Customer;
 import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.factory.payment.PaymentFactory;
-import za.ac.cput.factory.user.CustomerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
