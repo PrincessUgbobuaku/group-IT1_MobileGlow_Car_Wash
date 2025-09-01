@@ -13,7 +13,8 @@ public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "contact_Id")
+
     private Long contactID;
 
 

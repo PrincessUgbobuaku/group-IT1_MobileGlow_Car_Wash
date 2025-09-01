@@ -73,7 +73,29 @@ public class VehicleService implements IVehicleService {
 
     @Override
     public List<Vehicle> findAll() {
-        return repository.findAll();
+        try {
+            logger.info("VehicleService.findAll() called");
+            List<Vehicle> vehicles = repository.findAll();
+            logger.info("Repository returned " + (vehicles != null ? vehicles.size() : "null") + " vehicles");
+
+            if (vehicles != null && !vehicles.isEmpty()) {
+                for (int i = 0; i < vehicles.size(); i++) {
+                    Vehicle v = vehicles.get(i);
+                    logger.info("Vehicle " + (i + 1) + ": ID=" + v.getVehicleID() +
+                            ", Plate=" + v.getCarPlateNumber() +
+                            ", Make=" + v.getCarMake() +
+                            ", Model=" + v.getCarModel());
+                }
+            } else {
+                logger.warning("No vehicles found in repository");
+            }
+
+            return vehicles;
+        } catch (Exception e) {
+            logger.severe("Error in VehicleService.findAll(): " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     // Helper method to clean up duplicate plates (for testing/maintenance)

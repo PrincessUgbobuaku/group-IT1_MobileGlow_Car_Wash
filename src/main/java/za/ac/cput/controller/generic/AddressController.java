@@ -14,7 +14,7 @@ import za.ac.cput.service.generic.AddressService;
 
 import java.util.List;
 
-@CrossOrigin(origins = " http://localhost:3002")
+@CrossOrigin(origins = " http://localhost:3000")
 @RestController
 @RequestMapping("/api/address")
 public class AddressController {
@@ -43,32 +43,25 @@ public class AddressController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Address> update(@PathVariable Long id, @RequestBody Address address) {
-        if (!id.equals(address.getAddressID())) {
-            return ResponseEntity.badRequest().build();
-        }
-
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Address address) {
         try {
-            Address existing = addressService.read(id); // fetch existing
+            // Check if the address exists
+            Address existing = addressService.read(id);
             if (existing == null) {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found with ID: " + id);
             }
 
-            // Create a new Address object with updated fields using Builder
-            Address updated = new Address.Builder()
-                    .copy(existing) // copy existing data
-                    .setStreetNumber(address.getStreetNumber()) // update new values
-                    .setStreetName(address.getStreetName())
-                    .setCity(address.getCity())
-                    .setPostalCode(address.getPostalCode())
-                    .build();
+            // Verify path ID matches body ID
+            if (!id.equals(address.getAddressID())) {
+                return ResponseEntity.badRequest().body("ID in path and body do not match");
+            }
 
-            // Save updated address
-            Address saved = addressService.create(updated);
-            return ResponseEntity.ok(saved);
+            // Update the address - use repository.save directly since JPA handles updates
+            Address updated = addressService.update(address);
+            return ResponseEntity.ok(updated);
 
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating address: " + e.getMessage());
         }
     }
 

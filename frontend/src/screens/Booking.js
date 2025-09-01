@@ -12,7 +12,7 @@ const Booking = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8080/mobileglow/api/cleaningservice')
+    fetch('http://localhost:8080/mobileglow/api/cleaningservice/getAll')
       .then((response) => response.json())
       .then((data) => {
         console.log('Fetched Services:', data);
