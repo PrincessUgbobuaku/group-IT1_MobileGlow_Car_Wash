@@ -19,7 +19,6 @@ public class Address {
     private String city;
     private String postalCode;
 
-    //Default Constructors
     public Address() {
 
     }
