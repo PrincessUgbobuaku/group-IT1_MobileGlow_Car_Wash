@@ -5,28 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/LoadingSpinner.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/LoadingSpinner.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/CleaningServiceManagement.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/CleaningServiceManagement.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/CleaningServicePage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/CleaningServicePage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ProfileManagement.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ProfileManagement.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ProfilePage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ProfilePage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/VehiclePage.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/VehiclePage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/api.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/cleaningService.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/customerService.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/profileService.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/vehicleService.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/Booking.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/Booking.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/BookingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/CleaningServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/CleaningServiceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/VehicleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/VehicleController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/AddressController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/ContactController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/ContactController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/user/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/user/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Vehicle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/generic/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/generic/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/generic/Contact.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/generic/Contact.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/UserFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/UserFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/review/IServiceReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/review/IServiceReviewRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/AccountantControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/AccountantControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/BookingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/BookingServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/payment/PaymentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/payment/PaymentServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/CustomerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/WashAttendantServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/WashAttendantServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/CleaningServiceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/CleaningServiceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/VehicleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/VehicleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/booking/VehicleControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/booking/VehicleControllerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,51 +65,63 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/PrincessUgbobuaku/group-IT1_MobileGlow_Car_Wash.git&quot;,
-    &quot;accountId&quot;: &quot;b2c82074-8a95-4072-bbf4-447844e48d36&quot;
+    &quot;url&quot;: &quot;https://github.com/ThaakirahWatson/group-IT1_MobileGlow_Car_Wash.git&quot;,
+    &quot;accountId&quot;: &quot;f455940e-3500-4679-9d37-e6853f57a93f&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="31euclX8Ma2Qt72PTH9wEv87ZH0" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "JUnit.BookingFactoryTest.executor": "Run",
-    "JUnit.BookingFactoryTest.testCreateBookingWithMultiplePayments.executor": "Run",
-    "JUnit.BookingFactoryTest.testCreateBookingWithoutPayments.executor": "Run",
-    "JUnit.BookingServiceTest.executor": "Run",
-    "JUnit.BookingServiceTest.setupEntities.executor": "Run",
-    "JUnit.BookingServiceTest.testCreate.executor": "Run",
-    "JUnit.CleaningServiceFactoryTest.executor": "Run",
-    "JUnit.CleaningServiceFactoryTest.testCreateSingleCleaningService.executor": "Run",
-    "JUnit.CleaningServiceServiceTest.executor": "Run",
-    "JUnit.CleaningServiceServiceTest.testCreate.executor": "Run",
-    "JUnit.CustomerServiceTest.create.executor": "Run",
-    "JUnit.CustomerServiceTest.executor": "Run",
-    "JUnit.PaymentFactoryTest.executor": "Run",
-    "JUnit.PaymentFactoryTest.testCreatePaymentForExistingBooking.executor": "Run",
-    "JUnit.PaymentServiceTest.executor": "Run",
-    "JUnit.PaymentServiceTest.setupEntities.executor": "Run",
-    "JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking.executor": "Run",
-    "JUnit.VehicleServiceTest.create.executor": "Run",
-    "JUnit.VehicleServiceTest.executor": "Run",
-    "JUnit.WashAttendantServiceTest.a_create.executor": "Run",
-    "JUnit.WashAttendantServiceTest.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "230098010",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/USER/Desktop/CardConnect",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingFactoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingFactoryTest.testCreateBookingWithMultiplePayments.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingFactoryTest.testCreateBookingWithoutPayments.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingServiceTest.setupEntities.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.BookingServiceTest.testCreate.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CleaningServiceFactoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CleaningServiceFactoryTest.testCreateSingleCleaningService.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CleaningServiceServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CleaningServiceServiceTest.testCreate.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CustomerServiceTest.create.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.CustomerServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaymentFactoryTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaymentFactoryTest.testCreatePaymentForExistingBooking.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaymentServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaymentServiceTest.setupEntities.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.VehicleServiceTest.create.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.VehicleServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.WashAttendantServiceTest.a_create.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.WashAttendantServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/USER/Desktop/CardConnect&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\wthaa\\AppData\\Roaming\\JetBrains\\IntelliJIdea2025.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="za.ac.cput.Main" />
@@ -185,6 +210,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -193,7 +226,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1755896945852</updated>
+      <workItem from="1756660809241" duration="8803000" />
+      <workItem from="1756670765980" duration="756000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
