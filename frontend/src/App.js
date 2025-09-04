@@ -9,7 +9,8 @@ import VehiclePage from "./screens/VehiclePage";
 import CleaningServicePage from "./screens/CleaningServicePage";
 import CleaningServiceManagement from "./screens/CleaningServiceManagement";
 import ProfilePage from "./screens/ProfilePage";
-
+import ManageBookings from "./screens/ManageBookings";
+import PaymentPage from "./screens/PaymentPage"
 function App() {
   return (
     <Router>
@@ -25,6 +26,11 @@ function App() {
         <Route path="/bookingtwo" element={<BookingTwo />} />
         <Route path="/bookingvehicle" element={<BookingVehicle />} /> {/* Vehicle selection */}
         <Route path="/confirm" element={<ConfirmBookingPage />} />
+        <Route path="/manage-bookings" element={<ManageBookings />} />
+        <Route path="/payment/:bookingId" element={<PaymentPage />} />
+
+
+
       </Routes>
     </Router>
   );

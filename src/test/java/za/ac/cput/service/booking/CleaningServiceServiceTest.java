@@ -28,19 +28,19 @@ public class CleaningServiceServiceTest {
     @Order(1)
     void testCreate() {
         CleaningService cleaningService = CleaningServiceFactory.createCleaningService(
-                "DEP_FULL_WASH",
-                300.00,
-                1.5,
-                "Exterior Wash"
+                "OIL_COATING",
+                500.00,
+                2.0,
+                "Protection Services"
         );
 
         savedCleaningService = cleaningServiceService.create(cleaningService);
 
         assertNotNull(savedCleaningService);
-        assertNotNull(savedCleaningService.getCleaningServiceID());
+        assertNotNull(savedCleaningService.getCleaningServiceId());
         assertEquals("Protection Services", savedCleaningService.getCategory());
 
-        System.out.println("✅ Created Cleaning Service: " + savedCleaningService);
+        System.out.println("Created Cleaning Service: " + savedCleaningService);
     }
 
     @Test
@@ -65,18 +65,18 @@ public class CleaningServiceServiceTest {
 
         assertNotNull(cause);
         assertEquals("CleaningService already exists with name: " + savedCleaningService.getServiceName(), cause.getMessage());
-        System.out.println("⚠️ Duplicate service creation prevented: " + cause.getMessage());
+        System.out.println("Duplicate service creation prevented: " + cause.getMessage());
     }
 
     @Test
     @Rollback(false)
     @Order(3)
     void testRead() {
-        CleaningService read = cleaningServiceService.read(savedCleaningService.getCleaningServiceID());
+        CleaningService read = cleaningServiceService.read(savedCleaningService.getCleaningServiceId());
 
         assertNotNull(read);
-        assertEquals(savedCleaningService.getCleaningServiceID(), read.getCleaningServiceID());
-        System.out.println("📖 Read Cleaning Service: " + read);
+        assertEquals(savedCleaningService.getCleaningServiceId(), read.getCleaningServiceId());
+        System.out.println("Read Cleaning Service: " + read);
     }
 
 //    @Test
@@ -91,7 +91,7 @@ public class CleaningServiceServiceTest {
 //
 //        assertNotNull(result);
 //        assertEquals(350.00, result.getPriceOfService());
-//        System.out.println("🔄 Updated Cleaning Service: " + result);
+//        System.out.println("Updated Cleaning Service: " + result);
 //
 //        savedCleaningService = result; // update reference for future tests if needed
 //    }
@@ -99,10 +99,10 @@ public class CleaningServiceServiceTest {
     @Test
     @Order(5)
     void testDelete() {
-        boolean deleted = cleaningServiceService.delete(savedCleaningService.getCleaningServiceID());
+        boolean deleted = cleaningServiceService.delete(savedCleaningService.getCleaningServiceId());
 
         assertTrue(deleted);
-        System.out.println("🗑️ Deleted Cleaning Service with ID: " + savedCleaningService.getCleaningServiceID());
+        System.out.println("🗑Deleted Cleaning Service with ID: " + savedCleaningService.getCleaningServiceId());
     }
 
     @Test

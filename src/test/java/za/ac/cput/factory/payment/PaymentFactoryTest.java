@@ -40,7 +40,7 @@ public class PaymentFactoryTest {
         List<CleaningService> services = List.of(cs_1, cs_2);
 
         // Dummy customer
-        Customer cust_001 = new Customer.Builder()
+        Customer customer = new Customer.Builder()
                 .setUserName("Brian")
                 .setUserSurname("Kabongo")
                 .setCustomerDOB(LocalDate.of(1990, 1, 1)).build();
@@ -51,7 +51,7 @@ public class PaymentFactoryTest {
                 "Toyota",
                 "Red",
                 "Corolla",
-                cust_001
+                customer
         );
 
 
@@ -63,10 +63,9 @@ public class PaymentFactoryTest {
 
         Booking booking = BookingFactory.createBooking(
                 services,
-                null,
+                vehicle,
                 washAttendant,
                 LocalDateTime.of(2025, 10, 30, 12, 0),
-                vehicle,
                 true,
                 500
         );
@@ -124,10 +123,9 @@ public class PaymentFactoryTest {
 
         Booking booking = BookingFactory.createBooking(
                 services,
-                null,
+                vehicle,
                 washAttendant,
                 LocalDateTime.of(2025, 10, 30, 12, 0),
-                vehicle,
                 true,
                 500
         );

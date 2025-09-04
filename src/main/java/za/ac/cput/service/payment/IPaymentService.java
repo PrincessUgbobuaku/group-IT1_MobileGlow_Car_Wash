@@ -8,6 +8,6 @@ import java.util.List;
 public interface IPaymentService extends IService<Payment, Long> {
     List<Payment> getAll();
 
-    List<Payment> getPaymentsByBookingID(Long bookingID);
+    List<Payment> getPaymentsByBookingId(Long bookingId);
 
 }

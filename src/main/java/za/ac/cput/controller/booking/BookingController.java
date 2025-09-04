@@ -20,25 +20,25 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    // ✅ CREATE - POST /api/bookings
+    // CREATE - POST /api/bookings
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Booking> create(@RequestBody Booking booking) {
         Booking created = bookingService.create(booking);
         return ResponseEntity.ok(created);
     }
 
-    // ✅ READ - GET /api/bookings/{id}
+    // READ - GET /api/bookings/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Booking> read(@PathVariable Long id) {
         Booking found = bookingService.read(id);
         return found != null ? ResponseEntity.ok(found) : ResponseEntity.notFound().build();
     }
 
-    // ✅ UPDATE - PUT /api/bookings/{id}
+    // UPDATE - PUT /api/bookings/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Booking> update(@PathVariable Long id, @RequestBody Booking booking) {
         // Optional: Ensure path ID and body ID match (for integrity)
-        if (!id.equals(booking.getBookingID())) {
+        if (!id.equals(booking.getBookingId())) {
             return ResponseEntity.badRequest().build();
         }
         Booking updated = bookingService.update(booking);
@@ -54,14 +54,14 @@ public class BookingController {
 //        return ResponseEntity.ok(bookingService.update(updated));
     }
 
-    // ✅ DELETE - DELETE /api/bookings/{id}
+    // DELETE - DELETE /api/bookings/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = bookingService.delete(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // ✅ GET ALL - GET /api/bookings
+    // GET ALL - GET /api/bookings
     @GetMapping
     public ResponseEntity<List<Booking>> getAll() {
         List<Booking> bookings = bookingService.getAll();

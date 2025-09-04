@@ -1,4 +1,3 @@
-// ...imports remain unchanged
 import React, { useState, useEffect } from 'react';
 import './Booking.css';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -12,7 +11,7 @@ const Booking = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:8080/mobileglow/api/cleaningservice/getAll')
+    fetch('http://localhost:8081/mobileglow/api/cleaningservice/getAll')
       .then((response) => response.json())
       .then((data) => {
         console.log('Fetched Services:', data);
@@ -25,13 +24,26 @@ const Booking = () => {
     if (newCategory !== null) setSelectedCategory(newCategory);
   };
 
-const filteredServices = services.filter(
-  (service) => service.category?.trim().toLowerCase() === selectedCategory.trim().toLowerCase()
-);
+  const filteredServices = Array.isArray(services)
+    ? services.filter(
+        (service) => service.category?.trim().toLowerCase() === selectedCategory.trim().toLowerCase()
+      )
+    : [];
 
   const addToCart = (service) => {
-    if (!cart.includes(service)) {
-      setCart([...cart, service]);
+    const normalizedService = {
+      ...service,
+      id: service.cleaningServiceId
+    };
+
+    console.log("Trying to add service to cart:", normalizedService);
+
+    if (!cart.some(item => item.id === normalizedService.id)) {
+      const newCart = [...cart, normalizedService];
+      setCart(newCart);
+      console.log("Updated cart after addition:", newCart);
+    } else {
+      console.log("Service already in cart:", normalizedService);
     }
   };
 
@@ -40,6 +52,7 @@ const filteredServices = services.filter(
   };
 
   const totalPrice = cart.reduce((sum, item) => sum + item.priceOfService, 0);
+  console.log("Current cart contents:", cart);
 
   const handleContinue = () => {
     navigate("/bookingtwo", {
@@ -56,7 +69,6 @@ const filteredServices = services.filter(
   return (
     <div className="booking-layout">
       <div className="left-panel">
-        <button className="back-button">←</button>
         <h2 className="booking-page-heading">Services</h2>
 
         <ToggleButtonGroup
@@ -83,13 +95,9 @@ const filteredServices = services.filter(
           ) : (
             filteredServices.map(service => (
               <div key={service.id} className="service-card">
-                <div>
-                  {/* 🔁 Replace underscores in service name */}
+                <div className="service-info">
                   <h4>{service.serviceName.replace(/_/g, ' ')}</h4>
-
-                  {/* 🕒 Add 'Duration:' label */}
                   <p className="duration">Duration: {service.duration} <strong>hours</strong></p>
-
                   <p className="price">R {service.priceOfService}</p>
                 </div>
                 <button className="add-btn" onClick={() => addToCart(service)}>+</button>
@@ -111,13 +119,15 @@ const filteredServices = services.filter(
             <p className="empty-cart">No services selected</p>
           ) : (
             <ul>
-              {cart.map(item => (
-                <li key={item.id}>
-                  {/* Replace underscores in cart items as well */}
-                  {item.serviceName.replace(/_/g, ' ')} - R {item.priceOfService}
-                  <button className="remove-btn" onClick={() => removeFromCart(item.id)}>x</button>
-                </li>
-              ))}
+              {cart.map((item, index) => {
+                console.log(`Rendering cart item - id: ${item.id}, name: ${item.serviceName}`);
+                return (
+                  <li key={item.id || `${item.serviceName}-${index}`}>
+                    {item.serviceName.replace(/_/g, ' ')} - R {item.priceOfService}
+                    <button className="remove-btn" onClick={() => removeFromCart(item.id)}>x</button>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <div className="total">
