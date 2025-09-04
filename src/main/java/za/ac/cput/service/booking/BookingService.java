@@ -7,6 +7,7 @@ import za.ac.cput.domain.booking.CleaningService;
 import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.factory.booking.BookingFactory;
 import za.ac.cput.repository.booking.IBookingRepository;
+import za.ac.cput.service.user.employee.WashAttendantService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,14 @@ public class BookingService implements IBookingService{
         this.bookingRepository = bookingRepository;
         this.cleaningServiceService = cleaningServiceService;
         this.vehicleService = vehicleService; // 👈 assigned
-    }
+           }
 
     public Booking create(Booking booking) {
+
+        System.out.println("Received cleaning services: " + booking.getCleaningServices());
+        for (CleaningService cs : booking.getCleaningServices()) {
+            System.out.println("CleaningService ID: " + cs.getCleaningServiceId());
+        }
 
         // ✅ Rule 1: At least one cleaning service
         if (booking.getCleaningServices() == null || booking.getCleaningServices().isEmpty()) {
@@ -39,10 +45,10 @@ public class BookingService implements IBookingService{
         //checking to see if requested service exists in cleaningservice db
         for (CleaningService service : booking.getCleaningServices()) {
             // Read the real service from DB using ID
-            CleaningService validatedService = cleaningServiceService.read(service.getCleaningServiceID());
+            CleaningService validatedService = cleaningServiceService.read(service.getCleaningServiceId());
 
             if (validatedService == null) {
-                throw new IllegalArgumentException("Invalid cleaning service ID: " + service.getCleaningServiceID());
+                throw new IllegalArgumentException("Invalid cleaning service ID: " + service.getCleaningServiceId());
             }
 
             validatedServices.add(validatedService);
@@ -90,10 +96,9 @@ public class BookingService implements IBookingService{
         // Use factory to create booking (payments null, booking cost calculated)
         Booking created = BookingFactory.createBooking(
                 validatedServices,
-                null,  // payments can be null initially
+                validatedVehicle,
                 booking.getWashAttendant(),
                 booking.getBookingDateTime(),
-                validatedVehicle,
                 booking.isTipAdd(),
                 totalCost
         );
@@ -112,9 +117,27 @@ public class BookingService implements IBookingService{
 
     @Override
     public Booking update(Booking booking) {
-        return bookingRepository.save(booking);
-    }
+        List<Booking> existingBookings = bookingRepository.findByBookingId(booking.getBookingId());
 
+        if (existingBookings.isEmpty()) {
+            throw new RuntimeException("Booking not found with id " + booking.getBookingId());
+        }
+
+        Booking existingBooking = existingBookings.get(0);
+
+        // Use builder to copy and update fields
+        Booking updatedBooking = new Booking.Builder()
+                .copy(existingBooking)
+                .setBookingDateTime(booking.getBookingDateTime())
+                .setCleaningServices(booking.getCleaningServices())
+                .setVehicle(booking.getVehicle())
+                .setWashAttendant(booking.getWashAttendant())
+                .setTipAdd(booking.isTipAdd())
+                .setBookingCost(booking.getBookingCost())
+                .build();
+
+        return bookingRepository.save(updatedBooking);
+    }
     @Override
     public boolean delete(Long id) {
         if (bookingRepository.existsById(id)) {

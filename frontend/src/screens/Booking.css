@@ -14,8 +14,8 @@
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 0.5rem 1.5rem;
-    margin-top: 235px;
-    }
+  margin-top: 235px;
+}
 
 .back-button {
   background: none;
@@ -26,7 +26,7 @@
 }
 
 .booking-page-heading {
-    font-size: 45px;
+  font-size: 45px;
 }
 
 .service-list {
@@ -39,9 +39,15 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between !important;
+}
+
+.service-info {
+  text-align: left; /* text aligns left */
+  flex-grow: 1; /* take remaining space */
+  margin-right: 1rem; /* space between text and button */
 }
 
 .duration {

@@ -15,6 +15,7 @@ import za.ac.cput.service.booking.BookingService;
 import za.ac.cput.service.booking.CleaningServiceService;
 import za.ac.cput.service.booking.VehicleService;
 import za.ac.cput.service.user.employee.WashAttendantService;
+import za.ac.cput.service.payment.PaymentService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -77,9 +78,9 @@ class PaymentServiceTest {
         booking.getCleaningServices().size(); // Initializes the collection
 
         // Now create the payment
-        Payment payment = paymentService.createPaymentForBookingWithTip(booking.getBookingID());
+        Payment payment = paymentService.createPaymentForBookingWithTip(booking.getBookingId());
         assertNotNull(payment);
-        assertEquals(booking.getBookingID(), payment.getBooking().getBookingID());
+        assertEquals(booking.getBookingId(), payment.getBooking().getBookingId());
 
         double expectedAmount = booking.isTipAdd()
                 ? booking.getBookingCost() * 1.10
@@ -88,7 +89,7 @@ class PaymentServiceTest {
         assertEquals(expectedAmount, payment.getPaymentAmount(), 0.01);
         savedPayment = payment;
 
-        System.out.println("✅ Created Payment: " + payment);  // Safe to log now
+        System.out.println("Created Payment: " + payment);  // Safe to log now
     }
 
     @Test
@@ -100,9 +101,9 @@ class PaymentServiceTest {
         // Save the payment again to confirm successful creation
         Payment result = paymentService.create(savedPayment);
         assertNotNull(result);
-        assertEquals(savedPayment.getBooking().getBookingID(), result.getBooking().getBookingID());
+        assertEquals(savedPayment.getBooking().getBookingId(), result.getBooking().getBookingId());
 
-        System.out.println("✅ Created Payment (again): " + result);
+        System.out.println("Created Payment (again): " + result);
     }
 
     @Test
@@ -112,34 +113,34 @@ class PaymentServiceTest {
         assertNotNull(savedPayment, "Payment should have been created in the previous test");
 
         // Read the payment and check if it's the same
-        Payment readPayment = paymentService.read(savedPayment.getPaymentID());
+        Payment readPayment = paymentService.read(savedPayment.getPaymentId());
         assertNotNull(readPayment);
-        assertEquals(savedPayment.getPaymentID(), readPayment.getPaymentID());
+        assertEquals(savedPayment.getPaymentId(), readPayment.getPaymentId());
 
-        System.out.println("✅ Read Payment: " + readPayment);
+        System.out.println("Read Payment: " + readPayment);
     }
 
-//    @Test
-//    @Rollback(value = false)
-//    @Order(4)
-//    void testUpdate() {
-//        assertNotNull(savedPayment, "Payment should have been created in the previous test");
-//
-//        // Update the payment (e.g., changing the amount or status)
-//        Payment updatedPayment = new Payment.Builder()
-//                .copy(savedPayment)
-//                .setPaymentAmount(150.00)  // Adjusted amount for the update
-//                .setPaymentStatus(Payment.PaymentStatus.PAID)
-//                .setPaymentMethod(Payment.PaymentMethod.CREDIT)// Changed status
-//                .build();
-//
-//        Payment result = paymentService.update(updatedPayment);
-//        assertNotNull(result);
-//        assertEquals(150.00, result.getPaymentAmount());
-//        assertEquals(Payment.PaymentStatus.PAID, result.getPaymentStatus()); // ✅
-//
-//        System.out.println("✅ Updated Payment: " + result);
-//    }
+    @Test
+    @Rollback(value = false)
+    @Order(4)
+    void testUpdate() {
+        assertNotNull(savedPayment, "Payment should have been created in the previous test");
+
+        // Update the payment (e.g., changing the amount or status)
+        Payment updatedPayment = new Payment.Builder()
+                .copy(savedPayment)
+                .setPaymentAmount(150.00)  // Adjusted amount for the update
+                .setPaymentStatus(Payment.PaymentStatus.PAID)
+                .setPaymentMethod(Payment.PaymentMethod.CREDIT)// Changed status
+                .build();
+
+        Payment result = paymentService.update(updatedPayment);
+        assertNotNull(result);
+        assertEquals(150.00, result.getPaymentAmount());
+        assertEquals(Payment.PaymentStatus.PAID, result.getPaymentStatus()); //
+
+        System.out.println(" Updated Payment: " + result);
+    }
 
     @Test
     @Rollback(value = false)
@@ -150,7 +151,7 @@ class PaymentServiceTest {
         assertNotNull(payments, "Payment list should not be null");
         assertFalse(payments.isEmpty(), "There should be at least one payment");
 
-        System.out.println("✅ All Payments: " + payments);
+        System.out.println("All Payments: " + payments);
     }
 
 //    @Test
@@ -165,6 +166,6 @@ class PaymentServiceTest {
 //        // Verify it has been deleted
 //        Payment afterDelete = paymentService.read(savedPayment.getPaymentID());
 //        assertNull(afterDelete);
-//        System.out.println("✅ Payment deleted successfully");
+//        System.out.println(" Payment deleted successfully");
 //    }
 }

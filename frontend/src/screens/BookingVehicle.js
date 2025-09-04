@@ -6,51 +6,52 @@ const BookingVehicle = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { cart, totalPrice, selectedDateTime } = location.state || {};
+  const { cart, totalPrice, selectedDateTime, serviceIds } = location.state || {};
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
-  const userId = 7; // Example: get this dynamically for production
+  const userId = 5; // example
 
   useEffect(() => {
-    fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
+    fetch(`http://localhost:8081/mobileglow/api/vehicle/customer/${userId}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Fetched vehicles:", data);
-        console.log("First vehicle object:", data[0]);
         setVehicles(Array.isArray(data) ? data : []);
       })
-      .catch((error) => {
-        console.error('Error fetching vehicles:', error);
-      });
+      .catch((error) => console.error('Error fetching vehicles:', error));
   }, [userId]);
 
   const handleVehicleChange = (event) => {
-    const vehicleId = event.target.value;
-    setSelectedVehicleId(vehicleId);
-    console.log("Selected Vehicle ID:", vehicleId);
+    setSelectedVehicleId(event.target.value);
   };
 
   const handleContinue = () => {
     if (!selectedVehicleId) {
       alert("Please select a vehicle!");
-    } else {
-      const vehicleObj = vehicles.find(v => String(v.vehicleID) === selectedVehicleId);
-      navigate("/confirm", {
-        state: {
-          cart,
-          totalPrice,
-          selectedDateTime,
-          selectedVehicle: vehicleObj,  // pass full vehicle object here
-        }
-      });
+      return;
     }
-  };
 
+    const selectedVehicle = vehicles.find(v => String(v.vehicleID) === selectedVehicleId);
+
+    if (!selectedVehicle) {
+      alert("Selected vehicle not found!");
+      return;
+    }
+
+    // Pass serviceIds forward here as well
+    navigate("/confirm", {
+      state: {
+        cart,
+        totalPrice,
+        selectedDateTime,
+        selectedVehicle,
+        serviceIds, // pass this along
+      },
+    });
+  };
   return (
     <div className="booking-vehicle-container">
       <div className="left-panel">
-        <button className="back-button">←</button>
         <h2 className="booking-page-heading">Select Vehicle for Cleaning</h2>
 
         <div className="vehicle-selection">
@@ -87,21 +88,33 @@ const BookingVehicle = () => {
           <p>4.9 ⭐ (32)</p>
           <p>Parklands, Cape Town</p>
         </div>
-      </div>
 
-      {/*
-      // DEBUG VIEW – Uncomment if needed for troubleshooting
-      <div className="vehicle-debug">
-        <h4>Debug: Vehicles List</h4>
-        <ul>
-          {vehicles.map(vehicle => (
-            <li key={vehicle.vehicleID}>
-              ID: {vehicle.vehicleID}, Model: {vehicle.carModel}, Make: {vehicle.carMake}, Plate: {vehicle.carPlateNumber}, Colour: {vehicle.carColour}
-            </li>
-          ))}
-        </ul>
+        <div className="summary-section">
+          <h4>Selected Services</h4>
+          <ul>
+            {cart.map((item, index) => (
+              <li key={index}>
+                {item.serviceName.replace(/_/g, ' ')} - R {item.priceOfService}
+              </li>
+            ))}
+          </ul>
+
+          <h4>Date & Time</h4>
+          <p>{selectedDateTime ? new Date(selectedDateTime).toLocaleString() : "Not selected"}</p>
+
+          <h4>Vehicle</h4>
+          <p>
+            {selectedVehicleId
+              ? vehicles.find(v => String(v.vehicleID) === selectedVehicleId)?.carMake + " " +
+                vehicles.find(v => String(v.vehicleID) === selectedVehicleId)?.carModel
+              : "Not selected"}
+          </p>
+
+          <div className="total-price">
+            <strong>Total:</strong> R {totalPrice}
+          </div>
+        </div>
       </div>
-      */}
     </div>
   );
 };

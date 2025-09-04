@@ -26,7 +26,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public Payment create(Payment payment) {
-        Long bookingId = payment.getBooking().getBookingID();
+        Long bookingId = payment.getBooking().getBookingId();
         Booking booking = bookingService.read(bookingId);
 
         if (booking == null) {
@@ -71,8 +71,8 @@ public class PaymentService implements IPaymentService {
         return paymentRepository.findAll();
     }
 
-    public List<Payment> getPaymentsByBookingID(Long bookingID) {
-        return paymentRepository.findByBooking_BookingID(bookingID);
+    public List<Payment> getPaymentsByBookingId(Long bookingID) {
+        return paymentRepository.findByBooking_BookingId(bookingID);
     }
 
     public Payment createPaymentForBookingWithTip(Long bookingId) {

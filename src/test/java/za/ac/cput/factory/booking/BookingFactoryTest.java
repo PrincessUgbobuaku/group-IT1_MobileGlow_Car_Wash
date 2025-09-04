@@ -60,10 +60,9 @@ public class BookingFactoryTest {
 
         Booking booking = BookingFactory.createBooking(
                 services,
-                null,
+                vehicle,
                 washAttendant,
                 LocalDateTime.of(2025, 10, 30, 12, 0),
-                vehicle,
                 true,
                 500
         );
@@ -75,7 +74,6 @@ public class BookingFactoryTest {
 
         assertNotNull(booking.getVehicle());
         assertEquals(2, booking.getCleaningServices().size());
-        assertTrue(booking.getPayments().isEmpty());
 
         System.out.println("Booking without payments:\n" + booking);
     }
@@ -128,10 +126,9 @@ public class BookingFactoryTest {
         // Final booking with payments
         Booking booking = BookingFactory.createBooking(
                 services,
-                payments,
+                vehicle,
                 washAttendant,
                 LocalDateTime.now().plusDays(2),
-                vehicle,
                 true,
                 650
         );
@@ -141,11 +138,6 @@ public class BookingFactoryTest {
         assertEquals("Mazda", booking.getVehicle().getCarMake());
         assertEquals("Blue", booking.getVehicle().getCarColour());
         assertEquals(2, booking.getCleaningServices().size());
-        assertEquals(2, booking.getPayments().size());
-
-        for (Payment p : booking.getPayments()) {
-            assertEquals(booking.getBookingID(), p.getBooking().getBookingID());
-        }
 
         System.out.println("Booking with multiple payments:\n" + booking);
     }

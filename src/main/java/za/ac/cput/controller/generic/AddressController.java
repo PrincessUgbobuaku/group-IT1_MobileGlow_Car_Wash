@@ -32,10 +32,10 @@ public class AddressController {
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/read/{addressID}")
-    public ResponseEntity<?> read(@PathVariable Long addressID) {
+    @GetMapping("/read/{id}")
+    public ResponseEntity<?> read(@PathVariable Long id) {
         try {
-            Address serviceReview = addressService.read(addressID);
+            Address serviceReview = addressService.read(id);
             return ResponseEntity.ok(serviceReview);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

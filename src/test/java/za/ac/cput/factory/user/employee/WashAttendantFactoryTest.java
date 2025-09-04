@@ -30,7 +30,7 @@ public class WashAttendantFactoryTest {
     public WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
             "Abulele",
             "Voki",
-            User.RoleDescription.WASH_ATTENDANT,
+            User.RoleDescription.EMPLOYEE,
             true,
             "Car Wash Attendant",
             true,
@@ -50,7 +50,7 @@ public class WashAttendantFactoryTest {
         WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
                 "Abulele",
                 "Voki",
-                User.RoleDescription.WASH_ATTENDANT,
+                User.RoleDescription.EMPLOYEE,
                 true,
                 "Car Wash Attendant",
                 true,
@@ -68,7 +68,7 @@ public class WashAttendantFactoryTest {
         WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
                 "", // Empty first name
                 "Voki",
-                User.RoleDescription.WASH_ATTENDANT,
+                User.RoleDescription.EMPLOYEE,
                 true,
                 "Car Wash Attendant",
                 true,
@@ -86,7 +86,7 @@ public class WashAttendantFactoryTest {
         WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
                 "Abulele",
                 "Voki",
-                User.RoleDescription.WASH_ATTENDANT,
+                User.RoleDescription.EMPLOYEE,
                 true,
                 "Car Wash Attendant",
                 true,
@@ -104,7 +104,7 @@ public class WashAttendantFactoryTest {
         WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
                 "Abulele",
                 "Voki",
-                User.RoleDescription.WASH_ATTENDANT,
+                User.RoleDescription.EMPLOYEE,
                 true,
                 "Car Wash Attendant",
                 true,
@@ -122,7 +122,7 @@ public class WashAttendantFactoryTest {
         WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
                 "Dumiza",
                 "Zikalala",
-                User.RoleDescription.WASH_ATTENDANT,
+                User.RoleDescription.EMPLOYEE,
                 true,
                 "Car Wash Attendant",
                 true,
@@ -140,7 +140,7 @@ public class WashAttendantFactoryTest {
         WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
                 "Thuso",
                 "Siduka",
-                User.RoleDescription.WASH_ATTENDANT,
+                User.RoleDescription.EMPLOYEE,
                 true,
                 "Senior Wash Attendant",
                 false, // Part-time

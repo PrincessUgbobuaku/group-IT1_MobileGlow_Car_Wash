@@ -104,13 +104,14 @@ public class CleaningServiceService implements ICleaningServiceService {
 
     @Override
     public CleaningService read(Long id) {
-        return cleaningServiceRepository.findById(id).orElse(null);
+        return cleaningServiceRepository.findById(id)
+                .orElse(null); // or throw an exception if preferred
     }
 
     @Override
     public CleaningService update(CleaningService cleaningService) {
-        if (!cleaningServiceRepository.existsById(cleaningService.getCleaningServiceID())) {
-            throw new IllegalArgumentException("Service with ID " + cleaningService.getCleaningServiceID() + " not found.");
+        if (!cleaningServiceRepository.existsById(cleaningService.getCleaningServiceId())) {
+            throw new IllegalArgumentException("Service with ID " + cleaningService.getCleaningServiceId() + " not found.");
         }
         return cleaningServiceRepository.save(cleaningService);
     }

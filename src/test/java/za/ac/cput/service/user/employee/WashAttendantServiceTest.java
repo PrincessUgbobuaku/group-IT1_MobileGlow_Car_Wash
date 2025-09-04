@@ -31,21 +31,21 @@ class WashAttendantServiceTest {
     @Autowired
     private WashAttendantService washAttendantService;
 
-    private final Contact contact = ContactFactory.createContact("0725637252");
+    private final Contact contact = ContactFactory.createContact("0625341234");
 
     private final Address address = AddressFactory.createAddressFactory1(
-            "101", "Main Street", "Cape Town", "8000");
+            "100", "School Street", "Cape Town", "8001");
 
     private final Login login = LoginFactory.createLogin("washattendant@gmail.com", "password123");
 
     private final WashAttendant washAttendant = new WashAttendant.Builder()
-            .setUserName("Timothy")
-            .setUserSurname("Toon")
+            .setUserName("Matthew")
+            .setUserSurname("Lee")
             .setIsActive(true)
             .setRoleDescription(User.RoleDescription.EMPLOYEE)
             .setEmployeeType("Wash Attendant")
             .setIsFullTime(true)
-            .setShiftHours(8)
+            .setShiftHours(7)
             .setContact(contact)
             .setAddress(address)
             .setLogin(login)

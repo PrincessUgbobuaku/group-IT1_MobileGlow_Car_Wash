@@ -49,12 +49,12 @@ class BookingServiceTest {
     @BeforeEach
     @Order(0)
     void setupEntities() {
-        // ✅ Fetch an existing vehicle (ensure this ID exists in DB)
+        // Fetch an existing vehicle (ensure this ID exists in DB)
         vehicle = vehicleService.read(1L);
         assertNotNull(vehicle, "Vehicle should exist in the database");
         assertNotNull(vehicle.getCustomer(), "Vehicle should have a customer");
 
-        // ✅ Fetch an existing wash attendant (ensure this ID exists in DB)
+        // Fetch an existing wash attendant (ensure this ID exists in DB)
         washAttendant = washAttendantService.read(1L);
         assertNotNull(washAttendant, "WashAttendant should exist in the database");
     }
@@ -64,7 +64,7 @@ class BookingServiceTest {
     @Order(1)
     void testCreate() {
         CleaningService cleaningService_1 = cleaningServiceService.readByServiceName("INTERIOR_STEAM");
-        CleaningService cleaningService_2 = cleaningServiceService.readByServiceName("DEP_FULL_WASH");
+        CleaningService cleaningService_2 = cleaningServiceService.readByServiceName("DEEP_FULL_WASH");
 
         List<CleaningService> services = new ArrayList<>();
         services.add(cleaningService_1);
@@ -76,13 +76,13 @@ class BookingServiceTest {
         }
 
         booking = BookingFactory.createBooking(
-                services, null, washAttendant, LocalDateTime.now().plusDays(1),
-                vehicle, true, 0.0
+                services, vehicle, washAttendant, LocalDateTime.now().plusDays(1),
+                 true, 0.0
         );
 
-        booking = bookingService.create(booking); // 👈 persist with ID
-        assertNotNull(booking.getBookingID());
-        System.out.println("✅ Created Booking: " + booking);
+        booking = bookingService.create(booking); // persist with ID
+        assertNotNull(booking.getBookingId());
+        System.out.println("Created Booking: " + booking);
     }
 
     @Test
@@ -91,12 +91,12 @@ class BookingServiceTest {
     @Order(2)
     void testRead() {
         assertNotNull(booking, "Booking should be initialized");
-        assertNotNull(booking.getBookingID(), "Booking ID should not be null");
+        assertNotNull(booking.getBookingId(), "Booking ID should not be null");
 
-        Booking read = bookingService.read(booking.getBookingID());
+        Booking read = bookingService.read(booking.getBookingId());
         assertNotNull(read);
-        assertEquals(booking.getBookingID(), read.getBookingID());
-        System.out.println("✅ Read Booking: " + read);
+        assertEquals(booking.getBookingId(), read.getBookingId());
+        System.out.println(" Read Booking: " + read);
     }
 
     @Test
@@ -104,7 +104,7 @@ class BookingServiceTest {
     @Transactional
     @Rollback(false)
     void testUpdate() {
-        Booking existingBooking = bookingService.read(booking.getBookingID());
+        Booking existingBooking = bookingService.read(booking.getBookingId());
 
         Booking updatedBooking = new Booking.Builder()
                 .copy(existingBooking)
@@ -116,7 +116,7 @@ class BookingServiceTest {
 
         assertNotNull(saved);
         assertTrue(saved.isTipAdd());
-        System.out.println("✅ Updated Booking: " + saved);
+        System.out.println(" Updated Booking: " + saved);
     }
 
     @Test
@@ -127,10 +127,9 @@ class BookingServiceTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             BookingFactory.createBooking(
                     new ArrayList<>(), // empty services list
-                    null,
+                    vehicle,
                     washAttendant,
                     LocalDateTime.now().plusDays(1),
-                    vehicle,
                     false,
                     0.0
             );
@@ -150,10 +149,9 @@ class BookingServiceTest {
 
         Booking firstBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                null,
+                vehicle,
                 washAttendant,
                 bookingTime,
-                vehicle,
                 false,
                 0.0
         );
@@ -163,10 +161,9 @@ class BookingServiceTest {
         // Attempt to create second booking for same vehicle and time - should fail
         Booking duplicateBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                null,
+                vehicle,
                 washAttendantService.read(59L), // different wash attendant if needed
                 bookingTime,
-                vehicle,
                 false,
                 0.0
         );
@@ -191,10 +188,9 @@ class BookingServiceTest {
 
         Booking firstBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                null,
+                vehicleService.read(62L), // different vehicle if needed
                 washAttendant,
                 bookingTime,
-                vehicleService.read(62L), // different vehicle if needed
                 false,
                 0.0
         );
@@ -203,10 +199,9 @@ class BookingServiceTest {
 
         Booking duplicateBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                null,
+                vehicleService.read(63L), // different vehicle to isolate wash attendant double-booking
                 washAttendant,
                 bookingTime,
-                vehicleService.read(63L), // different vehicle to isolate wash attendant double-booking
                 false,
                 0.0
         );
@@ -229,10 +224,9 @@ class BookingServiceTest {
 
         Booking pastBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                null,
+                vehicle,
                 washAttendant,
                 LocalDateTime.now().minusDays(1),
-                vehicle,
                 false,
                 0.0
         );

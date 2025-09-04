@@ -20,7 +20,7 @@ public class CleaningServiceController {
         this.cleaningServiceService = cleaningServiceService;
     }
 
-    // ✅ CREATE - POST /api/cleaningservice
+    // CREATE - POST /api/cleaningservice
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody CleaningService cleaningService) {
         try {
@@ -48,14 +48,14 @@ public class CleaningServiceController {
         }
     }
 
-    // ✅ READ - GET /api/cleaningservice/{id}
+    // READ - GET /api/cleaningservice/{id}
     @GetMapping("/read/{id}")
     public ResponseEntity<CleaningService> read(@PathVariable Long id) {
         CleaningService found = cleaningServiceService.read(id);
         return found != null ? ResponseEntity.ok(found) : ResponseEntity.notFound().build();
     }
 
-    // ✅ UPDATE - PUT /api/cleaningservice/{id}
+    // UPDATE - PUT /api/cleaningservice/{id}
     @PutMapping("/update/{id}")
     public ResponseEntity<CleaningService> update(@PathVariable Long id, @RequestBody CleaningService cleaningService) {
         // Optional: Ensure path ID and body ID match (for integrity)
@@ -68,20 +68,20 @@ public class CleaningServiceController {
         // Force the path ID into the object — no need for it in the request body
         CleaningService updated = new CleaningService.Builder()
                 .copy(cleaningService)
-                .setCleaningServiceID(id)
+                .setCleaningServiceId(id)
                 .build();
 
         return ResponseEntity.ok(cleaningServiceService.update(updated));
     }
 
-    // ✅ DELETE - DELETE /api/cleaningservice/{id}
+    // DELETE - DELETE /api/cleaningservice/{id}
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = cleaningServiceService.delete(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // ✅ GET ALL - GET /api/cleaningservice
+    // GET ALL - GET /api/cleaningservice
     @GetMapping("/getAll")
     public ResponseEntity<List<CleaningService>> getAll() {
         List<CleaningService> services = cleaningServiceService.getAll();
