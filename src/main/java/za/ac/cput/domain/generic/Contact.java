@@ -6,7 +6,6 @@ package za.ac.cput.domain.generic;
  */
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "contact")
@@ -14,11 +13,12 @@ public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contact_id")
+    @Column(name = "contactid")
+
     private Long contactID;
 
-    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number should be valid")
-    @Column(name = "phone_number", nullable = false, unique = true)
+
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     // Default constructor

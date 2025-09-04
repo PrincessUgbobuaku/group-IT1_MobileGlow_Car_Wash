@@ -5,9 +5,9 @@ import za.ac.cput.service.IService;
 
 import java.util.List;
 
-public interface IPaymentService extends IService<Payment, String> {
+public interface IPaymentService extends IService<Payment, Long> {
     List<Payment> getAll();
 
-    List<Payment> getPaymentsByBookingID(String bookingID);
+    List<Payment> getPaymentsByBookingId(Long bookingId);
 
 }

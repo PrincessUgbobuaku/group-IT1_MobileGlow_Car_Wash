@@ -5,7 +5,7 @@ package za.ac.cput.controller.generic;
    Author: Inga Zekani (221043756)
  */
 
-import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import za.ac.cput.service.generic.ContactService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/contacts")
+@RequestMapping("/api/contact")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ContactController {
 
@@ -30,7 +30,7 @@ public class ContactController {
 
     // CREATE - Add new contact
     @PostMapping("/create")
-    public ResponseEntity<?> createContact(@Valid @RequestBody Contact contact, BindingResult result) {
+    public ResponseEntity<?> createContact( @RequestBody Contact contact, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body("Validation error: " + result.getFieldError().getDefaultMessage());
         }
@@ -57,7 +57,7 @@ public class ContactController {
 
     // UPDATE - Update existing contact
     @PutMapping("/update/{contactID}")
-    public ResponseEntity<?> updateContact(@PathVariable Long contactID, @Valid @RequestBody Contact contact, BindingResult result) {
+    public ResponseEntity<?> updateContact(@PathVariable Long contactID,  @RequestBody Contact contact, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body("Validation error: " + result.getFieldError().getDefaultMessage());
         }
@@ -70,7 +70,7 @@ public class ContactController {
             Contact updatedContact = contactService.update(contact);
             return ResponseEntity.ok(updatedContact);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
         }
     }
 

@@ -19,7 +19,9 @@ import za.ac.cput.service.booking.VehicleService;
 import za.ac.cput.service.user.CustomerService;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,8 +85,8 @@ public class VehicleControllerTest {
                 .build();
 
         // Persist vehicles using controller and update references
-        ResponseEntity<Vehicle> response1 = controller.create(vehicle1);
-        ResponseEntity<Vehicle> response2 = controller.create(vehicle2);
+        ResponseEntity<Vehicle> response1 = controller.create((Map<String, Object>) vehicle1);
+        ResponseEntity<Vehicle> response2 = controller.create((Map<String, Object>) vehicle2);
 
         // Update references with the persisted entities (they now have IDs)
         vehicle1 = response1.getBody();
@@ -106,7 +108,7 @@ public class VehicleControllerTest {
                 .setCustomer(customer)
                 .build();
 
-        ResponseEntity<Vehicle> response = controller.create(newVehicle);
+        ResponseEntity<Vehicle> response = controller.create((Map<String, Object>) newVehicle);
         System.out.println("CREATE Result: " + response.getBody());
 
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Your controller returns 200, not 201
@@ -143,12 +145,18 @@ public class VehicleControllerTest {
     @Order(4)
     void update() {
         String updatedPlate = "UPD" + UUID.randomUUID().toString().substring(0, 4);
-        Vehicle updatedVehicle = new Vehicle.Builder()
-                .copy(vehicle1)
-                .setCarPlateNumber(updatedPlate)
-                .build();
 
-        ResponseEntity<Vehicle> response = controller.update(vehicle1.getVehicleID(), updatedVehicle);
+        // Build request map (this matches the controller's expected input)
+        Map<String, Object> updateRequest = new HashMap<>();
+        updateRequest.put("carPlateNumber", updatedPlate);
+        updateRequest.put("carMake", vehicle1.getCarMake());
+        updateRequest.put("carModel", vehicle1.getCarModel());
+        updateRequest.put("carColour", vehicle1.getCarColour());
+        updateRequest.put("customerId", vehicle1.getCustomer().getUserId()); // sending customer reference
+
+        // Call the update endpoint
+        ResponseEntity<Vehicle> response = controller.update(vehicle1.getVehicleID(), updateRequest);
+
         System.out.println("UPDATE Result: " + response.getBody());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -156,10 +164,43 @@ public class VehicleControllerTest {
         assertEquals(updatedPlate, response.getBody().getCarPlateNumber());
         assertEquals(vehicle1.getVehicleID(), response.getBody().getVehicleID());
 
-        // Update reference for other tests
+        // Update reference for later tests
         vehicle1 = response.getBody();
         uniquePlate1 = updatedPlate;
     }
+
+
+//    @Test
+//    @Order(4)
+//    void update() {
+//        String updatedPlate = "UPD" + UUID.randomUUID().toString().substring(0, 4);
+//        Vehicle updatedVehicle = new Vehicle.Builder()
+//                .copy(vehicle1)
+//                .setCarPlateNumber(updatedPlate)
+//                .build();
+//
+//        // Call update (still returns Vehicle internally if your controller update endpoint does)
+//        ResponseEntity<Map<String, Object>> response =
+//                controller.update(vehicle1.getVehicleID(), updatedVehicle);
+//
+//        System.out.println("UPDATE Result: " + response.getBody());
+//
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertNotNull(response.getBody());
+//
+//        // Extract values from the mapping object
+//        Map<String, Object> responseBody = response.getBody();
+//        assertEquals(updatedPlate, responseBody.get("carPlateNumber"));
+//        assertEquals(vehicle1.getVehicleID(), responseBody.get("vehicleID"));
+//
+//        // Update reference for other tests (need to rebuild vehicle1 from map)
+//        vehicle1 = new Vehicle.Builder()
+//                .copy(vehicle1)
+//                .setCarPlateNumber((String) responseBody.get("carPlateNumber"))
+//                .build();
+//
+//        uniquePlate1 = updatedPlate;
+//    }
 
     @Test
     @Order(5)

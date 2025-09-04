@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.domain.user.Customer;
@@ -31,18 +32,15 @@ public class CustomerServiceTest {
     void setUp() {
         // Create Contact
         Contact contact1 = new Contact.Builder()
-                .setContactID("C01")
                 .setPhoneNumber("123-456-7890")
                 .build();
 
         Contact contact2 = new Contact.Builder()
-                .setContactID("C02")
                 .setPhoneNumber("098-765-4321")
                 .build();
 
         // Create Address
         Address address1 = new Address.Builder()
-                .setAddressID("A01")
                 .setStreetNumber("123")
                 .setStreetName("Main Street")
                 .setCity("Cape Town")
@@ -50,7 +48,6 @@ public class CustomerServiceTest {
                 .build();
 
         Address address2 = new Address.Builder()
-                .setAddressID("A02")
                 .setStreetNumber("126")
                 .setStreetName("Main Street")
                 .setCity("Cape Town")
@@ -95,6 +92,7 @@ public class CustomerServiceTest {
     }
 
     @Test
+    @Rollback(false) //added by Princess
     void create() {
         System.out.println("=== Starting CREATE test ===");
         assertNotNull(service, "CustomerService should not be null");
@@ -102,7 +100,6 @@ public class CustomerServiceTest {
         // Create Contact for the new customer
         System.out.println("Creating Contact...");
         Contact newContact = new Contact.Builder()
-                .setContactID("C05")
                 .setPhoneNumber("555-123-4567")
                 .build();
         System.out.println("Contact created: " + newContact);
@@ -110,7 +107,6 @@ public class CustomerServiceTest {
         // Create Address for the new customer
         System.out.println("Creating Address...");
         Address newAddress = new Address.Builder()
-                .setAddressID("A05")
                 .setStreetNumber("136")
                 .setStreetName("Main Street")
                 .setCity("Cape Town")
@@ -174,6 +170,7 @@ public class CustomerServiceTest {
 
     // Remove @Order annotations from other tests
     @Test
+    @Rollback //added by Princess
     void read() {
         Customer readCustomer = service.read(customer1.getUserId());
         System.out.println("READ Result: " + readCustomer);

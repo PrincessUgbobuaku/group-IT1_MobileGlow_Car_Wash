@@ -3,6 +3,7 @@ package za.ac.cput.domain.booking;
 
 import jakarta.persistence.*;
 import za.ac.cput.domain.user.Customer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Vehicle {
@@ -14,11 +15,14 @@ public class Vehicle {
     private String carPlateNumber;
 
     private String carMake;   // ✅ corrected from carMaker
+
     private String carColour;
+
     private String carModel;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonBackReference("customer-vehicles")
     private Customer customer;
 
     protected Vehicle() {}

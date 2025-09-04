@@ -1,105 +1,92 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import './BookingTwo.css';
 
-function BookingTwo() {
+const BookingTwo = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState("2025-08-23");
 
-  const fullyBookedDates = ["2025-08-23", "2025-08-24"];
-  const dates = [
-    "2025-08-23",
-    "2025-08-24",
-    "2025-08-25",
-    "2025-08-26",
-    "2025-08-27",
-    "2025-08-28",
-    "2025-08-29",
-  ];
-
-  const availableTimes = [
-    "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30"
-  ];
+  const { cart, totalPrice } = location.state;
+  const [selectedDateTime, setSelectedDateTime] = useState(null);
 
   const handleContinue = () => {
-    navigate("/confirm", { state: { date: selectedDate } });
+    if (!selectedDateTime) {
+      alert("Please select both a date and time!");
+      return;
+    }
+
+    const serviceIds = cart.map(service => ({ cleaningServiceId: service.id }));
+
+    navigate("/bookingvehicle", {
+      state: {
+        cart,
+        totalPrice,
+        selectedDateTime,
+        serviceIds,
+      },
+    });
   };
 
-  const isFullyBooked = fullyBookedDates.includes(selectedDate);
-
-  const selectedDateObj = new Date(selectedDate);
-  const monthName = selectedDateObj.toLocaleString("en-US", { month: "long", year: "numeric" });
-
   return (
-    <div className="booking-container">
-      {/* Left Section */}
-      <div className="booking-calendar">
-        <h1>Select time</h1>
-        <div className="month-label">{monthName}</div>
+    <div className="booking-vehicle-container">
+      <div className="left-panel">
+        <h2 className="booking-page-heading">Select Date and Time</h2>
 
-        <div className="date-grid">
-          {dates.map((date) => {
-            const d = new Date(date);
-            const day = d.toLocaleDateString("en-US", { weekday: "short" });
-            const dayNum = d.getDate();
-            return (
-              <button
-                key={date}
-                onClick={() => setSelectedDate(date)}
-                className={`date-btn ${
-                  selectedDate === date ? "selected" : ""
-                }`}
-                disabled={fullyBookedDates.includes(date)}
-              >
-                <div>{dayNum}</div>
-                <div>{day}</div>
-              </button>
-            );
-          })}
+        <div className="vehicle-selection">
+          <label>Select date and time:</label>
+          <DatePicker
+            selected={selectedDateTime}
+            onChange={(date) => setSelectedDateTime(date)}
+            showTimeSelect
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="MMMM d, yyyy h:mm aa"
+            minDate={new Date()}
+            minTime={new Date(new Date().setHours(8, 0, 0, 0))}   // 08:00 AM
+            maxTime={new Date(new Date().setHours(17, 0, 0, 0))}  // 05:00 PM
+            placeholderText="Click to select date and time"
+            className="custom-datepicker"
+          />
         </div>
 
-        {isFullyBooked ? (
-          <div className="info-card">
-            <p>Lynn is fully booked on this date</p>
-            <p>Available from Mon, 25 Aug</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              <button className="outline-btn">Go to next available date</button>
-              <button className="outline-btn">Join waitlist</button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="info-card">
-              <p>Available slots for {selectedDate}</p>
-              <p>Choose your time at confirmation</p>
-            </div>
-            <div className="time-grid">
-              {availableTimes.map((time) => (
-                <button key={time} className="time-btn">{time}</button>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Right Section */}
-      <div className="booking-summary">
-        <h3>Blush and Buff</h3>
-        <p>Gel Polish Application on Natural Hands</p>
-        <p>1 hr with Lynn</p>
-        <div style={{ marginTop: "20px", fontWeight: "bold" }}>
-          Total: <span style={{ float: "right" }}>R 275</span>
-        </div>
         <button
           className="continue-btn"
-          disabled={isFullyBooked}
           onClick={handleContinue}
+          disabled={!selectedDateTime}
         >
           Continue
         </button>
       </div>
+
+      <div className="right-panel">
+        <div className="business-info">
+          <h3>MobileGlow Car Wash</h3>
+          <p>4.9 ⭐ (32)</p>
+          <p>Parklands, Cape Town</p>
+        </div>
+
+        <div className="summary-section">
+          <h4>Selected Services</h4>
+          <ul>
+            {cart.map((service, i) => (
+              <li key={i}>
+                {service.serviceName.replace(/_/g, ' ')} - R {service.priceOfService}
+              </li>
+            ))}
+          </ul>
+
+          <h4>Date & Time</h4>
+          <p>{selectedDateTime ? new Date(selectedDateTime).toLocaleString() : "Not selected"}</p>
+
+          <div className="total-price">
+            <strong>Total:</strong> <span>R {totalPrice}</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default BookingTwo;

@@ -32,10 +32,10 @@ public class AddressController {
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/read/{addressID}")
-    public ResponseEntity<?> read(@PathVariable Long addressID) {
+    @GetMapping("/read/{id}")
+    public ResponseEntity<?> read(@PathVariable Long id) {
         try {
-            Address serviceReview = addressService.read(addressID);
+            Address serviceReview = addressService.read(id);
             return ResponseEntity.ok(serviceReview);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -43,18 +43,29 @@ public class AddressController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Address> update(@PathVariable Long id, @RequestBody Address address) {
-        if (!id.equals(address.getAddressID())) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Address address) {
+        try {
+            // Check if the address exists
+            Address existing = addressService.read(id);
+            if (existing == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found with ID: " + id);
+            }
 
-        if (!addressService.delete(id)) {
-            return ResponseEntity.notFound().build();
-        }
+            // Verify path ID matches body ID
+            if (!id.equals(address.getAddressID())) {
+                return ResponseEntity.badRequest().body("ID in path and body do not match");
+            }
 
-        Address updated = addressService.create(address);
-        return ResponseEntity.ok(updated);
+            // Update the address - use repository.save directly since JPA handles updates
+            Address updated = addressService.update(address);
+            return ResponseEntity.ok(updated);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating address: " + e.getMessage());
+        }
     }
+
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

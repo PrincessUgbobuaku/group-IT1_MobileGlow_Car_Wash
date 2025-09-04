@@ -1,4 +1,14 @@
 package za.ac.cput.service.user.employee;
 
-public interface IWashAttendantService {
+import za.ac.cput.domain.user.employee.WashAttendant;
+import za.ac.cput.service.IService;
+
+import java.util.List;
+
+public interface IWashAttendantService extends IService<WashAttendant, Long> {
+    List<WashAttendant> getAllWashAttendants();
+
+    WashAttendant getRandomWashAttendant();
+
+//    List<WashAttendant> findAll();
 }

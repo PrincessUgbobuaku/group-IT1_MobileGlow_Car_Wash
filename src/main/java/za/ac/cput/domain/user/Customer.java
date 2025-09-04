@@ -1,6 +1,7 @@
 //Thaakirah Watson, 230037550
 package za.ac.cput.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.domain.generic.Address;
@@ -38,6 +39,7 @@ public class Customer extends User {
         return customerDOB;
     }
 
+    @JsonBackReference
     public List<Vehicle> getVehicles() {
         return vehicles;
     }

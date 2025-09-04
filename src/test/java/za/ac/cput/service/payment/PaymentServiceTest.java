@@ -1,199 +1,171 @@
-//package za.ac.cput.service.payment;
+package za.ac.cput.service.payment;
+
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import za.ac.cput.domain.booking.Booking;
+import za.ac.cput.domain.booking.CleaningService;
+import za.ac.cput.domain.payment.Payment;
+import za.ac.cput.domain.booking.Vehicle;
+import za.ac.cput.domain.user.employee.WashAttendant;
+import za.ac.cput.factory.payment.PaymentFactory;
+import za.ac.cput.service.booking.BookingService;
+import za.ac.cput.service.booking.CleaningServiceService;
+import za.ac.cput.service.booking.VehicleService;
+import za.ac.cput.service.user.employee.WashAttendantService;
+import za.ac.cput.service.payment.PaymentService;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+@Transactional
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class PaymentServiceTest {
+
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private BookingService bookingService;
+
+    @Autowired
+    private CleaningServiceService cleaningServiceService;
+
+    @Autowired
+    private VehicleService vehicleService;
+
+    @Autowired
+    private WashAttendantService washAttendantService;
+
+    private static Payment savedPayment;
+    private static Booking booking;
+    private static Vehicle vehicle;
+    private static WashAttendant washAttendant;
+
+    @BeforeAll
+    static void init() {
+        System.out.println("🔧 PaymentServiceTest starting...");
+    }
+
+    @Test
+    @Rollback(value = false)
+    @Order(0)
+    void setupEntities() {
+//        // Fetch an existing vehicle from DB (ensure this ID exists in your database)
+//        vehicle = vehicleService.read(64L);  // Assuming ID 62 exists in the DB
+//        assertNotNull(vehicle, "Vehicle should exist in the database");
 //
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Order;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import za.ac.cput.domain.booking.Booking;
-//import za.ac.cput.domain.payment.Payment;
-//import za.ac.cput.factory.booking.BookingFactory;
-//import za.ac.cput.factory.payment.PaymentFactory;
-//import za.ac.cput.service.booking.BookingService;
-//
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import za.ac.cput.domain.booking.CleaningService;
-//
-//import za.ac.cput.service.booking.CleaningServiceService;
-//
-//
-//@SpringBootTest
-//public class PaymentServiceTest {
-//    @Autowired
-//    private PaymentService paymentService;
-//
-//    @Autowired
-//    private BookingService bookingService;
-//
-//    private static Booking createdBooking;
-//
-//    private static Payment createdPayment;
-//
-//    @Autowired
-//    private CleaningServiceService cleaningServiceService;
-//
-//    // Use an existing booking ID from your DB here:
-//    private static final String EXISTING_BOOKING_ID = "5fc0a12d-564c-48de-8f17-ee514e5663d5";
-//
+//        // Fetch an existing wash attendant (ensure this ID exists in DB)
+//        washAttendant = washAttendantService.read(59L);  // Assuming ID 59 exists in the DB
+//        assertNotNull(washAttendant, "WashAttendant should exist in the database");
+    }
+
+    @Test
+    @Rollback(value = false)
+    @Order(1)
+    void testCreatePaymentWithExistingBooking() {
+        // Fetch an existing booking from DB
+        booking = bookingService.read(1L); // Use real booking ID
+        assertNotNull(booking, "Booking should exist");
+
+        // 💡 Force loading of cleaning services (avoids lazy init errors)
+        assertNotNull(booking.getCleaningServices());
+        booking.getCleaningServices().size(); // Initializes the collection
+
+        // Now create the payment
+        Payment payment = paymentService.createPaymentForBookingWithTip(booking.getBookingId());
+        assertNotNull(payment);
+        assertEquals(booking.getBookingId(), payment.getBooking().getBookingId());
+
+        double expectedAmount = booking.isTipAdd()
+                ? booking.getBookingCost() * 1.10
+                : booking.getBookingCost();
+
+        assertEquals(expectedAmount, payment.getPaymentAmount(), 0.01);
+        savedPayment = payment;
+
+        System.out.println("Created Payment: " + payment);  // Safe to log now
+    }
+
+    @Test
+    @Rollback(value = false)
+    @Order(2)
+    void testCreate() {
+        assertNotNull(savedPayment, "Payment should have been created in the previous test");
+
+        // Save the payment again to confirm successful creation
+        Payment result = paymentService.create(savedPayment);
+        assertNotNull(result);
+        assertEquals(savedPayment.getBooking().getBookingId(), result.getBooking().getBookingId());
+
+        System.out.println("Created Payment (again): " + result);
+    }
+
+    @Test
+    @Rollback(value = false)
+    @Order(3)
+    void testRead() {
+        assertNotNull(savedPayment, "Payment should have been created in the previous test");
+
+        // Read the payment and check if it's the same
+        Payment readPayment = paymentService.read(savedPayment.getPaymentId());
+        assertNotNull(readPayment);
+        assertEquals(savedPayment.getPaymentId(), readPayment.getPaymentId());
+
+        System.out.println("Read Payment: " + readPayment);
+    }
+
+    @Test
+    @Rollback(value = false)
+    @Order(4)
+    void testUpdate() {
+        assertNotNull(savedPayment, "Payment should have been created in the previous test");
+
+        // Update the payment (e.g., changing the amount or status)
+        Payment updatedPayment = new Payment.Builder()
+                .copy(savedPayment)
+                .setPaymentAmount(150.00)  // Adjusted amount for the update
+                .setPaymentStatus(Payment.PaymentStatus.PAID)
+                .setPaymentMethod(Payment.PaymentMethod.CREDIT)// Changed status
+                .build();
+
+        Payment result = paymentService.update(updatedPayment);
+        assertNotNull(result);
+        assertEquals(150.00, result.getPaymentAmount());
+        assertEquals(Payment.PaymentStatus.PAID, result.getPaymentStatus()); //
+
+        System.out.println(" Updated Payment: " + result);
+    }
+
+    @Test
+    @Rollback(value = false)
+    @Order(5)
+    void testGetAll() {
+        // Fetch all payments
+        List<Payment> payments = paymentService.getAll();
+        assertNotNull(payments, "Payment list should not be null");
+        assertFalse(payments.isEmpty(), "There should be at least one payment");
+
+        System.out.println("All Payments: " + payments);
+    }
+
 //    @Test
-//    @Order(1)
-//    void testCreatePaymentWithExistingBooking() {
-//        Booking existingBooking = bookingService.read(EXISTING_BOOKING_ID);
-//        assertNotNull(existingBooking);
+//    @Order(6)
+//    void testDelete() {
+//        assertNotNull(savedPayment, "Payment should have been created in the previous test");
 //
-//        Payment payment = paymentService.createPaymentForBookingWithTip(
-//                existingBooking.getBookingID());
+//        // Delete the payment
+//        boolean deleted = paymentService.delete(savedPayment.getPaymentID());
+//        assertTrue(deleted);
 //
-//        assertNotNull(payment);
-//        assertEquals(existingBooking.getBookingID(), payment.getBooking().getBookingID());
-//
-//        double expectedAmount = existingBooking.isTipAdd()
-//                ? existingBooking.getBookingCost() * 1.10
-//                : existingBooking.getBookingCost();
-//        assertEquals(expectedAmount, payment.getPaymentAmount());
-//
-//        createdPayment = payment; // save for CRUD tests
+//        // Verify it has been deleted
+//        Payment afterDelete = paymentService.read(savedPayment.getPaymentID());
+//        assertNull(afterDelete);
+//        System.out.println(" Payment deleted successfully");
 //    }
-//
-//    @Test
-//    @Order(2)
-//    void testCreatePaymentWithNewBooking() {
-//
-//        // Step 1: Prepare cleaning services (fetch from DB or create new)
-//        List<CleaningService> services = new ArrayList<>();
-//
-//        // Example: fetch existing cleaning services from BookingService or CleaningServiceService (assuming you have one)
-//        // Replace with your actual service fetching logic
-//        CleaningService service1 = cleaningServiceService.readByServiceName(CleaningService.ServiceName.CERAMIC_COATING);
-//        CleaningService service2 = cleaningServiceService.readByServiceName(CleaningService.ServiceName.INTERIOR_CLEANING);
-//
-//        // Add fetched services to list (ensure they are not null)
-//        if (service1 != null) services.add(service1);
-//        if (service2 != null) services.add(service2);
-//
-//        double calculatedBookingCost = services.stream()
-//                .mapToDouble(CleaningService::getPriceOfService)
-//                .sum();
-//
-//
-//        createdBooking = BookingFactory.createBooking(
-//                services,
-//                null,
-//                "WA_TEST_010",
-//                LocalDateTime.now().plusDays(1),
-//                "VEHICLE_TEST_001",
-//                true,
-//                calculatedBookingCost
-//        );
-//
-//        createdBooking = bookingService.create(createdBooking);
-//        assertNotNull(createdBooking);
-//
-//        Payment payment = paymentService.createPaymentForBookingWithTip(
-//                createdBooking.getBookingID());
-//
-//        assertNotNull(payment);
-//        assertEquals(createdBooking.getBookingID(), payment.getBooking().getBookingID());
-//
-//        double expectedAmount = createdBooking.getBookingCost() * 1.10;
-//        assertEquals(expectedAmount, payment.getPaymentAmount());
-//    }
-//
-//    private Payment createTestPayment() {
-//        // Use existing booking for simplicity here:
-//        Booking booking = bookingService.read(EXISTING_BOOKING_ID);
-//        if (booking == null) {
-//            // Or create a new booking here if needed
-//            List<CleaningService> services = new ArrayList<>();
-//            CleaningService service1 = cleaningServiceService.readByServiceName(CleaningService.ServiceName.CERAMIC_COATING);
-//            CleaningService service2 = cleaningServiceService.readByServiceName(CleaningService.ServiceName.INTERIOR_CLEANING);
-//            if (service1 != null) services.add(service1);
-//            if (service2 != null) services.add(service2);
-//            double bookingCost = services.stream().mapToDouble(CleaningService::getPriceOfService).sum();
-//
-//            booking = BookingFactory.createBooking(
-//                    services,
-//                    null,
-//                    "WA_TEST_011",
-//                    LocalDateTime.now().plusDays(1),
-//                    "VEHICLE_TEST_011",
-//                    true,
-//                    bookingCost
-//            );
-//            booking = bookingService.create(booking);
-//        }
-//        return paymentService.createPaymentForBookingWithTip(booking.getBookingID());
-//    }
-//
-//    @Test
-//    @Order(3)
-//    void testCreate() {
-//
-//        System.out.println("Running testCreate...");
-//        Payment testPayment = createTestPayment(); // get fresh test payment
-//        Payment saved = paymentService.create(testPayment);
-//        assertNotNull(saved);
-//        assertEquals(testPayment.getBooking().getBookingID(), saved.getBooking().getBookingID());
-//    }
-//
-//    @Test
-//    @Order(4)
-//    void testRead() {
-//        System.out.println("Running testRead...");
-//        Payment testPayment = createTestPayment();
-//        Payment saved = paymentService.create(testPayment);
-//        Payment read = paymentService.read(saved.getPaymentID());
-//        assertNotNull(read);
-//        assertEquals(saved.getPaymentID(), read.getPaymentID());
-//    }
-//
-//    @Test
-//    @Order(5)
-//
-//    void testUpdate() {
-//
-//        System.out.println("Running testUpdate...");
-//        Payment testPayment = createTestPayment();
-//        Payment saved = paymentService.create(testPayment);
-//
-//        Payment updated = new Payment.Builder()
-//                .copy(saved)
-//                .setPaymentAmount(999.99)
-//                .setPaymentStatus(Payment.PaymentStatus.PAID)
-//                .build();
-//
-//        Payment result = paymentService.update(updated);
-//        assertEquals(999.99, result.getPaymentAmount());
-//        assertEquals(Payment.PaymentStatus.PAID, result.getPaymentStatus());
-//    }
-//
-////    @Test
-////    @Order(6)
-////
-////    void testDelete() {
-////        System.out.println("Running testDelete...");
-////        Payment testPayment = createTestPayment();
-////        Payment saved = paymentService.create(testPayment);
-////
-////        boolean deleted = paymentService.delete(saved.getPaymentID());
-////        assertTrue(deleted);
-////        assertNull(paymentService.read(saved.getPaymentID()));
-////    }
-//
-//    @Test
-//    @Order(7)
-//
-//    void testGetAll() {
-//        System.out.println("Running testGetAll...");
-//        Payment testPayment = createTestPayment();
-//        paymentService.create(testPayment);
-//
-//        List<Payment> allPayments = paymentService.getAll();
-//        assertFalse(allPayments.isEmpty());
-//    }
-//
-//}
+}

@@ -7,7 +7,7 @@ import za.ac.cput.service.IService;
 import java.util.List;
 
 @Repository
-public interface ICleaningServiceService extends IService<CleaningService, String> {
+public interface ICleaningServiceService extends IService<CleaningService, Long> {
 
     List<CleaningService> getAll();
 

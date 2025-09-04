@@ -17,24 +17,27 @@ public abstract class User {
     protected String userName;
     protected String userSurname;
     protected Boolean isActive;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "role_description", length = 50)
     protected User.RoleDescription roleDescription;
 
     public enum RoleDescription {
         CLIENT,
-        EMPLOYEE;
+        EMPLOYEE,
     }
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "contact_Id", referencedColumnName = "contactID")
+   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "contactid", referencedColumnName = "contactid")
     protected Contact contact;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_Id", referencedColumnName = "addressID")
+
+    @JoinColumn(name = "addressid", referencedColumnName = "addressid")
     protected Address address;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "login_Id", referencedColumnName = "loginID")
+    @JoinColumn(name = "loginid", referencedColumnName = "loginid")
     protected Login login;
 
     public Long getUserId() {

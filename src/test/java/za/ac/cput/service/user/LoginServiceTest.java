@@ -82,4 +82,3 @@ public class LoginServiceTest {
         System.out.println("Deleted login: " + login);
     }
 }
-

@@ -119,3 +119,4 @@ class ManagerControllerTest {
         System.out.println("After deletion, the read manager status code: " + readManager.getStatusCode());
     }
 }
+

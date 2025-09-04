@@ -1,30 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Booking.css';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
 
 const Booking = () => {
-
-  const categories = ['Exterior Wash', 'Interior Cleaning', 'Full Detailing', 'Protection Services'];
-
-  const services = [
-    { id: 1, name: 'Gel Polish Application on Natural Hands', duration: '1 hr', price: 275, category: 'Featured' },
-    { id: 2, name: 'Soak Off', duration: '15 mins – 35 mins', price: 60, category: 'Nail Enhancement' },
-    { id: 3, name: 'Acrylic', duration: '10 mins – 1 hr, 30 mins', price: 100, category: 'Nail Enhancement' },
-    { id: 4, name: 'Brows', duration: '20 mins', price: 120, category: 'Henna' },
-  ];
-
-  const [selectedCategory, setSelectedCategory] = useState('Featured');
-
-    const handleCategoryChange = (event, newCategory) => {
-      if (newCategory !== null) setSelectedCategory(newCategory);
-    };
-
+  const categories = ['Exterior Wash', 'Interior Care', 'Full Detailing', 'Protection Services'];
+  const [selectedCategory, setSelectedCategory] = useState('Exterior Wash');
+  const [services, setServices] = useState([]);
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('http://localhost:8081/mobileglow/api/cleaningservice/getAll')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Fetched Services:', data);
+        setServices(data);
+      })
+      .catch((error) => console.error('Error fetching services:', error));
+  }, []);
+
+  const handleCategoryChange = (event, newCategory) => {
+    if (newCategory !== null) setSelectedCategory(newCategory);
+  };
+
+  const filteredServices = Array.isArray(services)
+    ? services.filter(
+        (service) => service.category?.trim().toLowerCase() === selectedCategory.trim().toLowerCase()
+      )
+    : [];
 
   const addToCart = (service) => {
-    if (!cart.includes(service)) {
-      setCart([...cart, service]);
+    const normalizedService = {
+      ...service,
+      id: service.cleaningServiceId
+    };
+
+    console.log("Trying to add service to cart:", normalizedService);
+
+    if (!cart.some(item => item.id === normalizedService.id)) {
+      const newCart = [...cart, normalizedService];
+      setCart(newCart);
+      console.log("Updated cart after addition:", newCart);
+    } else {
+      console.log("Service already in cart:", normalizedService);
     }
   };
 
@@ -32,12 +51,24 @@ const Booking = () => {
     setCart(cart.filter(item => item.id !== serviceId));
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + item.priceOfService, 0);
+  console.log("Current cart contents:", cart);
+
+  const handleContinue = () => {
+    navigate("/bookingtwo", {
+      state: {
+        cart: cart,
+        totalPrice: totalPrice,
+      },
+    });
+  };
+
+  console.log("Selected category:", selectedCategory);
+  console.log("All services from API:", services);
 
   return (
     <div className="booking-layout">
       <div className="left-panel">
-        <button className="back-button">←</button>
         <h2 className="booking-page-heading">Services</h2>
 
         <ToggleButtonGroup
@@ -57,23 +88,28 @@ const Booking = () => {
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
+
         <div className="service-list">
-          {services.map(service => (
-            <div key={service.id} className="service-card">
-              <div>
-                <h4>{service.name}</h4>
-                <p className="duration">{service.duration}</p>
-                <p className="price">R {service.price}</p>
+          {filteredServices.length === 0 ? (
+            <p>No services available for this category</p>
+          ) : (
+            filteredServices.map(service => (
+              <div key={service.id} className="service-card">
+                <div className="service-info">
+                  <h4>{service.serviceName.replace(/_/g, ' ')}</h4>
+                  <p className="duration">Duration: {service.duration} <strong>hours</strong></p>
+                  <p className="price">R {service.priceOfService}</p>
+                </div>
+                <button className="add-btn" onClick={() => addToCart(service)}>+</button>
               </div>
-              <button className="add-btn" onClick={() => addToCart(service)}>+</button>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
       <div className="right-panel">
         <div className="business-info">
-          <h3>Blush and Buff</h3>
+          <h3>MobileGlow Car Wash</h3>
           <p>4.9 ⭐ (32)</p>
           <p>Parklands, Cape Town</p>
         </div>
@@ -83,18 +119,21 @@ const Booking = () => {
             <p className="empty-cart">No services selected</p>
           ) : (
             <ul>
-              {cart.map(item => (
-                <li key={item.id}>
-                  {item.name} - R {item.price}
-                  <button className="remove-btn" onClick={() => removeFromCart(item.id)}>x</button>
-                </li>
-              ))}
+              {cart.map((item, index) => {
+                console.log(`Rendering cart item - id: ${item.id}, name: ${item.serviceName}`);
+                return (
+                  <li key={item.id || `${item.serviceName}-${index}`}>
+                    {item.serviceName.replace(/_/g, ' ')} - R {item.priceOfService}
+                    <button className="remove-btn" onClick={() => removeFromCart(item.id)}>x</button>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <div className="total">
             <strong>Total:</strong> R {totalPrice || '0'}
           </div>
-          <button className="continue-btn" disabled={cart.length === 0}>Continue</button>
+          <button className="continue-btn" disabled={cart.length === 0} onClick={handleContinue}>Continue</button>
         </div>
       </div>
     </div>

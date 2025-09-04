@@ -101,7 +101,7 @@ public class AddressServiceTest {
         assertFalse(addresses.isEmpty());
         assertTrue(addresses.size() >= 1);
 
-        System.out.println("All Addresses (" + addresses.size() + "):");
+        //System.out.println("All Addresses (" + addresses.size() + "):");
         for (Address address : addresses) {
             System.out.println(address);
             // Verify that our test address is in the list
@@ -115,6 +115,8 @@ public class AddressServiceTest {
             assertNotNull(address.getStreetName());
             assertNotNull(address.getCity());
             assertNotNull(address.getPostalCode());
+
+            System.out.println("All Addresses (" + addresses.size() + "):");
         }
     }
 
@@ -129,7 +131,7 @@ public class AddressServiceTest {
         // Delete the address
         boolean deleteResult = addressService.delete(savedAddressId.getAddressID());
         assertTrue(deleteResult, "Delete operation should return true");
-        
+
 
         System.out.println("Address deleted successfully. ID: " + savedAddressId);
     }

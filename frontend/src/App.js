@@ -1,34 +1,40 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import Payment from "./screens/Payment";
-import Booking from "./screens/Booking"; // ⬅️ Import the Booking component
-import BookingTwo from "./screens/BookingTwo"; // ⬅️ Import the Booking component
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Booking from "./screens/Booking";
+import BookingVehicle from "./screens/BookingVehicle"; // Ensure this is imported correctly
+import BookingTwo from "./screens/BookingTwo"; // Ensure this is imported correctly
 import ConfirmBookingPage from "./screens/ConfirmBookingPage";
+import ProfileManagement from "./screens/ProfileManagement";
+import VehiclePage from "./screens/VehiclePage";
+import CleaningServicePage from "./screens/CleaningServicePage";
+import CleaningServiceManagement from "./screens/CleaningServiceManagement";
+import ProfilePage from "./screens/ProfilePage";
+import ManageBookings from "./screens/ManageBookings";
+import PaymentPage from "./screens/PaymentPage"
 import ManagerProfile from "./pages/ManagerProfile";
 import LoginForm from "./pages/LoginForm";
 import ManagerForm from "./pages/ManagerForm"; // ⬅️ Import the Booking component
-
-
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/payment" />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/booking" element={<Booking />} /> {/* ⬅️ Add this line */}
-        <Route path="/bookingtwo" element={<BookingTwo />} /> {/* ⬅️ Add this line */}
-        <Route path="/confirm" element={<ConfirmBookingPage />} /> {/* ⬅️ Add this line */}
-        <Route path="/" element={<ManagerForm />} />
+          <Route path="/vehicles" element={<VehiclePage />} />
+          <Route path="/cleaning-services" element={<CleaningServicePage />} />
+          <Route path="/cleaning-services/management" element={<CleaningServiceManagement />} />
+          <Route path="/profiles" element={<ProfilePage />} />
+          <Route path="/profile-management" element={<ProfileManagement />} />
+          <Route path="/" element={<Navigate to="/booking" />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/bookingtwo" element={<BookingTwo />} />
+        <Route path="/bookingvehicle" element={<BookingVehicle />} /> {/* Vehicle selection */}
+        <Route path="/confirm" element={<ConfirmBookingPage />} />
+        <Route path="/manage-bookings" element={<ManageBookings />} />
+        <Route path="/payment/:bookingId" element={<PaymentPage />} />
+           <Route path="/" element={<ManagerForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/profile" element={<ManagerProfile />} />
-
-
       </Routes>
     </Router>
   );
