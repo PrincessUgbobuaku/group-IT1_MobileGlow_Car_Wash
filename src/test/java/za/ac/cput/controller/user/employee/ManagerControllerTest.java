@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class ManagerControllerTest {
 
-    private static Contact contact = ContactFactory.createContactFactory1("0669844409");
+    private static Contact contact = ContactFactory.createContact("0669844409");
 
     private static Address address = AddressFactory.createAddressFactory1("143",
             "Sir Lowry Street",
@@ -51,7 +51,7 @@ class ManagerControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String BASE_URL = "http://localhost:8080/MobileCarWash/Manager";
+    private static final String BASE_URL = "http://localhost:8080/mobileglow/Manager";
 
     @Test
     void a_create() {

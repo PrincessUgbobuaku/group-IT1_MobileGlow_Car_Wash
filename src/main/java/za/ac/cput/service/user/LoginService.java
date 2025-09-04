@@ -42,6 +42,11 @@ public class LoginService implements ILoginService {
     }
 
     @Override
+    public Login findByEmailAddress(String email) {
+        return loginRepository.findByEmailAddress(email);
+    }
+
+    @Override
     public boolean delete(Long Id) {
         loginRepository.deleteById(Id);
         return true;

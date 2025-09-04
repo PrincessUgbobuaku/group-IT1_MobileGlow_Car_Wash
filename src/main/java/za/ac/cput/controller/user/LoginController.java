@@ -14,6 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Login")
+@CrossOrigin(
+        origins = "http://localhost:3000",
+        allowedHeaders = "*",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
+)
 public class LoginController {
 
     private final LoginService loginService;
@@ -57,6 +62,25 @@ public class LoginController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(logins);
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<String> authenticate(@RequestBody Login login) {
+        if (login.getEmailAddress() == null || login.getPassword() == null) {
+            return ResponseEntity.badRequest().body("{\"message\":\"Email and password are required\"}");
+        }
+
+        Login foundLogin = loginService.findByEmailAddress(login.getEmailAddress());
+
+        if (foundLogin != null && foundLogin.getPassword().equals(login.getPassword())) {
+            String roleDescription = "CLIENT";
+            if (login.getEmailAddress().contains("manager")) {
+                roleDescription = "EMPLOYEE";
+            }
+            return ResponseEntity.ok("{\"message\":\"Login successful\", \"role_description\":\"" + roleDescription + "\"}");
+        } else {
+            return ResponseEntity.status(401).body("{\"message\":\"Invalid email or password\"}");
+        }
     }
 
     @DeleteMapping("/delete/{Id}")
