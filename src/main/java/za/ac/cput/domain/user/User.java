@@ -28,7 +28,7 @@ public abstract class User {
     }
 
    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "contactid", referencedColumnName = "contactid")
+    @JoinColumn(name = "contact_Id", referencedColumnName = "contact_Id")
     protected Contact contact;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
