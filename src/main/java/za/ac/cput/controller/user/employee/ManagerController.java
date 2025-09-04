@@ -8,6 +8,7 @@ import za.ac.cput.service.user.employee.ManagerService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/Manager")
 public class ManagerController {

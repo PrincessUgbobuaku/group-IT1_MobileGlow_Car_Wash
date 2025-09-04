@@ -1,4 +1,5 @@
 import React from "react";
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Booking from "./screens/Booking";
 import BookingVehicle from "./screens/BookingVehicle"; // Ensure this is imported correctly
@@ -11,11 +12,14 @@ import CleaningServiceManagement from "./screens/CleaningServiceManagement";
 import ProfilePage from "./screens/ProfilePage";
 import ManageBookings from "./screens/ManageBookings";
 import PaymentPage from "./screens/PaymentPage"
+import ManagerProfile from "./pages/ManagerProfile";
+import LoginForm from "./pages/LoginForm";
+import ManagerForm from "./pages/ManagerForm"; // ⬅️ Import the Booking component
+
 function App() {
   return (
     <Router>
       <Routes>
-
           <Route path="/vehicles" element={<VehiclePage />} />
           <Route path="/cleaning-services" element={<CleaningServicePage />} />
           <Route path="/cleaning-services/management" element={<CleaningServiceManagement />} />
@@ -28,9 +32,9 @@ function App() {
         <Route path="/confirm" element={<ConfirmBookingPage />} />
         <Route path="/manage-bookings" element={<ManageBookings />} />
         <Route path="/payment/:bookingId" element={<PaymentPage />} />
-
-
-
+           <Route path="/" element={<ManagerForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/profile" element={<ManagerProfile />} />
       </Routes>
     </Router>
   );

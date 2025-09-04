@@ -10,4 +10,5 @@ import za.ac.cput.domain.user.Login;
 
 @Repository
 public interface ILoginRepository extends JpaRepository<Login, Long> {
+    Login findByEmailAddress(String emailAddress);
 }
