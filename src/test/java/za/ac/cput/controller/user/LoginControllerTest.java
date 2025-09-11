@@ -31,12 +31,16 @@ class LoginControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String BASE_URL = "http://localhost:8080/MobileCarWash/Login";
+    private static final String BASE_URL = "http://localhost:8080/mobileglow/Login";
 
     @Test
     void a_create() {
         String url = BASE_URL + "/create";
         ResponseEntity<Login> postResponse = restTemplate.postForEntity(url, login, Login.class);
+
+        System.out.println("Status: " + postResponse.getStatusCode());
+        System.out.println("Body: " + postResponse);
+
         assertNotNull(postResponse.getBody());
         System.out.println("postResponse: " + postResponse.getBody());
         login_with_Id = postResponse.getBody();
