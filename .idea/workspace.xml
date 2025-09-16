@@ -5,56 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ManageBookings.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ManageBookings.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/PaymentPage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/PaymentPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/dto/booking/BookingDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/AboutUs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ContactUs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/LandingPublic.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/auth/RoleSelection.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/components/NavigationBar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/customer/LandingCustomer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/customer/ProfileCustomer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingHistory.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/LandingEmployee.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/ProfileEmployee.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/EmployeeManagement.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/Performance.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/Booking.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/Booking.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/CleaningServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/booking/CleaningServiceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/generic/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/payment/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/payment/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/CleaningService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/booking/CleaningService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/payment/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/payment/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/UserRole.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/domain/user/UserRoleID.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/booking/BookingFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/booking/BookingFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/RoleFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/UserFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/factory/user/UserRoleFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/booking/IBookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/booking/IBookingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/payment/IPaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/payment/IPaymentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/user/IRoleRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/repository/user/IUserRoleRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/BookingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/CleaningServiceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/booking/CleaningServiceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/payment/IPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/payment/IPaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/payment/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/payment/PaymentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/AccountantControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/controller/user/employee/AccountantControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/booking/BookingFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/booking/BookingFactoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/payment/PaymentFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/payment/PaymentFactoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/RoleFactoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/UserRoleFactoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/AccountantFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/AccountantFactoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/WashAttendantFactoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/factory/user/employee/WashAttendantFactoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/BookingServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/BookingServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/payment/PaymentServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/payment/PaymentServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/CustomerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/WashAttendantServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/WashAttendantServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/CleaningServiceManagement.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/CleaningServiceManagement.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/CleaningServiceManagement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/CleaningServiceManagement.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/VehiclePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/management/VehiclePage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/VehiclePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/management/VehiclePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,6 +109,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\screens\customer\management" />
+      <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\screens\employee\management" />
+      <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\screens\customer\booking" />
       <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\src\main\java\za\ac\cput\dto\booking" />
     </key>
   </component>
