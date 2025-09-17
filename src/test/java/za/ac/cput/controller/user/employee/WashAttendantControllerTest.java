@@ -29,16 +29,16 @@ class WashAttendantControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String BASE_URL = "/api/wash-attendants";
+    private final String BASE_URL = "http://localhost:8080/mobileglow/wash-attendants";
 
-    private static Contact contact = ContactFactory.createContactFactory1("0725637252");
+    private static Contact contact = ContactFactory.createContact("0725637252");
     private static Address address = AddressFactory.createAddressFactory1("101", "Main Street", "Cape Town", "8000");
     private static Login login = LoginFactory.createLogin("washattendant@gmail.com", "password123");
 
     private static WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
             "Mike",
             "Johnson",
-            User.RoleDescription.WASH_ATTENDANT,
+            User.RoleDescription.EMPLOYEE,
             true,
             "Full-Time",
             true,
@@ -51,7 +51,7 @@ class WashAttendantControllerTest {
 
     @Test
     void a_create() {
-        String url = BASE_URL;
+        String url = BASE_URL + "/create";
         ResponseEntity<WashAttendant> response = restTemplate.postForEntity(url, washAttendant, WashAttendant.class);
 
         assertNotNull(response);
@@ -67,7 +67,7 @@ class WashAttendantControllerTest {
 
     @Test
     void b_read() {
-        String url = BASE_URL + "/" + createdWashAttendant.getUserId();
+        String url = BASE_URL + "/read/" + createdWashAttendant.getUserId();
         ResponseEntity<WashAttendant> response = restTemplate.getForEntity(url, WashAttendant.class);
 
         assertNotNull(response);
@@ -87,7 +87,7 @@ class WashAttendantControllerTest {
                 .setShiftHours(6)
                 .build();
 
-        String url = BASE_URL + "/" + createdWashAttendant.getUserId();
+        String url = BASE_URL + "/update" + createdWashAttendant.getUserId();
         HttpEntity<WashAttendant> requestEntity = new HttpEntity<>(updatedWashAttendant);
         ResponseEntity<WashAttendant> response = restTemplate.exchange(
                 url, HttpMethod.PUT, requestEntity, WashAttendant.class);
@@ -104,7 +104,7 @@ class WashAttendantControllerTest {
 
     @Test
     void d_getAll() {
-        String url = BASE_URL;
+        String url = BASE_URL + "/getAllWashAttendants";
         ResponseEntity<WashAttendant[]> response = restTemplate.getForEntity(url, WashAttendant[].class);
 
         assertNotNull(response);
@@ -117,7 +117,7 @@ class WashAttendantControllerTest {
 
     @Test
     void e_delete() {
-        String url = BASE_URL + "/" + createdWashAttendant.getUserId();
+        String url = BASE_URL + "/delete/" + createdWashAttendant.getUserId();
         restTemplate.delete(url);
 
         // Verify deletion

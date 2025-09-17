@@ -118,5 +118,6 @@ class ManagerControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, readManager.getStatusCode());
         System.out.println("After deletion, the read manager status code: " + readManager.getStatusCode());
     }
+
 }
 

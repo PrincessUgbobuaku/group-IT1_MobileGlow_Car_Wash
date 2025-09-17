@@ -10,7 +10,7 @@ import za.ac.cput.service.user.employee.impl.AccountantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/accountants")
+@RequestMapping("/Accountant")
 public class AccountantController {
 
     private final AccountantService accountantService;
@@ -20,13 +20,13 @@ public class AccountantController {
         this.accountantService = accountantService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Accountant> create(@RequestBody Accountant accountant) {
         Accountant createdAccountant = accountantService.create(accountant);
         return ResponseEntity.ok(createdAccountant);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public ResponseEntity<Accountant> read(@PathVariable Long id) {
         Accountant accountant = accountantService.read(id);
         if (accountant == null) {
@@ -35,9 +35,9 @@ public class AccountantController {
         return ResponseEntity.ok(accountant);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Accountant> update(@PathVariable Long id, @RequestBody Accountant accountant) {
-        if (!id.equals(accountant.getUserId())) {
+    @PutMapping("/update")
+    public ResponseEntity<Accountant> update(@RequestBody Accountant accountant) {
+        if (accountant.getUserId() == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -48,7 +48,7 @@ public class AccountantController {
         return ResponseEntity.ok(updatedAccountant);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         Accountant accountant = accountantService.read(id);
         if (accountant == null) {
@@ -59,7 +59,7 @@ public class AccountantController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/getAllAccountants")
     public ResponseEntity<List<Accountant>> getAll() {
         List<Accountant> accountants = accountantService.getAllAccountants();
         return ResponseEntity.ok(accountants);

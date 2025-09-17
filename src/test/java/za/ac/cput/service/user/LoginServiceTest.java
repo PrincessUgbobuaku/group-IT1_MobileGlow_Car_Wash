@@ -9,18 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import za.ac.cput.domain.generic.Address;
-import za.ac.cput.domain.generic.Contact;
-import za.ac.cput.domain.user.Login;
-import za.ac.cput.domain.user.User;
-import za.ac.cput.domain.user.employee.Manager;
-import za.ac.cput.factory.generic.AddressFactory;
-import za.ac.cput.factory.generic.ContactFactory;
-import za.ac.cput.factory.user.LoginFactory;
-import za.ac.cput.factory.user.employee.ManagerFactory;
-import za.ac.cput.service.user.employee.ManagerService;
 
-import java.time.LocalDate;
+import za.ac.cput.domain.user.Login;
+import za.ac.cput.factory.user.LoginFactory;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class LoginServiceTest {
 
-     @Autowired
-    private LoginService loginService;
-
-    private static Login login = LoginFactory.createLogin(
+     private static Login login = LoginFactory.createLogin(
             "kwanda@yahoo.com",
             "Broker2000"
     );
+
+    @Autowired
+    private LoginService loginService;
 
 
     @Test
@@ -82,3 +73,5 @@ public class LoginServiceTest {
         System.out.println("Deleted login: " + login);
     }
 }
+
+
