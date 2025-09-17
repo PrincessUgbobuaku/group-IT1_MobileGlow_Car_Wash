@@ -16,21 +16,18 @@ function App() {
     <Router>
       <Routes>
 
-          <Route path="/vehicles" element={<VehiclePage />} />
-          <Route path="/cleaning-services" element={<CleaningServicePage />} />
-          <Route path="/cleaning-services/management" element={<CleaningServiceManagement />} />
-          <Route path="/profiles" element={<ProfilePage />} />
-          <Route path="/profile-management" element={<ProfileManagement />} />
-          <Route path="/" element={<Navigate to="/booking" />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/bookingtwo" element={<BookingTwo />} />
-        <Route path="/bookingvehicle" element={<BookingVehicle />} /> {/* Vehicle selection */}
-        <Route path="/confirm" element={<ConfirmBookingPage />} />
-        <Route path="/manage-bookings" element={<ManageBookings />} />
-        <Route path="/payment/:bookingId" element={<PaymentPage />} />
-
-
-
+//          <Route path="/vehicles" element={<VehiclePage />} />
+//          <Route path="/cleaning-services" element={<CleaningServicePage />} />
+//          <Route path="/cleaning-services/management" element={<CleaningServiceManagement />} />
+//          <Route path="/profiles" element={<ProfilePage />} />
+//          <Route path="/profile-management" element={<ProfileManagement />} />
+//          <Route path="/" element={<Navigate to="/booking" />} />
+//        <Route path="/booking" element={<Booking />} />
+//        <Route path="/bookingtwo" element={<BookingTwo />} />
+//        <Route path="/bookingvehicle" element={<BookingVehicle />} /> {/* Vehicle selection */}
+//        <Route path="/confirm" element={<ConfirmBookingPage />} />
+//        <Route path="/manage-bookings" element={<ManageBookings />} />
+//        <Route path="/payment/:bookingId" element={<PaymentPage />} />
       </Routes>
     </Router>
   );
