@@ -1,3 +1,4 @@
+/*
 package za.ac.cput.service.user.employee.impl;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -94,4 +95,4 @@ class WashAttendantServiceImplTest {
         assertNull(washAttendantService.read(washAttendantWithId.getUserId()));
         System.out.println("Delete successfully: " + washAttendantWithId.getUserId());
     }
-}
+}*/

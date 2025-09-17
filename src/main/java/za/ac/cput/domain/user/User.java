@@ -33,7 +33,7 @@ public abstract class User {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 
-    @JoinColumn(name = "addressid", referencedColumnName = "addressid")
+    @JoinColumn(name = "addressID", referencedColumnName = "addressID")
     protected Address address;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

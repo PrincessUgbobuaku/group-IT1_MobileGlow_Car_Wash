@@ -44,9 +44,9 @@ public class AccountantServiceImpl implements IAccountantService {
         accountantRepository.deleteById(Id);
         return false;
     }
-
+/*
     @Override
     public List<Accountant> findAll() {
         return List.of();
-    }
+    }*/
 }
