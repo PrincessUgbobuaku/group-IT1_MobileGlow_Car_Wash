@@ -24,46 +24,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
 class WashAttendantServiceTest {
 
     @Autowired
     private WashAttendantService washAttendantService;
 
-    private final Contact contact = ContactFactory.createContact("0625341234");
+    private static Contact contact = ContactFactory.createContact("0625341234");
 
-    private final Address address = AddressFactory.createAddressFactory1(
+    private static Address address = AddressFactory.createAddressFactory1(
             "100", "School Street", "Cape Town", "8001");
 
-    private final Login login = LoginFactory.createLogin("washattendant@gmail.com", "password123");
+    private static Login login = LoginFactory.createLogin("washattendant@gmail.com", "password123");
 
-    private final WashAttendant washAttendant = new WashAttendant.Builder()
-            .setUserName("Matthew")
-            .setUserSurname("Lee")
-            .setIsActive(true)
-            .setRoleDescription(User.RoleDescription.EMPLOYEE)
-            .setEmployeeType("Wash Attendant")
-            .setIsFullTime(true)
-            .setShiftHours(7)
-            .setContact(contact)
-            .setAddress(address)
-            .setLogin(login)
-            .build();
+    private static WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
+            "Matthew",
+            "Lee",
+            User.RoleDescription.EMPLOYEE,
+            true,
+            "WashAttendant",
+            true,
+            7,
+            contact,
+            address,
+            login
+            );
 
-    private WashAttendant washAttendantWithId;
+    private static WashAttendant washAttendantWithId;
 
     @Test
-    @Rollback(value = false)
     void a_create() {
         WashAttendant created = washAttendantService.create(washAttendant);
         assertNotNull(created);
         washAttendantWithId = created;
-        System.out.println("Created WashAttendant: " + created);
+        System.out.println("Created WashAttendant: " + washAttendantWithId);
     }
 
     @Test
-    @Rollback(value = false)
     void b_read() {
         assertNotNull(washAttendantWithId);
         WashAttendant read = washAttendantService.read(washAttendantWithId.getUserId());
@@ -73,7 +69,6 @@ class WashAttendantServiceTest {
     }
 
     @Test
-    @Rollback(value = false)
     void c_update() {
         WashAttendant updated = new WashAttendant.Builder()
                 .copy(washAttendantWithId)
@@ -99,11 +94,10 @@ class WashAttendantServiceTest {
         System.out.println("All WashAttendants: " + all);
     }
 
-//    @Test
-//    void e_delete() {
-//        boolean deleted = washAttendantService.delete(washAttendantWithId.getUserId());
-//        assertTrue(deleted);
-//        assertNull(washAttendantService.read(washAttendantWithId.getUserId()));
-//        System.out.println("Deleted WashAttendant with ID: " + washAttendantWithId.getUserId());
-//    }
+    @Test
+    void e_delete() {
+        washAttendantService.delete(washAttendantWithId.getUserId());
+        assertNull(washAttendantService.read(washAttendantWithId.getUserId()));
+        System.out.println("Deleted WashAttendant with ID: " + washAttendantWithId);
+    }
 }

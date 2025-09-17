@@ -10,7 +10,7 @@ public class AccountantFactory {
 
     public static Accountant createAccountant(String userName, String userSurname,
                                               boolean isActive, User.RoleDescription roleDescription,
-                                              boolean hasTaxFillingAuthority,
+                                              String employeeType, boolean hasTaxFillingAuthority,
                                               Contact contact, Address address, Login login) {
 
         return new Accountant.Builder()
@@ -18,6 +18,7 @@ public class AccountantFactory {
                 .setUserSurname(userSurname)
                 .setIsActive(isActive)
                 .setRoleDescription(roleDescription)
+                .setEmployeeType(employeeType)
                 .setHasTaxFillingAuthority(hasTaxFillingAuthority)
                 .setContact(contact)
                 .setAddress(address)
@@ -25,7 +26,7 @@ public class AccountantFactory {
                 .build();
     }
 
-    public static Accountant createAccountantWithId(Long userId, String userName, String userSurname,
+    /*public static Accountant createAccountantWithId(Long userId, String userName, String userSurname,
                                                     boolean isActive, User.RoleDescription roleDescription,
                                                     boolean hasTaxFillingAuthority,
                                                     Contact contact, Address address, Login login) {
@@ -41,5 +42,5 @@ public class AccountantFactory {
                 .setAddress(address)
                 .setLogin(login)
                 .build();
-    }
+    }*/
 }

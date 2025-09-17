@@ -18,7 +18,7 @@ public class Booking {
     @ManyToMany
     @JoinTable(
             name = "booking_cleaning_service",
-            joinColumns = @JoinColumn(name = "booking_id"),
+            joinColumns = @JoinColumn(name = "booking_Id"),
             inverseJoinColumns = @JoinColumn(name = "cleaning_service_id")
     )
     private List<CleaningService> cleaningServices = new ArrayList<>();

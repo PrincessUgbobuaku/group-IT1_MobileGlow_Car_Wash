@@ -19,13 +19,13 @@ public class WashAttendantController {
         this.washAttendantService = washAttendantService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<WashAttendant> create(@RequestBody WashAttendant washAttendant) {
         WashAttendant createdWashAttendant = washAttendantService.create(washAttendant);
         return ResponseEntity.ok(createdWashAttendant);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public ResponseEntity<WashAttendant> read(@PathVariable Long id) {
         WashAttendant washAttendant = washAttendantService.read(id);
         if (washAttendant == null) {
@@ -34,9 +34,9 @@ public class WashAttendantController {
         return ResponseEntity.ok(washAttendant);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<WashAttendant> update(@PathVariable Long id, @RequestBody WashAttendant washAttendant) {
-        if (!id.equals(washAttendant.getUserId())) {
+    @PutMapping("/update")
+    public ResponseEntity<WashAttendant> update(@RequestBody WashAttendant washAttendant) {
+        if (washAttendant.getUserId() == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -47,7 +47,7 @@ public class WashAttendantController {
         return ResponseEntity.ok(updatedWashAttendant);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         WashAttendant washAttendant = washAttendantService.read(id);
         if (washAttendant == null) {
@@ -77,7 +77,7 @@ public class WashAttendantController {
         }
     }
 
-    @GetMapping
+    @GetMapping("getAllWashAttendants")
     public ResponseEntity<List<WashAttendant>> getAll() {
         List<WashAttendant> washAttendants = washAttendantService.getAllWashAttendants();
         return ResponseEntity.ok(washAttendants);

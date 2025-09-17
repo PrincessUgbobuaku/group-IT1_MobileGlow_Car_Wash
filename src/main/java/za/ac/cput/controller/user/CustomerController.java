@@ -1,6 +1,7 @@
 //Thaakirah Watson, 230037550
 package za.ac.cput.controller.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.user.Customer;
@@ -14,18 +15,19 @@ public class CustomerController {
 
     private CustomerService service;
 
+    @Autowired
     public CustomerController(CustomerService service) {
         this.service = service;
     }
 
     // CREATE
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Customer> create(@RequestBody Customer customer) {
         return ResponseEntity.ok(service.create(customer));
     }
 
     // READ
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public ResponseEntity<Customer> read(@PathVariable Long id) {
         Customer customer = service.read(id);
         return customer != null ? ResponseEntity.ok(customer) : ResponseEntity.notFound().build();

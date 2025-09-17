@@ -31,8 +31,8 @@ public class ManagerServiceTest {
     @Autowired
     private ManagerService managerService;
 
-    private static Contact contact = ContactFactory.createContact("0725637218");
 
+    private static Contact contact = ContactFactory.createContact("0725637252");
 
     private static Address address = AddressFactory.createAddressFactory1("101",
             "Main Street",
