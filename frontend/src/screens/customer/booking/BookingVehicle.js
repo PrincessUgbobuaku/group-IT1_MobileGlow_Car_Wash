@@ -13,7 +13,7 @@ const BookingVehicle = () => {
   const userId = 5; // example
 
   useEffect(() => {
-    fetch(`http://localhost:8081/mobileglow/api/vehicle/customer/${userId}`)
+    fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setVehicles(Array.isArray(data) ? data : []);
