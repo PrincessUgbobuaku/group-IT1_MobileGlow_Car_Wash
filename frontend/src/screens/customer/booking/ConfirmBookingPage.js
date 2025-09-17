@@ -27,7 +27,7 @@ function ConfirmBookingPage() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:8081/mobileglow/wash-attendants/random')
+    fetch('http://localhost:8080/mobileglow/wash-attendants/random')
       .then(response => {
         if (!response.ok) throw new Error('Failed to fetch wash attendant');
         return response.json();
@@ -43,7 +43,7 @@ function ConfirmBookingPage() {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8081/mobileglow/api/customers/5')
+    fetch('http://localhost:8080/mobileglow/api/customers/read/5')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch customer');
         return res.json();
@@ -54,7 +54,7 @@ function ConfirmBookingPage() {
 
   useEffect(() => {
     if (customer?.address?.addressID) {
-      fetch(`http://localhost:8081/api/address/read/${customer.address.addressID}`)
+      fetch(`http://localhost:8080/api/address/read/${customer.address.addressID}`)
         .then(res => {
           if (!res.ok) throw new Error('Failed to fetch address');
           return res.json();
@@ -85,7 +85,7 @@ function ConfirmBookingPage() {
     };
 
     try {
-      const res = await fetch('http://localhost:8081/mobileglow/api/bookings', {
+      const res = await fetch('http://localhost:8080/mobileglow/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
