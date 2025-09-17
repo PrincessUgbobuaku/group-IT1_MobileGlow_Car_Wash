@@ -1,0 +1,24 @@
+{
+  "name": "group-it1_mobileglow_car_wash",
+  "version": "1.0.0",
+  "description": "Welcome to the Mobile Car Wash application repository! This project is designed to provide users with the convenience of having their cars washed at their desired location through a seamless mobile app experience.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vokiabulele/group-IT1_MobileGlow_Car_Wash.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vokiabulele/group-IT1_MobileGlow_Car_Wash/issues"
+  },
+  "homepage": "https://github.com/vokiabulele/group-IT1_MobileGlow_Car_Wash#readme",
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "react-chartjs-2": "^5.3.0"
+  }
+}
