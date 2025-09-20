@@ -9,7 +9,8 @@ import VehiclePage from "./screens/customer/management/VehiclePage";
 import CleaningServiceManagement from "./screens/employee/management/CleaningServiceManagement";
 import ProfilePage from "./screens/ProfilePage";
 import ManageBookings from "./screens/employee/booking//ManageBookings";
-import PaymentPage from "./screens/employee/booking/PaymentPage"
+import PaymentPage from "./screens/employee/booking/PaymentPage";
+
 function App() {
   return (
     <Router>

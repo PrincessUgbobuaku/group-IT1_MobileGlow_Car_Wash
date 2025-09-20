@@ -1,4 +1,4 @@
-package za.ac.cput.service.user.employee.impl;
+package za.ac.cput.service.user.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
