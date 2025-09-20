@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './Booking.css';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import bookingImage1 from '../../../assets/booking-interface-tire-clean-water-pressure.png';
+import bookingImage2 from '../../../assets/booking-interface-wash-attendant-washing-tire.png';
+import { FaStar } from 'react-icons/fa';
+
 
 const Booking = () => {
   const categories = ['Exterior Wash', 'Interior Care', 'Full Detailing', 'Protection Services'];
@@ -67,9 +71,57 @@ const Booking = () => {
   console.log("All services from API:", services);
 
   return (
+
     <div className="booking-layout">
+    {/* start of booking layout (above)*/}
+
+{/* start of header */}
+
+    <div className="booking-header">
+              <div className="breadcrumb">Home <span className="dot">•</span> Booking <span className="dot">•</span> <strong>Select a service</strong></div>
+
+                  <h1 className="main-title">Select a service</h1>
+                  <div className="business-info-inline">
+                        <span className="rating">
+                          <strong>4.8</strong>
+                          <span className="stars">
+                            <FaStar />
+                            <FaStar />
+                            <FaStar />
+                            <FaStar />
+                            <FaStar />
+                          </span>
+                          <span className="rating-count">(288)</span>
+                        </span>
+
+                        <span className="dot">•</span>
+
+                        <span className="hours">
+                          <span className="open-label">Open</span> until 17:00
+                        </span>
+
+                        <span className="dot">•</span>
+
+                        <span className="location">Cape Town, Cape Town</span>
+
+                        <span className="dot">•</span>
+
+                        <a href="#" className="directions-link">Get directions</a>
+                      </div>
+
+                  <div className="header-images">
+                    <img src={bookingImage1} alt="Car Wash 1" />
+                    <img src={bookingImage2} alt="Car Wash 2" />
+                  </div>
+
+                  <h2 className="services-title">Services</h2>
+            </div>
+
+{/*end of header */}
+          {/* start of div surrounding left and right panel */}
+
+    <div className="panel-container">
       <div className="left-panel">
-        <h2 className="booking-page-heading">Services</h2>
 
         <ToggleButtonGroup
           value={selectedCategory}
@@ -100,16 +152,24 @@ const Booking = () => {
                   <p className="duration">Duration: {service.duration} <strong>hours</strong></p>
                   <p className="price">R {service.priceOfService}</p>
                 </div>
-                <button className="add-btn" onClick={() => addToCart(service)}>+</button>
+                <button className={`add-btn ${cart.some(item => item.id === service.cleaningServiceId) ? 'added' : ''}`}
+                          onClick={() => {
+                            cart.some(item => item.id === service.cleaningServiceId)
+                              ? removeFromCart(service.cleaningServiceId)
+                              : addToCart(service);
+                          }}>
+                          {cart.some(item => item.id === service.cleaningServiceId) ? '✓ Selected' : 'Add Service'}
+                          </button>
               </div>
             ))
           )}
         </div>
+
       </div>
 
       <div className="right-panel">
         <div className="business-info">
-          <h3>MobileGlow Car Wash</h3>
+          <h3 className="right-panel-heading">MobileGlow Car Wash</h3>
           <p>4.9 ⭐ (32)</p>
           <p>Parklands, Cape Town</p>
         </div>
@@ -137,6 +197,11 @@ const Booking = () => {
         </div>
       </div>
     </div>
+      {/* end of div surrounding left and right panel */}
+{/* end of booking layout (below)*/}
+    </div>
+
+
   );
 };
 

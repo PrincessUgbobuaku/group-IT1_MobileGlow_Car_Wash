@@ -1,4 +1,4 @@
-.booking-vehicle-container {
+/*.booking-vehicle-container {
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -50,8 +50,7 @@
   padding: 2rem;
   background: #f8f8f8;
   border-radius: 10px;
-  max-width: 320px; /* matches confirm screen */
-  margin-top: 175px;
+  max-width: 320px;
 }
 
 .summary-section h4 {
@@ -68,4 +67,4 @@
 
 .summary-section li {
   margin-bottom: 0.5rem;
-}
+}*/

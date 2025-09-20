@@ -1,4 +1,4 @@
-.confirm-container {
+/*.confirm-container {
   padding: 40px;
   font-family: 'Arial', sans-serif;
 }
@@ -20,7 +20,6 @@ h1 {
   gap: 40px;
 }
 
-/* Left Panel */
 .confirm-left {
   flex: 2;
 }
@@ -68,7 +67,7 @@ textarea {
   resize: vertical;
 }
 
-/* Right Panel */
+
 .confirm-summary {
   flex: 1;
   border: 1px solid #ddd;
@@ -165,4 +164,4 @@ textarea {
 .green-tick {
   font-size: 40px;
   color: green;
-}
+}*/
