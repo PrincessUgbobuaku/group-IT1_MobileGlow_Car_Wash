@@ -5,22 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/booking-interface-tire-clean-water-pressure.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/assets/booking-interface-wash-attendant-washing-tire.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/management/VehiclePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/management/VehiclePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/employee/management/CleaningServiceManagement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/CleaningServiceManagement.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/user/employee/AccountantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/controller/user/employee/AccountantController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/AccountantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/service/user/employee/AccountantService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

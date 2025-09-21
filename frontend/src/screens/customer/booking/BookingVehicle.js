@@ -38,22 +38,26 @@ const BookingVehicle = () => {
       return;
     }
 
-    // Pass serviceIds forward here as well
     navigate("/confirm", {
       state: {
         cart,
         totalPrice,
         selectedDateTime,
         selectedVehicle,
-        serviceIds, // pass this along
+        serviceIds,
       },
     });
   };
+
+  const selectedVehicle = vehicles.find(v => String(v.vehicleID) === selectedVehicleId);
+
   return (
     <div className="booking-vehicle-container">
-      <div className="left-panel">
-        <h2 className="booking-page-heading">Select Vehicle for Cleaning</h2>
+    <h2 className="booking-page-heading">Select Vehicle</h2>
+    <div className="left-right-panel-container">
 
+
+      <div className="left-panel">
         <div className="vehicle-selection">
           <label>Select your vehicle:</label>
           <select onChange={handleVehicleChange} value={selectedVehicleId}>
@@ -72,14 +76,6 @@ const BookingVehicle = () => {
             )}
           </select>
         </div>
-
-        <button
-          className="continue-btn"
-          onClick={handleContinue}
-          disabled={!selectedVehicleId}
-        >
-          Continue
-        </button>
       </div>
 
       <div className="right-panel">
@@ -104,9 +100,8 @@ const BookingVehicle = () => {
 
           <h4>Vehicle</h4>
           <p>
-            {selectedVehicleId
-              ? vehicles.find(v => String(v.vehicleID) === selectedVehicleId)?.carMake + " " +
-                vehicles.find(v => String(v.vehicleID) === selectedVehicleId)?.carModel
+            {selectedVehicle
+              ? `${selectedVehicle.carMake} ${selectedVehicle.carModel}`
               : "Not selected"}
           </p>
 
@@ -114,6 +109,17 @@ const BookingVehicle = () => {
             <strong>Total:</strong> R {totalPrice}
           </div>
         </div>
+
+        <div className="right-panel-continue">
+          <button
+            className="continue-btn"
+            onClick={handleContinue}
+            disabled={!selectedVehicleId}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   );
