@@ -1,3 +1,4 @@
+/*
 package za.ac.cput.service.user.employee.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,12 @@ public class AccountantServiceImpl implements IAccountantService {
         accountantRepository.deleteById(Id);
         return false;
     }
+*/
 /*
     @Override
     public List<Accountant> findAll() {
         return List.of();
-    }*/
+    }*//*
+
 }
+*/
