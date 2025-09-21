@@ -1,0 +1,10 @@
+/* src/screens/components/Footer.css */
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background: #004aad;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
