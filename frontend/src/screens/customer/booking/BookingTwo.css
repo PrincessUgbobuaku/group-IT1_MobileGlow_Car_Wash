@@ -12,6 +12,29 @@
 
 }
 
+.breadcrumb {
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.breadcrumb-link {
+  text-decoration: none;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.dot {
+  color: #aaa;
+  padding: 0 10px;
+  position: relative;
+  top: 2px;
+}
+
 .left-panel {
   width: 60%;
 }

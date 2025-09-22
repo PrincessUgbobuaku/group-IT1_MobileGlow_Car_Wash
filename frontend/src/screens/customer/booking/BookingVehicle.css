@@ -8,13 +8,36 @@
   flex-wrap: wrap;
   flex-direction: row;
   width: 80%;
-      margin: 0 auto;
+  margin: 0 auto;
 }
 
 .booking-vehicle-container .booking-page-heading {
   width: 100%;
   font-size: 60px;
   margin-bottom: 1.5rem;
+}
+
+.breadcrumb {
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.breadcrumb-link {
+  text-decoration: none;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.dot {
+  color: #aaa;
+  padding: 0 10px;
+  position: relative;
+  top: 2px;
 }
 
 .left-right-panel-container {
