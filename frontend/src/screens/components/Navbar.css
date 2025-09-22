@@ -1,0 +1,78 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #004aad;
+    color: white;
+    padding: 1rem 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Buttons for Sign Up & Log In */
+.nav-btn {
+    background: white;
+    color: #004aad;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.nav-btn:hover {
+    background: #ddd;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.menu-btn {
+    background: white;
+    color: #004aad;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    color: #004aad;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+    list-style: none;
+    padding: 0.5rem 0;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+    min-width: 150px;
+}
+
+.dropdown-menu li {
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #004aad;
+    display: block;
+}
+
+.dropdown-menu li:hover {
+    background: #f0f0f0;
+}
