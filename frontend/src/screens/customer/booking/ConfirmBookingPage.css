@@ -1,6 +1,8 @@
-/*.confirm-container {
-  padding: 40px;
+.confirm-container {
+  padding: 32px 0;
   font-family: 'Arial', sans-serif;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .breadcrumb {
@@ -164,4 +166,4 @@ textarea {
 .green-tick {
   font-size: 40px;
   color: green;
-}*/
+}
