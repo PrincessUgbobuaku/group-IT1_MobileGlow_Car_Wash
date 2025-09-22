@@ -1,20 +1,129 @@
 .booking-layout {
   display: flex;
-  padding: 2rem;
+  flex-direction: column;
+  padding: 32px 0;
   font-family: 'Segoe UI', sans-serif;
   gap: 2rem;
+  width: 80%;
+  margin: 0 auto;
 }
 
+.business-info-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  color: #333;
+  gap: 8px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 30px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stars {
+  color: black;
+  display: flex;
+  gap: 2px;
+  margin-left: 2px;
+}
+
+.rating-count {
+  color: #7c3aed; /* purple */
+  margin-left: 4px;
+}
+
+.dot {
+  font-size: 1.2rem;
+  color: #888;
+  padding: 0 10px;
+  position: relative;
+  top: 2px;
+}
+
+.breadcrumb-link {
+  color: #4a4a4a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.hours {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.open-label {
+  color: green;
+  font-weight: 500;
+}
+
+.location {
+  color: #555;
+}
+
+.directions-link {
+  color: #7c3aed; /* purple */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.directions-link:hover {
+  text-decoration: underline;
+}
+
+.header-images {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+.panel-container {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.main-title {
+    font-size: 60px;
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+
+.services-title {
+    font-size: 40px;
+    margin-bottom: 0;
+}
 .left-panel {
-  flex: 2;
+  width: 60%
 }
 
 .right-panel {
-  flex: 1;
+  width: 40%;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 0.5rem 1.5rem;
-  margin-top: 235px;
+
+  /* Sticky behavior */
+  position: sticky;
+  top: 20px; /* Adjust depending on your header height */
+  align-self: flex-start; /* Important for sticky to work inside flexbox */
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  background-color: white; /* Ensure background is solid */
+  z-index: 1; /* Ensure it layers correctly above other content */
+}
+
+.right-panel-heading {
+    font-size: 40px;
+    font-weight: 700;
 }
 
 .back-button {
@@ -61,13 +170,22 @@
 }
 
 .add-btn {
-  background-color: #f1f1f1;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  width: 30px;
-  height: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: fit-content;
+  align-self: center;
+  background-color: transparent;
+  color: black;
+  border: 1px solid grey;
+  border-radius: 50px;
+}
+
+.add-btn:hover {
+  background-color: #145DA0;
+  color: white;
 }
 
 .business-info h3 {

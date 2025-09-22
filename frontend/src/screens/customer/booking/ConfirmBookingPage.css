@@ -1,6 +1,8 @@
 .confirm-container {
-  padding: 40px;
+  padding: 32px 0;
   font-family: 'Arial', sans-serif;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .breadcrumb {
@@ -20,7 +22,6 @@ h1 {
   gap: 40px;
 }
 
-/* Left Panel */
 .confirm-left {
   flex: 2;
 }
@@ -68,7 +69,7 @@ textarea {
   resize: vertical;
 }
 
-/* Right Panel */
+
 .confirm-summary {
   flex: 1;
   border: 1px solid #ddd;

@@ -5,33 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/AboutUs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/ContactUs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/LandingPublic.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/auth/RoleSelection.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/components/NavigationBar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/customer/LandingCustomer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/customer/ProfileCustomer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingHistory.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/LandingEmployee.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/ProfileEmployee.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/EmployeeManagement.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/Performance.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/CleaningServiceManagement.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/CleaningServiceManagement.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/CleaningServiceManagement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/management/CleaningServiceManagement.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/VehiclePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/management/VehiclePage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/VehiclePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/management/VehiclePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +54,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AddressControllerTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.BookingFactoryTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.BookingFactoryTest.testCreateBookingWithMultiplePayments.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.BookingFactoryTest.testCreateBookingWithoutPayments.executor&quot;: &quot;Run&quot;,
@@ -103,11 +80,14 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;230098010&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/USER/Desktop/CardConnect&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/USB Drive/ADP362S/MobileGlow_Car_Wash - Revised/frontend/src/assets&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\assets" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\screens\customer\management" />
       <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\screens\employee\management" />
@@ -129,6 +109,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AddressControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="MobileGlow_Car_Wash" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="za.ac.cput.controller.generic.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="za.ac.cput.controller.generic" />
+      <option name="MAIN_CLASS_NAME" value="za.ac.cput.controller.generic.AddressControllerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BookingServiceTest.testCreate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MobileGlow_Car_Wash" />
       <extension name="coverage">
@@ -139,22 +134,6 @@
       </extension>
       <option name="PACKAGE_NAME" value="za.ac.cput.service.booking" />
       <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.booking.BookingServiceTest" />
-      <option name="METHOD_NAME" value="testCreate" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CleaningServiceServiceTest.testCreate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="MobileGlow_Car_Wash" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="za.ac.cput.service.booking.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="za.ac.cput.service.booking" />
-      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.booking.CleaningServiceServiceTest" />
       <option name="METHOD_NAME" value="testCreate" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -196,10 +175,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.AddressControllerTest" />
         <item itemvalue="JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking" />
         <item itemvalue="JUnit.WashAttendantServiceTest.a_create" />
         <item itemvalue="JUnit.BookingServiceTest.testCreate" />
-        <item itemvalue="JUnit.CleaningServiceServiceTest.testCreate" />
       </list>
     </recent_temporary>
   </component>
