@@ -77,7 +77,7 @@ public class WashAttendantController {
         }
     }
 
-    @GetMapping("getAllWashAttendants")
+    @GetMapping("/getAllWashAttendants")
     public ResponseEntity<List<WashAttendant>> getAll() {
         List<WashAttendant> washAttendants = washAttendantService.getAllWashAttendants();
         return ResponseEntity.ok(washAttendants);

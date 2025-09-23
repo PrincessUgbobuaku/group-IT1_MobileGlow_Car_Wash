@@ -1,6 +1,7 @@
 //Thaakirah Watson, 230037550
 package za.ac.cput.service.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import za.ac.cput.domain.user.Customer;
@@ -14,13 +15,17 @@ public class CustomerService implements ICustomerService {
 
     private final ICustomerRepository repository;
 
+    @Autowired
+    private UserService userService;
+
     public CustomerService(ICustomerRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public Customer create(Customer customer) {
-        return repository.save(customer);
+        Customer encryptedCustomer = userService.encryptUserPassword(customer);
+        return repository.save(encryptedCustomer);
     }
 
     @Override
