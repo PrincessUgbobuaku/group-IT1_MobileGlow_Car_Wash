@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { profileService } from '../services/profileService';
-import LoadingSpinner from '../components/LoadingSpinner';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
@@ -164,7 +163,12 @@ const ProfilePage = () => {
     };
 
     if (loading) {
-        return <LoadingSpinner text="Loading customer accounts..." />;
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Loading customer accounts...</p>
+            </div>
+        );
     }
 
     return (
