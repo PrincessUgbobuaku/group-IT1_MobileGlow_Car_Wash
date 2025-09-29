@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface IPaymentRepository extends JpaRepository<Payment, Long> {
 
-//    List<Payment> getAll(); //going into the database, getting all the objects and returning them as a list
+    // List<Payment> getAll(); //going into the database, getting all the objects
+    // and returning them as a list
 
     List<Payment> findByBooking_BookingId(Long bookingID); // needed for service
+
+    boolean existsByBooking_BookingId(Long bookingId);
 
 }

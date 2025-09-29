@@ -77,6 +77,11 @@ function ConfirmBookingPage() {
         ? serviceIds
         : cart.map((service) => ({ cleaningServiceId: service.id }));
 
+    if (typeof selectedDateTime !== "string") {
+      alert("Invalid booking date/time format.");
+      return;
+    }
+
     const payload = {
       cleaningServices: cleaningServicesPayload,
       vehicle: { vehicleID: selectedVehicle.vehicleID },
@@ -84,7 +89,7 @@ function ConfirmBookingPage() {
         userId:
           washAttendant.userId || washAttendant.userID || washAttendant.id,
       },
-      bookingDateTime: selectedDateTime.toISOString(),
+      bookingDateTime: selectedDateTime, // send local datetime string as-is
       tipAdd: false,
     };
 
@@ -102,6 +107,11 @@ function ConfirmBookingPage() {
 
       const result = await res.json();
       console.log("Booking saved:", result);
+
+      // ✅ Clean up sessionStorage
+      sessionStorage.removeItem("bookingData");
+
+      // ✅ Show confirmation popup
       setShowPopup(true);
     } catch (err) {
       alert("Failed to save booking: " + err.message);
@@ -110,6 +120,52 @@ function ConfirmBookingPage() {
 
   return (
     <div className="confirm-container">
+      <div className="breadcrumb">
+        <a href="/" className="breadcrumb-link">
+          Home
+        </a>
+        <span className="dot">•</span>
+        <a href="/booking" className="breadcrumb-link">
+          Select a service
+        </a>
+        <span className="dot">•</span>
+        <a
+          href="/bookingtwo"
+          className="breadcrumb-link"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/bookingtwo", {
+              state: {
+                cart,
+                totalPrice,
+                serviceIds,
+              },
+            });
+          }}
+        >
+          Select a date and time
+        </a>
+        <span className="dot">•</span>
+        <a
+          href="/bookingvehicle"
+          className="breadcrumb-link"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/bookingvehicle", {
+              state: {
+                cart,
+                totalPrice,
+                selectedDateTime,
+                serviceIds,
+              },
+            });
+          }}
+        >
+          Select vehicle
+        </a>
+        <span className="dot">•</span>
+        <strong>Review & Confirm</strong>
+      </div>
       <h1>Review and confirm</h1>
 
       <div className="confirm-content">
@@ -215,7 +271,6 @@ function ConfirmBookingPage() {
           <div className="total">
             <div>
               <div>Total</div>
-              <div className="pay-now">Pay now</div>
               <div className="pay-at-venue">Pay at venue</div>
             </div>
             <div className="total-price">R {totalPrice}</div>

@@ -1,14 +1,9 @@
 .booking-vehicle-container {
   display: flex;
-  gap: 40px;
   padding: 32px 0;
-  font-family: 'Segoe UI', sans-serif;
-  width: 90%;
   margin: auto;
   flex-wrap: wrap;
   flex-direction: row;
-  width: 80%;
-  margin: 0 auto;
 }
 
 .booking-vehicle-container .booking-page-heading {
@@ -18,7 +13,6 @@
 }
 
 .breadcrumb {
-  margin-bottom: 20px;
   font-size: 0.95rem;
   color: #666;
 }
@@ -54,7 +48,7 @@
   width: 40%;
   border: 1px solid #ddd;
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 40px;
   background-color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   align-self: flex-start;
@@ -80,13 +74,12 @@
   width: 100%;
 }
 
-.business-info h3 {
-  font-size: 24px;
-  margin-bottom: 0.2rem;
+.vehicle-business-info h3 {
+  font-size: 30px;
+  margin: 0;
 }
 
 .summary-section {
-  margin-top: 2rem;
 }
 
 .summary-section ul {
