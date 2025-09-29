@@ -6,19 +6,19 @@ const BookingVehicle = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Fallback to sessionStorage if location.state is null
-  const savedData = JSON.parse(sessionStorage.getItem("bookingData")) || {};
+  // Only use state from location
   const {
     cart = [],
     totalPrice = 0,
     selectedDateTime = null,
     serviceIds = [],
-  } = location.state || savedData;
+  } = location.state || {};
 
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
-  const userId = 5; // Example hardcoded user ID
+  const userId = 5; // Replace with dynamic value if needed
+  const [hasConflict, setHasConflict] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
@@ -29,36 +29,56 @@ const BookingVehicle = () => {
       .catch((error) => console.error("Error fetching vehicles:", error));
   }, [userId]);
 
-  const handleVehicleChange = (event) => {
-    setSelectedVehicleId(event.target.value);
+  const handleVehicleChange = async (event) => {
+    const vehicleId = event.target.value;
+    setSelectedVehicleId(vehicleId);
+    setHasConflict(false); // Reset conflict
+
+    if (!vehicleId || !selectedDateTime) return;
+
+    try {
+      // ✅ Fix ISO formatting issue
+      const dateObj = new Date(selectedDateTime);
+      const formattedDateTime = `${dateObj.getFullYear()}-${String(
+        dateObj.getMonth() + 1
+      ).padStart(2, "0")}-${String(dateObj.getDate()).padStart(
+        2,
+        "0"
+      )}T${String(dateObj.getHours()).padStart(2, "0")}:${String(
+        dateObj.getMinutes()
+      ).padStart(2, "0")}:00`;
+
+      const response = await fetch(
+        `http://localhost:8080/mobileglow/api/bookings/check-conflict?vehicleId=${vehicleId}&bookingDateTime=${encodeURIComponent(
+          formattedDateTime
+        )}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to check booking conflict.");
+      }
+
+      const conflict = await response.json();
+      setHasConflict(conflict);
+
+      if (conflict) {
+        alert("⚠️ This vehicle is already booked at the selected time.");
+      }
+    } catch (error) {
+      console.error("Error checking conflict:", error);
+      alert("An error occurred while checking vehicle booking availability.");
+    }
   };
 
+  const selectedVehicle = vehicles.find(
+    (v) => String(v.vehicleID) === selectedVehicleId
+  );
+
   const handleContinue = () => {
-    if (!selectedVehicleId) {
+    if (!selectedVehicleId || !selectedVehicle) {
       alert("Please select a vehicle!");
       return;
     }
-
-    const selectedVehicle = vehicles.find(
-      (v) => String(v.vehicleID) === selectedVehicleId
-    );
-
-    if (!selectedVehicle) {
-      alert("Selected vehicle not found!");
-      return;
-    }
-
-    // Save updated state to sessionStorage
-    sessionStorage.setItem(
-      "bookingData",
-      JSON.stringify({
-        cart,
-        totalPrice,
-        selectedDateTime,
-        serviceIds,
-        selectedVehicle,
-      })
-    );
 
     navigate("/confirm", {
       state: {
@@ -71,19 +91,19 @@ const BookingVehicle = () => {
     });
   };
 
-  const selectedVehicle = vehicles.find(
-    (v) => String(v.vehicleID) === selectedVehicleId
-  );
-
   return (
     <div className="booking-vehicle-container">
-      {/* ✅ Breadcrumbs with preserved state */}
       <div className="breadcrumb">
         <Link to="/" className="breadcrumb-link">
           Home
         </Link>
         <span className="dot">•</span>
-        <Link to="/booking" className="breadcrumb-link">
+
+        <Link
+          to="/booking"
+          className="breadcrumb-link"
+          state={{ cart, totalPrice }}
+        >
           Select a service
         </Link>
         <span className="dot">•</span>
@@ -91,17 +111,12 @@ const BookingVehicle = () => {
         <Link
           to="/bookingtwo"
           className="breadcrumb-link"
-          state={{
-            cart,
-            totalPrice,
-            selectedDateTime,
-            serviceIds,
-          }}
+          state={{ cart, totalPrice, selectedDateTime, serviceIds }}
         >
           Select a date and time
         </Link>
-
         <span className="dot">•</span>
+
         <strong>Select vehicle</strong>
       </div>
 
@@ -126,11 +141,18 @@ const BookingVehicle = () => {
                 <option disabled>No vehicles available</option>
               )}
             </select>
+            {/* <-- Add conflict message here */}
+            {hasConflict && (
+              <p style={{ color: "red", marginTop: "0.5rem" }}>
+                ⚠️ This vehicle is already booked at the selected time. Please
+                choose another.
+              </p>
+            )}
           </div>
         </div>
 
         <div className="right-panel">
-          <div className="business-info">
+          <div className="vehicle-business-info">
             <h3>MobileGlow Car Wash</h3>
             <p>4.9 ⭐ (32)</p>
             <p>Parklands, Cape Town</p>
@@ -170,7 +192,7 @@ const BookingVehicle = () => {
             <button
               className="continue-btn"
               onClick={handleContinue}
-              disabled={!selectedVehicleId}
+              disabled={!selectedVehicleId || hasConflict}
             >
               Continue
             </button>

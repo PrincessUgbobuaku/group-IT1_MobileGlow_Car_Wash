@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class BookingService implements IBookingService{
+public class BookingService implements IBookingService {
 
     private final IBookingRepository bookingRepository;
     private final CleaningServiceService cleaningServiceService;
@@ -21,12 +21,12 @@ public class BookingService implements IBookingService{
 
     @Autowired
     public BookingService(IBookingRepository bookingRepository,
-                          CleaningServiceService cleaningServiceService,
-                          VehicleService vehicleService) { // 👈 added
+            CleaningServiceService cleaningServiceService,
+            VehicleService vehicleService) { // 👈 added
         this.bookingRepository = bookingRepository;
         this.cleaningServiceService = cleaningServiceService;
         this.vehicleService = vehicleService; // 👈 assigned
-           }
+    }
 
     public Booking create(Booking booking) {
 
@@ -42,7 +42,7 @@ public class BookingService implements IBookingService{
 
         List<CleaningService> validatedServices = new ArrayList<>();
 
-        //checking to see if requested service exists in cleaningservice db
+        // checking to see if requested service exists in cleaningservice db
         for (CleaningService service : booking.getCleaningServices()) {
             // Read the real service from DB using ID
             CleaningService validatedService = cleaningServiceService.read(service.getCleaningServiceId());
@@ -58,7 +58,6 @@ public class BookingService implements IBookingService{
         if (booking.getVehicle() == null || booking.getVehicle().getVehicleID() == null) {
             throw new IllegalArgumentException("Booking must include a vehicle.");
         }
-
 
         // ✅ Validate Vehicle
         long vehicleID = booking.getVehicle().getVehicleID();
@@ -78,13 +77,15 @@ public class BookingService implements IBookingService{
             throw new IllegalArgumentException("This vehicle already has a booking at the selected time.");
         }
 
-// ✅ Rule 6: Prevent wash attendant from being double-booked
-        if (bookingRepository.existsByWashAttendantAndBookingDateTime(booking.getWashAttendant(), booking.getBookingDateTime())) {
+        // ✅ Rule 6: Prevent wash attendant from being double-booked
+        if (bookingRepository.existsByWashAttendantAndBookingDateTime(booking.getWashAttendant(),
+                booking.getBookingDateTime())) {
             throw new IllegalArgumentException("This wash attendant is already booked at the selected time.");
         }
 
         // ✅ Rule 4: Booking date must be in the future
-        if (booking.getBookingDateTime() == null || booking.getBookingDateTime().isBefore(java.time.LocalDateTime.now())) {
+        if (booking.getBookingDateTime() == null
+                || booking.getBookingDateTime().isBefore(java.time.LocalDateTime.now())) {
             throw new IllegalArgumentException("Booking date must be in the future.");
         }
 
@@ -100,8 +101,7 @@ public class BookingService implements IBookingService{
                 booking.getWashAttendant(),
                 booking.getBookingDateTime(),
                 booking.isTipAdd(),
-                totalCost
-        );
+                totalCost);
 
         if (created == null) {
             throw new IllegalArgumentException("Invalid Booking data");
@@ -138,6 +138,7 @@ public class BookingService implements IBookingService{
 
         return bookingRepository.save(updatedBooking);
     }
+
     @Override
     public boolean delete(Long id) {
         if (bookingRepository.existsById(id)) {
@@ -152,5 +153,12 @@ public class BookingService implements IBookingService{
         return bookingRepository.findAll();
     }
 
+    public boolean hasBookingConflict(Long vehicleId, java.time.LocalDateTime bookingDateTime) {
+        Vehicle vehicle = vehicleService.read(vehicleId);
+        if (vehicle == null) {
+            throw new IllegalArgumentException("Invalid vehicle ID: " + vehicleId);
+        }
+        return bookingRepository.existsByVehicleAndBookingDateTime(vehicle, bookingDateTime);
+    }
 
 }

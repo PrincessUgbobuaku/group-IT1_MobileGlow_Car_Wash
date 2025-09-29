@@ -6,8 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingTwo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/BookingVehicle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/ConfirmBookingPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/AccountantServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/AccountantServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

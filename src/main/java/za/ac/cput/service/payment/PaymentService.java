@@ -1,5 +1,6 @@
 package za.ac.cput.service.payment;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.booking.Booking;
@@ -8,6 +9,7 @@ import za.ac.cput.factory.payment.PaymentFactory;
 import za.ac.cput.repository.payment.IPaymentRepository;
 import za.ac.cput.service.booking.BookingService;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +19,7 @@ public class PaymentService implements IPaymentService {
 
     private final IPaymentRepository paymentRepository;
     private final BookingService bookingService;
+    private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
 
     @Autowired
     public PaymentService(IPaymentRepository paymentRepository, BookingService bookingService) {
@@ -37,8 +40,7 @@ public class PaymentService implements IPaymentService {
                 booking,
                 payment.getPaymentAmount(),
                 payment.getPaymentMethod(),
-                payment.getPaymentStatus()
-        );
+                payment.getPaymentStatus());
 
         if (created == null) {
             throw new IllegalArgumentException("Invalid Payment data");
@@ -94,4 +96,11 @@ public class PaymentService implements IPaymentService {
 
         return paymentRepository.save(payment);
     }
+
+    public boolean paymentExistsForBooking(Long bookingId) {
+        boolean exists = paymentRepository.existsByBooking_BookingId(bookingId);
+        logger.info("Checking payment existence for bookingId {}: {}", bookingId, exists);
+        return exists;
+    }
+
 }

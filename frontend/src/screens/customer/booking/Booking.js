@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./Booking.css";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
+import Slider from "react-slick"; // ✅ Add this
+import "slick-carousel/slick/slick.css"; // ✅ Add this
+import "slick-carousel/slick/slick-theme.css"; // ✅ Add this
 import bookingImage1 from "../../../assets/booking-interface-tire-clean-water-pressure.png";
 import bookingImage2 from "../../../assets/booking-interface-wash-attendant-washing-tire.png";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaTrash } from "react-icons/fa";
 
 const Booking = () => {
   const categories = [
@@ -29,7 +32,9 @@ const Booking = () => {
   }, []);
 
   const handleCategoryChange = (event, newCategory) => {
-    if (newCategory !== null) setSelectedCategory(newCategory);
+    if (newCategory) {
+      setSelectedCategory(newCategory);
+    }
   };
 
   const filteredServices = Array.isArray(services)
@@ -46,14 +51,9 @@ const Booking = () => {
       id: service.cleaningServiceId,
     };
 
-    console.log("Trying to add service to cart:", normalizedService);
-
     if (!cart.some((item) => item.id === normalizedService.id)) {
       const newCart = [...cart, normalizedService];
       setCart(newCart);
-      console.log("Updated cart after addition:", newCart);
-    } else {
-      console.log("Service already in cart:", normalizedService);
     }
   };
 
@@ -62,37 +62,51 @@ const Booking = () => {
   };
 
   const totalPrice = cart.reduce((sum, item) => sum + item.priceOfService, 0);
-  console.log("Current cart contents:", cart);
 
   const handleContinue = () => {
-    navigate("/bookingtwo", {
-      state: {
-        cart: cart,
-        totalPrice: totalPrice,
-      },
-    });
+    if (cart.length === 0) return;
+
+    const serviceIds = cart.map((s) => ({
+      cleaningServiceId: s.id,
+    }));
+
+    const state = {
+      cart,
+      totalPrice,
+      serviceIds,
+    };
+
+    sessionStorage.setItem("bookingData", JSON.stringify(state));
+    navigate("/bookingtwo", { state });
   };
 
-  console.log("Selected category:", selectedCategory);
-  console.log("All services from API:", services);
+  // Carousel settings
+  const carouselSettings = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
+
+  const images = [bookingImage1, bookingImage2, bookingImage1, bookingImage2];
 
   return (
     <div className="booking-layout">
-      {/* start of booking layout (above)*/}
-
-      {/* start of header */}
-
+      {/* Header */}
       <div className="booking-header">
         <div className="breadcrumb">
           <Link to="/" className="breadcrumb-link">
             Home
           </Link>
-          
           <span className="dot">•</span>
           <strong>Select a service</strong>
         </div>
+
         <h1 className="main-title">Select a service</h1>
-        
+
         <div className="business-info-inline">
           <span className="rating">
             <strong>4.8</strong>
@@ -107,34 +121,40 @@ const Booking = () => {
           </span>
 
           <span className="dot">•</span>
-
           <span className="hours">
             <span className="open-label">Open</span> until 17:00
           </span>
 
           <span className="dot">•</span>
-
           <span className="location">Cape Town, Cape Town</span>
 
           <span className="dot">•</span>
-
           <a href="#" className="directions-link">
             Get directions
           </a>
         </div>
 
-        <div className="header-images">
-          <img src={bookingImage1} alt="Car Wash 1" />
-          <img src={bookingImage2} alt="Car Wash 2" />
+        {/* ✅ Carousel Section */}
+        <div className="carousel-wrapper">
+          <Slider {...carouselSettings}>
+            {images.map((img, index) => (
+              <div key={index}>
+                <img
+                  src={img}
+                  alt={`Car Wash ${index + 1}`}
+                  className="carousel-image"
+                />
+              </div>
+            ))}
+          </Slider>
         </div>
 
         <h2 className="services-title">Services</h2>
       </div>
 
-      {/*end of header */}
-      {/* start of div surrounding left and right panel */}
-
+      {/* Main Content */}
       <div className="panel-container">
+        {/* Left Panel */}
         <div className="left-panel">
           <ToggleButtonGroup
             value={selectedCategory}
@@ -167,6 +187,7 @@ const Booking = () => {
                     </p>
                     <p className="price">R {service.priceOfService}</p>
                   </div>
+
                   <button
                     className={`add-btn ${
                       cart.some((item) => item.id === service.cleaningServiceId)
@@ -189,40 +210,45 @@ const Booking = () => {
           </div>
         </div>
 
+        {/* Right Panel */}
         <div className="right-panel">
           <div className="business-info">
             <h3 className="right-panel-heading">MobileGlow Car Wash</h3>
             <p>4.9 ⭐ (32)</p>
             <p>Parklands, Cape Town</p>
           </div>
+
           <div className="cart">
             <h4>Selected Services</h4>
+
             {cart.length === 0 ? (
               <p className="empty-cart">No services selected</p>
             ) : (
               <ul>
-                {cart.map((item, index) => {
-                  console.log(
-                    `Rendering cart item - id: ${item.id}, name: ${item.serviceName}`
-                  );
-                  return (
-                    <li key={item.id || `${item.serviceName}-${index}`}>
+                {cart.map((item, index) => (
+                  <li
+                    key={item.id || `${item.serviceName}-${index}`}
+                    className="cart-item"
+                  >
+                    <span className="cart-service-name">
                       {item.serviceName.replace(/_/g, " ")} - R{" "}
                       {item.priceOfService}
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        x
-                      </button>
-                    </li>
-                  );
-                })}
+                    </span>
+                    <button
+                      className="remove-btn"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </li>
+                ))}
               </ul>
             )}
+
             <div className="total">
               <strong>Total:</strong> R {totalPrice || "0"}
             </div>
+
             <button
               className="continue-btn"
               disabled={cart.length === 0}
@@ -233,8 +259,6 @@ const Booking = () => {
           </div>
         </div>
       </div>
-      {/* end of div surrounding left and right panel */}
-      {/* end of booking layout (below)*/}
     </div>
   );
 };
