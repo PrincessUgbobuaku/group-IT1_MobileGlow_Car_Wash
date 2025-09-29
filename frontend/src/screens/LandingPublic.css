@@ -145,14 +145,14 @@
     padding: 2rem 1rem;
 }
 
-.feature-icon {
-    font-size: 3.5rem; /* increased size */
-    margin-bottom: 1rem;
-    height: 80px;      /* taller for larger emojis */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/*.feature-icon {*/
+/*    font-size: 3.5rem; !* increased size *!*/
+/*    margin-bottom: 1rem;*/
+/*    height: 80px;      !* taller for larger emojis *!*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*}*/
 
 
 .feature-title {
@@ -167,12 +167,21 @@
 }
 
 /* Feature Images */
-.feature-image {
-    width: 100%;            /* take full width of the card */
-    max-width: 400px;       /* limit size so it’s not too big */
-    height: auto;           /* keeps the image ratio */
-    border-radius: 12px;    /* rounded corners */
-    margin: 1rem auto;      /* center + spacing */
+/*.feature-image {*/
+/*    width: 100%;            !* take full width of the card *!*/
+/*    max-width: 400px;       !* limit size so it’s not too big *!*/
+/*    height: auto;           !* keeps the image ratio *!*/
+/*    border-radius: 12px;    !* rounded corners *!*/
+/*    margin: 1rem auto;      !* center + spacing *!*/
+/*    display: block;*/
+/*}*/
+
+/* Specific size for feature icons */
+.features-section .feature-image {
+    width: 100%;      /* adjust size as needed */
+    height: 100%;
+    object-fit: contain;
+    margin: 0 auto 1rem;  /* center the image and add spacing below */
     display: block;
 }
 
