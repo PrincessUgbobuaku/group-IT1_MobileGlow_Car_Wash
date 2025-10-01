@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.user.Login;
+import za.ac.cput.domain.user.User;
+import za.ac.cput.service.user.JWTService;
 import za.ac.cput.service.user.LoginService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/Login")
@@ -22,10 +26,12 @@ import java.util.List;
 public class LoginController {
 
     private final LoginService loginService;
+    private final JWTService jwtService;
 
     @Autowired
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
+        this.jwtService = new JWTService();
     }
 
     @PostMapping("/create")
@@ -65,23 +71,37 @@ public class LoginController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(@RequestBody Login login) {
+    public ResponseEntity<?> authenticate(@RequestBody Login login) {
         if (login.getEmailAddress() == null || login.getPassword() == null) {
             return ResponseEntity.badRequest().body("{\"message\":\"Email and password are required\"}");
         }
 
+        //find login in DB.
         Login foundLogin = loginService.findByEmailAddress(login.getEmailAddress());
 
-        if (foundLogin != null && foundLogin.getPassword().equals(login.getPassword())) {
-            String roleDescription = "CLIENT";
-            if (login.getEmailAddress().contains("manager")) {
-                roleDescription = "EMPLOYEE";
-            }
-            return ResponseEntity.ok("{\"message\":\"Login successful\", \"role_description\":\"" + roleDescription + "\"}");
+        if (foundLogin != null && loginService.checkPassword(login.getPassword(), foundLogin.getPassword())) {
+
+            //Get the associated user and their role.
+            User user = loginService.findUserByLogin(foundLogin);
+
+            String roleDescription = (user != null && user.getRoleDescription() != null)
+                    ? user.getRoleDescription().name()
+                    : "CLIENT";
+
+            // Generate JWT token
+            String jwtToken = jwtService.generateToken(foundLogin.getEmailAddress());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful");
+            response.put("role_description", roleDescription);
+            response.put("token", jwtToken);
+
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(401).body("{\"message\":\"Invalid email or password\"}");
         }
     }
+
 
     @DeleteMapping("/delete/{Id}")
     public boolean delete(@PathVariable Long Id) {

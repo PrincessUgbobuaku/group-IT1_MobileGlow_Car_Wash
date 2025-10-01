@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.repository.user.employee.IWashAttendantRepository;
+import za.ac.cput.service.user.UserService;
 
 import java.util.List;
 import java.util.Random;
@@ -14,13 +15,17 @@ public class WashAttendantService implements IWashAttendantService {
     private IWashAttendantRepository washAttendantRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public WashAttendantService(IWashAttendantRepository washAttendantRepository) {
         this.washAttendantRepository = washAttendantRepository;
     }
 
     @Override
     public WashAttendant create(WashAttendant washAttendant) {
-        return washAttendantRepository.save(washAttendant);
+        WashAttendant encryptedWashAttendant = userService.encryptUserPassword(washAttendant);
+        return washAttendantRepository.save(encryptedWashAttendant);
     }
 
     @Override
