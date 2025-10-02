@@ -23,7 +23,7 @@ import NavbarEmployee from "./screens/components/NavbarEmployee";
 import LandingEmployee from "./screens/employee/LandingEmployee";
 
 
-function App() {
+function App()  {
   return (
     <Router>
       <Routes>

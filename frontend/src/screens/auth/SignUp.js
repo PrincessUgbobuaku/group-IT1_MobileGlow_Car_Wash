@@ -110,7 +110,7 @@ const SignUp = () => {
         e.preventDefault();
 
         // Instead of saving here, navigate to address page with manager data
-        navigate('/address', { state: { manager } });
+        navigate('/AddressDetails', { state: { manager } });
     };
 
     const handleDelete = async () => {
