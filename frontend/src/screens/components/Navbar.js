@@ -14,7 +14,7 @@ const Navbar = () => {
             <div className="logo">Mobile Car Wash</div>
 
             <div className="nav-links">
-                <a href="/signup" className="nav-btn">Sign Up</a>
+                <a href="/roleselection" className="nav-btn">Sign Up</a>
                 <a href="/login" className="nav-btn">Log In</a>
 
                 <div className="dropdown">

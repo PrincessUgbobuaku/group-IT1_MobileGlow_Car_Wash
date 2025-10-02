@@ -10,8 +10,20 @@ import CleaningServiceManagement from "./screens/employee/management/CleaningSer
 import ProfilePage from "./screens/ProfilePage";
 import ManageBookings from "./screens/employee/booking//ManageBookings";
 import PaymentPage from "./screens/employee/booking/PaymentPage";
+import LandingPublic  from "./screens/LandingPublic";
+import Navbar from "./screens/components/Navbar";
+import Footer from "./screens/components/Footer";
+import SignUp from "./screens/auth/SignUp";
+import RoleSelection from "./screens/auth/RoleSelection";
+import Login from "./screens/auth/Login";
+import AddressDetails from "./screens/auth/AddressDetails";
+import LandingCustomer from "./screens/customer/LandingCustomer";
+import NavbarCustomer from "./screens/components/NavbarCustomer";
+import NavbarEmployee from "./screens/components/NavbarEmployee";
+import LandingEmployee from "./screens/employee/LandingEmployee";
 
-function App() {
+
+function App()  {
   return (
     <Router>
       <Routes>
@@ -27,6 +39,17 @@ function App() {
           <Route path="/confirm" element={<ConfirmBookingPage />} />
           <Route path="/manage-bookings" element={<ManageBookings />} />
           <Route path="/payment/:bookingId" element={<PaymentPage />} />
+          <Route path="/landingpublic" element={<LandingPublic />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Navbar" element={<Navbar />} />
+          <Route path="/Footer" element={<Footer />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/RoleSelection" element={<RoleSelection />} />
+          <Route path="/AddressDetails" element={<AddressDetails />} />
+          <Route path="/LandingCustomer" element={<LandingCustomer />} />
+          <Route path="/NavbarCustomer" element={<NavbarCustomer />} />
+          <Route path="/NavbarEmployee" element={<NavbarEmployee />} />
+          <Route path="/LandingEmployee" element={<LandingEmployee />} />
 
       </Routes>
     </Router>

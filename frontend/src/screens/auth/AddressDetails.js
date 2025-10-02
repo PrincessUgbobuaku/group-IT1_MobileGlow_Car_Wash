@@ -27,7 +27,7 @@ const styles = {
     },
 };
 
-const AddressForm = () => {
+const AddressDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();
     // Get manager data passed from ManagerForm
@@ -55,14 +55,38 @@ const AddressForm = () => {
         }
 
         // Combine manager and address data for final submission
+        // const fullData = {
+        //     userName: managerData.userName,
+        //     userSurname: managerData.userSurname,
+        //     isActive: managerData.isActive,
+        //     roleDescription: managerData.employeeType === 'washAttendent' ? 'employee' : managerData.roleDescription,
+        //     employeeType: managerData.employeeType,
+        //     contact: {
+        //         phoneNumber: managerData.contact?.phoneNumber || ''
+        //     },
+        //     address: {
+        //         streetNumber: address.streetNumber,
+        //         streetName: address.streetName,
+        //         city: address.city,
+        //         postalCode: address.postalCode,
+        //     },
+        //     login: {
+        //         emailAddress: managerData.login?.emailAddress || '',
+        //         password: managerData.login?.password || ''
+        //     }
+        // };
+
         const fullData = {
             userName: managerData.userName,
             userSurname: managerData.userSurname,
             isActive: managerData.isActive,
-            roleDescription: managerData.employeeType === 'washAttendent' ? 'employee' : managerData.roleDescription,
+            roleDescription: managerData.employeeType === 'washAttendant' ? 'EMPLOYEE' : managerData.roleDescription,
             employeeType: managerData.employeeType,
+            isFullTime: true,              // required in WashAttendant
+            shiftHours: 8,                 // required in WashAttendant
             contact: {
-                phoneNumber: managerData.contact?.phoneNumber || ''
+                phoneNumber: managerData.contact?.phoneNumber || "",
+                emailAddress: managerData.contact?.emailAddress || "" // include this if entity requires it
             },
             address: {
                 streetNumber: address.streetNumber,
@@ -71,14 +95,15 @@ const AddressForm = () => {
                 postalCode: address.postalCode,
             },
             login: {
-                emailAddress: managerData.login?.emailAddress || '',
-                password: managerData.login?.password || ''
+                username: managerData.login?.emailAddress || "",  // backend expects username
+                password: managerData.login?.password || ""
             }
         };
 
+
         try {
             // Assuming backend endpoint to create washAttendat with address is the same as before
-            const response = await fetch('http://localhost:8080/mobileglow/washAttendant/create', {
+            const response = await fetch('http://localhost:8080/wash-attendants/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(fullData),
@@ -244,4 +269,4 @@ const AddressForm = () => {
     );
 };
 
-export default AddressForm;
+export default AddressDetails;
