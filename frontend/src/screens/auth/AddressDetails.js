@@ -54,56 +54,137 @@ const AddressDetails = () => {
             return;
         }
 
-        // Combine manager and address data for final submission
-        // const fullData = {
-        //     userName: managerData.userName,
-        //     userSurname: managerData.userSurname,
-        //     isActive: managerData.isActive,
-        //     roleDescription: managerData.employeeType === 'washAttendent' ? 'employee' : managerData.roleDescription,
-        //     employeeType: managerData.employeeType,
-        //     contact: {
-        //         phoneNumber: managerData.contact?.phoneNumber || ''
-        //     },
-        //     address: {
-        //         streetNumber: address.streetNumber,
-        //         streetName: address.streetName,
-        //         city: address.city,
-        //         postalCode: address.postalCode,
-        //     },
-        //     login: {
-        //         emailAddress: managerData.login?.emailAddress || '',
-        //         password: managerData.login?.password || ''
-        //     }
-        // };
+        let endpoint;
+        let fullData;
+        let successRedirect = '/login';
 
-        const fullData = {
-            userName: managerData.userName,
-            userSurname: managerData.userSurname,
-            isActive: managerData.isActive,
-            roleDescription: managerData.employeeType === 'washAttendant' ? 'EMPLOYEE' : managerData.roleDescription,
-            employeeType: managerData.employeeType,
-            isFullTime: true,              // required in WashAttendant
-            shiftHours: 8,                 // required in WashAttendant
-            contact: {
-                phoneNumber: managerData.contact?.phoneNumber || "",
-                emailAddress: managerData.contact?.emailAddress || "" // include this if entity requires it
-            },
-            address: {
-                streetNumber: address.streetNumber,
-                streetName: address.streetName,
-                city: address.city,
-                postalCode: address.postalCode,
-            },
-            login: {
-                username: managerData.login?.emailAddress || "",  // backend expects username
-                password: managerData.login?.password || ""
+        if (managerData.roleDescription === 'CLIENT') {
+            endpoint = 'http://localhost:8080/mobileglow/api/customers/create';
+            fullData = {
+                userName: managerData.userName,
+                userSurname: managerData.userSurname,
+                customerDOB: managerData.customerDOB || "",
+                isActive: managerData.isActive,
+                roleDescription: 'CLIENT',
+        contact: {
+            phoneNumber: managerData.contact?.phoneNumber || ""
+        },
+                address: {
+                    streetNumber: address.streetNumber,
+                    streetName: address.streetName,
+                    city: address.city,
+                    postalCode: address.postalCode,
+                },
+                login: {
+                    emailAddress: managerData.login?.emailAddress || "",
+                    password: managerData.login?.password || ""
+                }
+            };
+            successRedirect = '/LandingCustomer';
+        } else if (managerData.roleDescription === 'EMPLOYEE') {
+            if (managerData.employeeType === 'Manager') {
+                endpoint = 'http://localhost:8080/mobileglow/Manager/create';
+                fullData = {
+                    userName: managerData.userName,
+                    userSurname: managerData.userSurname,
+                    isActive: managerData.isActive,
+                    roleDescription: 'EMPLOYEE',
+                    employeeType: 'Manager',
+                    hireDate: managerData.hireDate,
+                    contact: {
+                        phoneNumber: managerData.contact?.phoneNumber || ""
+                    },
+                    address: {
+                        streetNumber: address.streetNumber,
+                        streetName: address.streetName,
+                        city: address.city,
+                        postalCode: address.postalCode,
+                    },
+                    login: {
+                        emailAddress: managerData.login?.emailAddress || "",
+                        password: managerData.login?.password || ""
+                    }
+                };
+            } else if (managerData.employeeType === 'Accountant') {
+                endpoint = 'http://localhost:8080/mobileglow/Accountant/create';
+                fullData = {
+                    userName: managerData.userName,
+                    userSurname: managerData.userSurname,
+                    isActive: managerData.isActive,
+                    roleDescription: 'EMPLOYEE',
+                    employeeType: 'Accountant',
+                    hireDate: managerData.hireDate,
+                    contact: {
+                        phoneNumber: managerData.contact?.phoneNumber || ""
+                    },
+                    address: {
+                        streetNumber: address.streetNumber,
+                        streetName: address.streetName,
+                        city: address.city,
+                        postalCode: address.postalCode,
+                    },
+                    login: {
+                        emailAddress: managerData.login?.emailAddress || "",
+                        password: managerData.login?.password || ""
+                    }
+                };
+            } else if (managerData.employeeType === 'WashAttendant') {
+                endpoint = 'http://localhost:8080/mobileglow/wash-attendants/create';
+                fullData = {
+                    userName: managerData.userName,
+                    userSurname: managerData.userSurname,
+                    isActive: managerData.isActive,
+                    roleDescription: 'EMPLOYEE',
+                    employeeType: 'WashAttendant',
+                    isFullTime: true,
+                    shiftHours: 8,
+                    contact: {
+                        phoneNumber: managerData.contact?.phoneNumber || ""
+                    },
+                    address: {
+                        streetNumber: address.streetNumber,
+                        streetName: address.streetName,
+                        city: address.city,
+                        postalCode: address.postalCode,
+                    },
+                    login: {
+                        emailAddress: managerData.login?.emailAddress || "",
+                        password: managerData.login?.password || ""
+                    }
+                };
+            } else {
+                // Default to Manager if None or unknown
+                endpoint = 'http://localhost:8080/mobileglow/Manager/create';
+                fullData = {
+                    userName: managerData.userName,
+                    userSurname: managerData.userSurname,
+                    isActive: managerData.isActive,
+                    roleDescription: 'EMPLOYEE',
+                    employeeType: 'Manager',
+                    hireDate: managerData.hireDate,
+                    contact: {
+                        phoneNumber: managerData.contact?.phoneNumber || "",
+                        emailAddress: managerData.login?.emailAddress || ""
+                    },
+                    address: {
+                        streetNumber: address.streetNumber,
+                        streetName: address.streetName,
+                        city: address.city,
+                        postalCode: address.postalCode,
+                    },
+                    login: {
+                        emailAddress: managerData.login?.emailAddress || "",
+                        password: managerData.login?.password || ""
+                    }
+                };
             }
-        };
-
+        } else {
+            alert('Invalid role description');
+            return;
+        }
 
         try {
-            // Assuming backend endpoint to create washAttendat with address is the same as before
-            const response = await fetch('http://localhost:8080/wash-attendants/create', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(fullData),
@@ -111,7 +192,7 @@ const AddressDetails = () => {
 
             if (response.ok) {
                 alert('Account created successfully!');
-                navigate('/login');
+                navigate(successRedirect);
             } else {
                 alert('Failed to create account.');
             }
