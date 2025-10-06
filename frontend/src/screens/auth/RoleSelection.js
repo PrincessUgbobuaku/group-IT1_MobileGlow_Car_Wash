@@ -12,7 +12,7 @@ const RoleSelection = ({ onBack }) => {
     return (
         <div style={styles.pageContainer}>
             <div style={styles.leftContainer}>
-                <button onClick={onBack} style={styles.backButton} aria-label="Go back">
+                <button onClick={() => navigate('/')} style={styles.backButton} aria-label="Go back">
                     ←
                 </button>
                 <h1 style={styles.title}>Choose Role</h1>

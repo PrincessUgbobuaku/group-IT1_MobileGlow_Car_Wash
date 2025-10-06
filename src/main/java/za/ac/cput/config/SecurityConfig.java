@@ -37,9 +37,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/Login/create", "/Login/authenticate").permitAll()
-                        .requestMatchers("/Manager/**", "/WashAttendant/**", "/Accountant/**", "/Customer/**").permitAll()
+                        .requestMatchers("/Manager/**", "/wash-attendants/**", "/Accountant/**", "/Customer/**", "/api/customers/**").permitAll()
                         .requestMatchers("/employee/**").hasRole("EMPLOYEE")
                         .requestMatchers("/customer/**").hasRole("CLIENT")
                         .anyRequest().authenticated()

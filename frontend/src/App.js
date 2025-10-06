@@ -32,7 +32,7 @@ function App()  {
           <Route path="/cleaning-services/management" element={<CleaningServiceManagement />} />
           <Route path="/profiles" element={<ProfilePage />} />
           <Route path="/profile-management" element={<ProfileManagement />} />
-          <Route path="/" element={<Navigate to="/booking" />} />
+          <Route path="/" element={<LandingPublic />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/bookingtwo" element={<BookingTwo />} />
           <Route path="/bookingvehicle" element={<BookingVehicle />} /> {/* Vehicle selection */}

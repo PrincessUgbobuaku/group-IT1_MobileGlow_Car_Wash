@@ -1,12 +1,21 @@
 // src/screens/components/Navbar.js
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./NavbarCustomer.css";
 
 const NavbarCustomer = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userRoleDescription');
+        // Add any other session items to clear
+        navigate('/login');
     };
 
     return (
@@ -23,10 +32,10 @@ const NavbarCustomer = () => {
                     </button>
                     {isOpen && (
                         <ul className="dropdown-menu">
-                            <li><a href="/Profile Customer">Profile</a></li>
+                            <li><a href="/profiles">Profile</a></li>
                             <li><a href="/vehicle page">Vehicle Page</a></li>
                             <li><a href="/Booking History">Booking History</a></li>
-                            <li><a href="/login">Log Out</a></li>
+                            <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
                     )}
                 </div>
