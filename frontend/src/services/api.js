@@ -1,3 +1,7 @@
+
+//api.js is a helper file that sets up how the app talks to the server. 
+//It adds the login token to requests so the server knows the user is logged in and allows updates.
+
 import axios from 'axios';
 
 // Base URL for the Spring Boot backend
@@ -11,10 +15,14 @@ const api = axios.create({
     },
 });
 
-// Request interceptor for logging
+// Request interceptor for logging and auth
 api.interceptors.request.use(
     (config) => {
         console.log('API Request:', config.method?.toUpperCase(), config.url);
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => {

@@ -3,37 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
-  const initialManager = {
+  const [client, setClient] = useState({
     userName: '',
     userSurname: '',
-    isActive: false,
-    roleDescription: '',
-    employeeType: '',
-    hireDate: '',
-    contact: {
-      phoneNumber: ''
-    },
-    address: {
-      streetNumber: '',
-      streetName: '',
-      city: '',
-      postalCode: ''
-    },
-    login: {
-      emailAddress: '',
-      password: ''
-    }
-  };
-
-  const [manager, setManager] = useState(initialManager);
-  const [isEditing, setIsEditing] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    contact: { phoneNumber: '' },
+    address: { streetNumber: '', streetName: '', city: '', postalCode: '' },
+    login: { emailAddress: '' }
+  });
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState('');
   const [messageType, setMessageType] = useState('error');
 
-  // Save original state for cancel
-  const [originalManager, setOriginalManager] = useState(initialManager);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -58,7 +39,6 @@ const ProfilePage = () => {
             return;
           }
         } else {
-          // For employees, fetch from all employee endpoints
           const endpoints = [
             'http://localhost:8080/mobileglow/Manager/getAllManagers',
             'http://localhost:8080/mobileglow/Accountant/getAllAccountants',
@@ -78,8 +58,7 @@ const ProfilePage = () => {
         }
         const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
         if (loggedInUser) {
-          setManager(loggedInUser);
-          setOriginalManager(loggedInUser);
+          setClient(loggedInUser);
         } else {
           setStatusMessage('User data not found');
           setMessageType('error');
@@ -92,326 +71,115 @@ const ProfilePage = () => {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setManager({ ...manager, [name]: value });
-  };
-
-  const handleContactChange = (e) => {
-    const { name, value } = e.target;
-    setManager({
-      ...manager,
-      contact: {
-        ...manager.contact,
-        [name]: value
-      }
-    });
-  };
-
-  const handleAddressChange = (e) => {
-    const { name, value } = e.target;
-    setManager({
-      ...manager,
-      address: {
-        ...manager.address,
-        [name]: value
-      }
-    });
-  };
-
-  const handleLoginChange = (e) => {
-    const { name, value } = e.target;
-    setManager({
-      ...manager,
-      login: {
-        ...manager.login,
-        [name]: value
-      }
-    });
-  };
-
-  const handleEdit = () => {
-    setOriginalManager(manager); // Save current data for cancel
-    setIsEditing(true);
-  };
-
-  const handleUpdate = async () => {
-    const userRole = localStorage.getItem('userRoleDescription');
-    try {
-      let endpoint;
-      if (userRole === 'CLIENT') {
-        endpoint = `http://localhost:8080/mobileglow/api/customers/${manager.userId}`;
-      } else {
-        if (manager.employeeType === 'ACCOUNTANT') {
-          endpoint = 'http://localhost:8080/mobileglow/Accountant/update';
-        } else if (manager.employeeType === 'WashAttendant') {
-          endpoint = 'http://localhost:8080/mobileglow/wash-attendants/update';
-        } else {
-          endpoint = 'http://localhost:8080/mobileglow/Manager/update';
-        }
-      }
-      const token = localStorage.getItem('token');
-      const response = await fetch(endpoint, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` })
-        },
-        body: JSON.stringify(manager)
-      });
-
-      if (response.ok) {
-        const updatedUser = await response.json();
-        setManager(updatedUser);
-        setOriginalManager(updatedUser);
-        setIsEditing(false);
-        setStatusMessage('Profile updated successfully!');
-        setMessageType('success');
-        setTimeout(() => { setStatusMessage(''); setMessageType('error'); }, 5000);
-      } else {
-        setStatusMessage('Failed to update profile');
-        setMessageType('error');
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      setStatusMessage('Something went wrong while updating');
-      setMessageType('error');
-    }
-  };
-
-  const handleCancel = () => {
-    setManager(originalManager);
-    setIsEditing(false);
-  };
-
-  const handleDelete = () => setShowDeleteConfirm(true);
-
-  const confirmDelete = async () => {
-    const userRole = localStorage.getItem('userRoleDescription');
-    try {
-      let endpoint;
-      if (userRole === 'CLIENT') {
-        endpoint = `http://localhost:8080/mobileglow/api/customers/${manager.userId}`;
-      } else {
-        if (manager.employeeType === 'ACCOUNTANT') {
-          endpoint = `http://localhost:8080/mobileglow/Accountant/delete/${manager.userId}`;
-        } else if (manager.employeeType === 'WashAttendant') {
-          endpoint = `http://localhost:8080/mobileglow/wash-attendants/delete/${manager.userId}`;
-        } else {
-          endpoint = `http://localhost:8080/mobileglow/Manager/delete/${manager.userId}`;
-        }
-      }
-      const token = localStorage.getItem('token');
-      const response = await fetch(endpoint, {
-        method: 'DELETE',
-        headers: {
-          ...(token && { 'Authorization': `Bearer ${token}` })
-        }
-      });
-
-      if (response.ok) {
-        setStatusMessage('Profile deleted successfully!');
-        setMessageType('success');
-        setTimeout(() => { setStatusMessage(''); setMessageType('error'); }, 5000);
-        setTimeout(() => (window.location.href = '/login'), 2000);
-      } else {
-        setStatusMessage('Failed to delete profile');
-        setMessageType('error');
-      }
-    } catch (error) {
-      console.error('Error deleting profile:', error);
-      setStatusMessage('Something went wrong while deleting');
-      setMessageType('error');
-    }
-    setShowDeleteConfirm(false);
-  };
-
-  const cancelDelete = () => setShowDeleteConfirm(false);
-
   const userRole = localStorage.getItem('userRoleDescription');
-  const navigate = useNavigate();
 
   if (loading) {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
-        <h2>Loading Manager Profile...</h2>
+        <h2>Loading Profile...</h2>
       </div>
     );
   }
 
+  const initials = client.userName ? client.userName.charAt(0).toUpperCase() : '?';
+
   return (
-    <>
-      <div className="profile-page">
-        <button
-          onClick={() => navigate(userRole === 'CLIENT' ? '/LandingCustomer' : '/LandingEmployee')}
-          style={{
-            fontSize: 24,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            marginBottom: '1rem',
-          }}
-          aria-label="Go back"
-        >
-          ←
-        </button>
-        <h2>{manager.userName} {manager.userSurname}'s Profile</h2>
-        {statusMessage && <div className={`${messageType}-message`}>{statusMessage}</div>}
+    <div className="profile-wrapper">
+      <button
+        onClick={() => navigate(userRole === 'CLIENT' ? '/LandingCustomer' : '/LandingEmployee')}
+        className="back-btn"
+      >
+        ←
+      </button>
 
-        <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
-          <div className="form-section">
-            <div className="form-row">
-              {[
-                { label: 'First Name', name: 'userName', placeholder: 'Enter first name' },
-                { label: 'Last Name', name: 'userSurname', placeholder: 'Enter last name' },
-                { label: 'Employee Type', name: 'employeeType', disabled: true },
-                { label: 'Hire Date', name: 'hireDate', type: 'date' },
-                { label: 'Role Description', name: 'roleDescription', disabled: true }
-              ].filter(item => userRole === 'CLIENT' ? item.name !== 'employeeType' && item.name !== 'hireDate' : true).map(({ label, name, placeholder, disabled, type = 'text' }) => (
-                <div className="form-group" key={name}>
-                  <label>{label}</label>
-                  <input
-                    type={type}
-                    name={name}
-                    value={manager[name]}
-                    onChange={handleChange}
-                    disabled={!isEditing || disabled}
-                    placeholder={placeholder}
-                  />
+      <h2 className="profile-title">Profile</h2>
+      {statusMessage && <div className={`${messageType}-message`}>{statusMessage}</div>}
+
+      <div className="profile-container">
+        {/* LEFT SIDE - PROFILE CARD */}
+        <div className="profile-card">
+          <div className="avatar-section">
+            <div className="avatar-circle">{initials}</div>
+            <button className="edit-link" onClick={() => navigate(userRole === 'CLIENT' ? '/EditCustomerProfile' : '/EditEmployeeProfile')}>
+              Edit
+            </button>
+          </div>
+
+          <h3 className="profile-name">
+            {client.userName} {client.userSurname}
+          </h3>
+
+          <div className="profile-info">
+            <div className="info-item">
+              <span className="info-label">First name</span>
+              <span>{client.userName}</span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">Last name</span>
+              <span>{client.userSurname}</span>
+            </div>
+            {userRole === 'EMPLOYEE' && (
+              <>
+                <div className="info-item">
+                  <span className="info-label">Employee Type</span>
+                  <span>{client.employeeType || '—'}</span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="form-section">
-            <h3>Contact Details</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Phone Number</label>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  value={manager.contact.phoneNumber}
-                  onChange={handleContactChange}
-                  disabled={!isEditing}
-                  placeholder="Enter phone number"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="form-section">
-            <h3>Address Details</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Street Number</label>
-                <input
-                  type="text"
-                  name="streetNumber"
-                  value={manager.address.streetNumber}
-                  onChange={handleAddressChange}
-                  disabled={!isEditing}
-                  placeholder="Enter street number"
-                />
-              </div>
-              <div className="form-group">
-                <label>Street Name</label>
-                <input
-                  type="text"
-                  name="streetName"
-                  value={manager.address.streetName}
-                  onChange={handleAddressChange}
-                  disabled={!isEditing}
-                  placeholder="Enter street name"
-                />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>City</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={manager.address.city}
-                  onChange={handleAddressChange}
-                  disabled={!isEditing}
-                  placeholder="Enter city"
-                />
-              </div>
-              <div className="form-group">
-                <label>Postal Code</label>
-                <input
-                  type="text"
-                  name="postalCode"
-                  value={manager.address.postalCode}
-                  onChange={handleAddressChange}
-                  disabled={!isEditing}
-                  placeholder="Enter postal code"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="form-section">
-            <h3>Login Details</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="emailAddress"
-                  value={manager.login.emailAddress}
-                  onChange={handleLoginChange}
-                  disabled={!isEditing}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={manager.login.password}
-                  onChange={handleLoginChange}
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="form-actions">
-            {!isEditing ? (
-              <>
-                <button type="button" className="btn btn-primary" onClick={handleEdit}>Edit</button>
-                <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete</button>
-              </>
-            ) : (
-              <>
-                <button type="button" className="btn btn-primary" onClick={handleUpdate}>Update</button>
-                <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+                <div className="info-item">
+                  <span className="info-label">Hire Date</span>
+                  <span>{client.hireDate || '—'}</span>
+                </div>
               </>
             )}
-          </div>
-        </form>
-      </div>
-
-      {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h4>Are you sure you want to delete this profile?</h4>
-            <div className="modal-buttons">
-              <button className="danger-btn" onClick={confirmDelete}>Yes, Delete</button>
-              <button className="secondary-btn" onClick={cancelDelete}>Cancel</button>
+            {userRole === 'CLIENT' && (
+              <div className="info-item">
+                <span className="info-label">Date of Birth</span>
+                <span>{client.customerDOB || '—'}</span>
+              </div>
+            )}
+            <div className="info-item">
+              <span className="info-label">Mobile number</span>
+              <span>{client.contact.phoneNumber || '—'}</span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">Email</span>
+              <span>{client.login.emailAddress}</span>
             </div>
           </div>
         </div>
-      )}
-    </>
+
+        {/* RIGHT SIDE - ADDRESS CARD */}
+        <div className="address-card">
+          <h3>My addresses</h3>
+          <div className="address-list">
+            <div className="address-item">
+              <div className="icon home-icon">🏠</div>
+              <div>
+                <strong>Home</strong>
+                <p>
+                  {client.address.streetNumber
+                    ? `${client.address.streetNumber} ${client.address.streetName}, ${client.address.city}, ${client.address.postalCode}`
+                    : 'Add a home address'}
+                </p>
+              </div>
+            </div>
+
+            <div className="address-item">
+              <div className="icon work-icon">💼</div>
+              <div>
+                <strong>Work</strong>
+                <p>Add a work address</p>
+              </div>
+            </div>
+          </div>
+
+          <button className="add-btn">+ Add</button>
+        </div>
+      </div>
+    </div>
   );
 };
 

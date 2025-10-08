@@ -21,6 +21,8 @@ import LandingCustomer from "./screens/customer/LandingCustomer";
 import NavbarCustomer from "./screens/components/NavbarCustomer";
 import NavbarEmployee from "./screens/components/NavbarEmployee";
 import LandingEmployee from "./screens/employee/LandingEmployee";
+import EditCustomerProfile from "./screens/EditCustomerProfile";
+import EditEmployeeProfile from "./screens/EditEmployeeProfile";
 
 
 function App()  {
@@ -50,6 +52,8 @@ function App()  {
           <Route path="/NavbarCustomer" element={<NavbarCustomer />} />
           <Route path="/NavbarEmployee" element={<NavbarEmployee />} />
           <Route path="/LandingEmployee" element={<LandingEmployee />} />
+          <Route path="/EditCustomerProfile" element={<EditCustomerProfile />} />
+          <Route path="/EditEmployeeProfile" element={<EditEmployeeProfile />} />
 
       </Routes>
     </Router>

@@ -35,16 +35,14 @@ public class ManagerController {
         return ResponseEntity.ok(manager);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Manager> update(@RequestBody Manager manager) {
-        if (manager.getUserId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Manager> update(@PathVariable Long id, @RequestBody Manager manager) {
+        manager = new Manager.Builder()
+                .copy(manager)
+                .setUserId(id)
+                .build();
         Manager updated = managerService.update(manager);
-        if (updated == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updated);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/getAllManagers")
