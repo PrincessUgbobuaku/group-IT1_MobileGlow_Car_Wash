@@ -34,17 +34,14 @@ public class AccountantController {
         return ResponseEntity.ok(accountant);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Accountant> update(@RequestBody Accountant accountant) {
-        if (accountant.getUserId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Accountant updatedAccountant = accountantService.update(accountant);
-        if (updatedAccountant == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedAccountant);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Accountant> update(@PathVariable Long id, @RequestBody Accountant accountant) {
+        accountant = new Accountant.Builder()
+                .copy(accountant)
+                .setUserId(id)
+                .build();
+        Accountant updated = accountantService.update(accountant);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")
