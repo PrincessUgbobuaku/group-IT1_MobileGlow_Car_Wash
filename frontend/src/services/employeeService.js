@@ -1,14 +1,5 @@
 // src/services/employeeService.js
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8080/mobileglow';
-
-const api = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-});
+import api from './api';
 
 // CORRECTED SERVICE - MATCHES YOUR ACTUAL CONTROLLERS
 export const employeeServiceSimple = {
@@ -43,9 +34,9 @@ export const employeeService = {
     getAllEmployees: async () => {
         try {
             const [managers, accountants, washAttendants] = await Promise.all([
-                employeeServiceSimple.getAllManagers().then(res => res.data.map(emp => ({ ...emp, type: 'Manager' }))),
-                employeeServiceSimple.getAllAccountants().then(res => res.data.map(emp => ({ ...emp, type: 'Accountant' }))),
-                employeeServiceSimple.getAllWashAttendants().then(res => res.data.map(emp => ({ ...emp, type: 'Wash Attendant' })))
+                api.get('/Manager/getAllManagers').then(res => res.data.map(emp => ({ ...emp, type: 'Manager' }))),
+                api.get('/Accountant/getAllAccountants').then(res => res.data.map(emp => ({ ...emp, type: 'Accountant' }))),
+                api.get('/wash-attendants/getAllWashAttendants').then(res => res.data.map(emp => ({ ...emp, type: 'Wash Attendant' })))
             ]);
 
             return [...managers, ...accountants, ...washAttendants];
@@ -71,26 +62,70 @@ export const employeeService = {
     },
 
     getEmployee: async (id, type) => {
-        switch (type) {
-            case 'Manager':
-                return employeeServiceSimple.getManager(id);
-            case 'Accountant':
-                return employeeServiceSimple.getAccountant(id);
-            case 'Wash Attendant':
-                return employeeServiceSimple.getWashAttendant(id);
-            default:
-                throw new Error(`Unknown employee type: ${type}`);
-        }
+        const endpoint = getEndpointByType(type, 'read');
+        return api.get(`${endpoint}/${id}`);
+    },
+
+    // Update employee
+    updateEmployee: async (employeeData) => {
+        const endpoint = getEndpointByType(employeeData.employeeType || employeeData.type, 'update');
+        return api.put(`${endpoint}/${employeeData.userId}`, employeeData);
+    },
+
+    // Delete employee
+    deleteEmployee: async (id, type) => {
+        const endpoint = getEndpointByType(type, 'delete');
+        return api.delete(`${endpoint}/${id}`);
     }
 };
 
-// Debugging interceptors
-api.interceptors.request.use(
-    (config) => {
-        console.log(`🚀 ${config.method?.toUpperCase()} to: ${config.baseURL}${config.url}`);
-        return config;
+const getEndpointByType = (type, operation) => {
+    let base;
+    if (type === 'WashAttendant' || type === 'Wash Attendant') {
+        base = 'wash-attendants';
+    } else {
+        base = type;
     }
-);
+
+    switch (operation) {
+        case 'create':
+            return `/${base}/create`;
+        case 'read':
+            return `/${base}/read`;
+        case 'update':
+            return `/${base}/update`;
+        case 'delete':
+            return `/${base}/delete`;
+        case 'getAll':
+            return `/${base}/getAll${base.replace('-', '')}s`;
+        default:
+            return `/${base}`;
+    }
+};
+
+// Simple explicit service methods
+export const employeeServiceSimple = {
+    // Manager endpoints
+    getAllManagers: () => api.get('/Manager/getAllManagers'),
+    getManager: (id) => api.get(`/Manager/read/${id}`),
+    createManager: (manager) => api.post('/Manager/create', manager),
+    updateManager: (manager) => api.put(`/Manager/update/${manager.userId}`, manager),
+    deleteManager: (id) => api.delete(`/Manager/delete/${id}`),
+
+    // Accountant endpoints
+    getAllAccountants: () => api.get('/Accountant/getAllAccountants'),
+    getAccountant: (id) => api.get(`/Accountant/read/${id}`),
+    createAccountant: (accountant) => api.post('/Accountant/create', accountant),
+    updateAccountant: (accountant) => api.put(`/Accountant/update/${accountant.userId}`, accountant),
+    deleteAccountant: (id) => api.delete(`/Accountant/delete/${id}`),
+
+    // Wash Attendant endpoints
+    getAllWashAttendants: () => api.get('/wash-attendants/getAllWashAttendants'),
+    getWashAttendant: (id) => api.get(`/wash-attendants/read/${id}`),
+    createWashAttendant: (washAttendant) => api.post('/wash-attendants/create', washAttendant),
+    updateWashAttendant: (washAttendant) => api.put(`/wash-attendants/update/${washAttendant.userId}`, washAttendant),
+    deleteWashAttendant: (id) => api.delete(`/wash-attendants/delete/${id}`),
+};
 
 api.interceptors.response.use(
     (response) => {

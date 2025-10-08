@@ -24,6 +24,8 @@ import LandingEmployee from "./screens/employee/LandingEmployee";
 import EmployeeManagement from "./screens/EmployeeManagement";
 import AboutUs from "./screens/AboutUs";
 import ContactUs from "./screens/ContactUs";
+import EditCustomerProfile from "./screens/EditCustomerProfile";
+import EditEmployeeProfile from "./screens/EditEmployeeProfile";
 
 
 function App()  {
@@ -57,6 +59,8 @@ function App()  {
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/ContactUs" element={<ContactUs />} />
 
+          <Route path="/EditCustomerProfile" element={<EditCustomerProfile />} />
+          <Route path="/EditEmployeeProfile" element={<EditEmployeeProfile />} />
 
       </Routes>
     </Router>

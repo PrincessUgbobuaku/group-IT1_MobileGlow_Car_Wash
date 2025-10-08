@@ -28,6 +28,8 @@ const Login = () => {
                 alert(data.message);
                 localStorage.setItem('userEmail', login.email);
                 localStorage.setItem('userRoleDescription', data.role_description);
+                localStorage.setItem('authToken', data.token); // Store JWT token
+                localStorage.setItem('userId', data.user_id || '1'); // Store user ID, default to 1 if not provided
                 if (data.role_description === 'EMPLOYEE') {
                     navigate('/LandingEmployee');
                 } else {
