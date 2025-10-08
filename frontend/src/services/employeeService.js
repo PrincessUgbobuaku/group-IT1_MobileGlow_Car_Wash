@@ -103,29 +103,7 @@ const getEndpointByType = (type, operation) => {
     }
 };
 
-// Simple explicit service methods
-export const employeeServiceSimple = {
-    // Manager endpoints
-    getAllManagers: () => api.get('/Manager/getAllManagers'),
-    getManager: (id) => api.get(`/Manager/read/${id}`),
-    createManager: (manager) => api.post('/Manager/create', manager),
-    updateManager: (manager) => api.put(`/Manager/update/${manager.userId}`, manager),
-    deleteManager: (id) => api.delete(`/Manager/delete/${id}`),
 
-    // Accountant endpoints
-    getAllAccountants: () => api.get('/Accountant/getAllAccountants'),
-    getAccountant: (id) => api.get(`/Accountant/read/${id}`),
-    createAccountant: (accountant) => api.post('/Accountant/create', accountant),
-    updateAccountant: (accountant) => api.put(`/Accountant/update/${accountant.userId}`, accountant),
-    deleteAccountant: (id) => api.delete(`/Accountant/delete/${id}`),
-
-    // Wash Attendant endpoints
-    getAllWashAttendants: () => api.get('/wash-attendants/getAllWashAttendants'),
-    getWashAttendant: (id) => api.get(`/wash-attendants/read/${id}`),
-    createWashAttendant: (washAttendant) => api.post('/wash-attendants/create', washAttendant),
-    updateWashAttendant: (washAttendant) => api.put(`/wash-attendants/update/${washAttendant.userId}`, washAttendant),
-    deleteWashAttendant: (id) => api.delete(`/wash-attendants/delete/${id}`),
-};
 
 api.interceptors.response.use(
     (response) => {

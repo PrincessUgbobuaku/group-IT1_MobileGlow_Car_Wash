@@ -156,7 +156,7 @@ export default function LandingCustomer() {
                 {/* Book Now Button */}
                 <div className="book-now-container">
                     <button
-                        onClick={() => (window.location.href = "/login")}
+                        onClick={() => (window.location.href = "/Booking")}
                         className="cta-button primary"
                     >
                         BOOK NOW
