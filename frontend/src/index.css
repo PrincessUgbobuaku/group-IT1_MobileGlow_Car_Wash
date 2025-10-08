@@ -6,8 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: "Inter", sans-serif;
-  width: 80%;
-  margin: 0 auto;
+  /* width: 80%;
+  margin: 0 auto; */
 }
 
 h1,
@@ -19,6 +19,12 @@ h3 {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+
+.app-content {
+  width: 80%;
+  margin: 0 auto;
 }
 
 /* font-size */

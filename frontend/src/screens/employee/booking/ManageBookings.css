@@ -1,13 +1,74 @@
 /* Layout */
 .dashboard-container {
-  padding: 20px;
+}
+
+.dashboard-title-toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dashboard-title {
+  font-size: 60px; /* as you wanted */
+  margin-top: 30px;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+/* .filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+} */
+
+.filters-row {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+.filters-row.show {
+  max-height: 500px; /* enough to show all filters comfortably */
+  opacity: 1;
+  transition: max-height 0.6s ease, opacity 0.5s ease;
+}
+
+.search-input {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.toolbar-btn.filter {
+  background-color: #0077cc;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-select,
+.filter-date,
+.filter-input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   margin-bottom: 20px;
+  flex-direction: column;
 }
 
 .dashboard-toolbar {
@@ -101,12 +162,12 @@
 
 /* --- Dropdown / 3-dot menu --- */
 .col.actions {
-  flex: none;          /* disable flex shrinking/growing */
+  flex: none; /* disable flex shrinking/growing */
   /* width: 90px;         fix width so it doesn't collapse */
   display: flex;
   justify-content: flex-end;
   position: relative;
-  padding-right: 8px;  /* optional, for spacing */
+  padding-right: 8px; /* optional, for spacing */
   padding-left: 0;
 }
 
@@ -131,9 +192,13 @@
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   min-width: 120px;
-  z-index: 1000; /* High enough to be on top */
+  z-index: 1000 !important; /* High enough to be on top */
+  min-height: 100px !important;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .dropdown-menu button {
@@ -152,97 +217,32 @@
   background-color: #f5f5f5;
 }
 
-
 .booking-table,
 .booking-row,
 .col.actions,
 .menu-wrapper {
   overflow: visible !important;
-  position: relative; /* if needed */
-  z-index: auto;
+  position: relative !important;
 }
 
-
-.booking-row input[type="text"],
-.booking-row input[type="date"],
-.booking-row input[type="time"],
-.booking-row input[type="number"] {
-  padding: 4px 6px;
-  font-size: 13px;
-  border: 1px solid #ccc;
+.filter-select {
+  padding: 5px 8px;
   border-radius: 4px;
-  width: 90%;
-}
-
-/* .manage-bookings-container {
-  padding: 2rem;
-  font-family: Arial, sans-serif;
-}
-
-.bookings-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.bookings-table th,
-.bookings-table td {
-  padding: 10px;
   border: 1px solid #ccc;
 }
 
-.bookings-table th {
-  background-color: #f5f5f5;
-}
-
-input[type="text"],
-input[type="datetime-local"] {
-  padding: 5px;
-  width: 100%;
-}
-
-.action-buttons button {
-  margin-right: 5px;
-  padding: 5px 10px;
-}
-
-.edit-btn {
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.save-btn {
-  background-color: #2e7d32;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background-color: gray;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.delete-btn {
-  background-color: #d32f2f;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.pay-btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 6px 10px;
-  margin-left: 5px;
-  border: none;
+.filter-date {
+  margin-left: 10px;
+  padding: 5px 8px;
   border-radius: 4px;
-  cursor: pointer;
+  border: 1px solid #ccc;
+  width: 140px;
 }
 
-.pay-btn:hover {
-  background-color: #45a049;
-} */
+.filter-input {
+  margin-left: 10px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 180px;
+}
