@@ -95,6 +95,7 @@ public class LoginController {
             response.put("message", "Login successful");
             response.put("role_description", roleDescription);
             response.put("token", jwtToken);
+            response.put("user_id", user != null ? user.getUserId() : null);
 
             return ResponseEntity.ok(response);
         } else {
