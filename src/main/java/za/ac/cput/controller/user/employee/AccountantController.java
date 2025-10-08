@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.user.employee.Accountant;
+import za.ac.cput.service.user.employee.IAccountantService;
 import za.ac.cput.service.user.employee.AccountantService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/Accountant")
 public class AccountantController {
