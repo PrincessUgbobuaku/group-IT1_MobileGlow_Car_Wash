@@ -1,6 +1,34 @@
 // src/services/employeeService.js
 import api from './api';
 
+// CORRECTED SERVICE - MATCHES YOUR ACTUAL CONTROLLERS
+export const employeeServiceSimple = {
+    // Manager endpoints
+    getAllManagers: () => api.get('/Manager/getAllManagers'),
+    getManager: (id) => api.get(`/Manager/read/${id}`),
+    createManager: (manager) => api.post('/Manager/create', manager),
+    updateManager: (manager) => api.put('/Manager/update', manager),
+    deleteManager: (id) => api.delete(`/Manager/delete/${id}`),
+
+    // Accountant endpoints
+    getAllAccountants: () => api.get('/Accountant/getAllAccountants'),
+    getAccountant: (id) => api.get(`/Accountant/read/${id}`),
+    createAccountant: (accountant) => api.post('/Accountant/create', accountant),
+    updateAccountant: (accountant) => api.put('/Accountant/update', accountant),
+    deleteAccountant: (id) => api.delete(`/Accountant/delete/${id}`),
+
+    // Wash Attendant endpoints - CORRECTED to match your controller
+    getAllWashAttendants: () => api.get('/wash-attendants/getAllWashAttendants'),
+    getWashAttendant: (id) => api.get(`/wash-attendants/read/${id}`),
+    createWashAttendant: (washAttendant) => api.post('/wash-attendants/create', washAttendant),
+    updateWashAttendant: (washAttendant) => api.put('/wash-attendants/update', washAttendant),
+    deleteWashAttendant: (id) => api.delete(`/wash-attendants/delete/${id}`),
+
+    // Bonus: Random wash attendant endpoint from your controller
+    getRandomWashAttendant: () => api.get('/wash-attendants/random')
+};
+
+// Enhanced service with error handling
 export const employeeService = {
     // Get all employees from all endpoints
     getAllEmployees: async () => {
@@ -14,17 +42,25 @@ export const employeeService = {
             return [...managers, ...accountants, ...washAttendants];
         } catch (error) {
             console.error('Failed to fetch employees:', error);
-            throw new Error('Failed to fetch employees');
+            throw new Error('Failed to fetch employees: ' + error.message);
         }
     },
 
-    // Create employee based on type
+    // Generic methods
     createEmployee: async (employeeData) => {
-        const endpoint = getEndpointByType(employeeData.type, 'create');
-        return api.post(endpoint, employeeData);
+        const type = employeeData.type;
+        switch (type) {
+            case 'Manager':
+                return employeeServiceSimple.createManager(employeeData);
+            case 'Accountant':
+                return employeeServiceSimple.createAccountant(employeeData);
+            case 'Wash Attendant':
+                return employeeServiceSimple.createWashAttendant(employeeData);
+            default:
+                throw new Error(`Unknown employee type: ${type}`);
+        }
     },
 
-    // Get single employee
     getEmployee: async (id, type) => {
         const endpoint = getEndpointByType(type, 'read');
         return api.get(`${endpoint}/${id}`);
@@ -91,13 +127,25 @@ export const employeeServiceSimple = {
     deleteWashAttendant: (id) => api.delete(`/wash-attendants/delete/${id}`),
 };
 
-// Add error interceptor for better debugging
 api.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        console.log('✅ Response:', response.status, response.data);
+        return response;
+    },
     (error) => {
-        console.error('API Error:', error.response?.data || error.message);
+        console.error('❌ API Error:');
+        console.error('URL:', error.config?.url);
+        console.error('Status:', error.response?.status);
+        console.error('Data:', error.response?.data);
+        console.error('Message:', error.message);
+
+        // Check for CORS error
+        if (error.message.includes('Network Error') || error.message.includes('CORS')) {
+            console.error('🔴 CORS ERROR: Backend not allowing requests from frontend');
+            console.error('💡 Solution: Add @CrossOrigin(origins = "http://localhost:3000") to your controllers');
+        }
+
         return Promise.reject(error);
     }
 );
 
-export default api;

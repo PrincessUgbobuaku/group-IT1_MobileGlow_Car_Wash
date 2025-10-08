@@ -24,7 +24,7 @@ const NavbarEmployee = () => {
 
             <div className="nav-links">
                 {/* Top-level navigation */}
-                <a href="/bookings" className="nav-btn">View Bookings</a>
+                <a href="/manage-bookings" className="nav-btn">View Bookings</a>
                 <a href="/cleaning-services/management" className="nav-btn">Update Services</a>
                 <a href="/performance" className="nav-btn">Performance</a>
                 <a href="/EmployeeManagement" className="nav-btn">Employees</a>

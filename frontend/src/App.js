@@ -21,6 +21,9 @@ import LandingCustomer from "./screens/customer/LandingCustomer";
 import NavbarCustomer from "./screens/components/NavbarCustomer";
 import NavbarEmployee from "./screens/components/NavbarEmployee";
 import LandingEmployee from "./screens/employee/LandingEmployee";
+import EmployeeManagement from "./screens/EmployeeManagement";
+import AboutUs from "./screens/AboutUs";
+import ContactUs from "./screens/ContactUs";
 import EditCustomerProfile from "./screens/EditCustomerProfile";
 import EditEmployeeProfile from "./screens/EditEmployeeProfile";
 
@@ -52,6 +55,10 @@ function App()  {
           <Route path="/NavbarCustomer" element={<NavbarCustomer />} />
           <Route path="/NavbarEmployee" element={<NavbarEmployee />} />
           <Route path="/LandingEmployee" element={<LandingEmployee />} />
+          <Route path="/EmployeeManagement" element={<EmployeeManagement />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/ContactUs" element={<ContactUs />} />
+
           <Route path="/EditCustomerProfile" element={<EditCustomerProfile />} />
           <Route path="/EditEmployeeProfile" element={<EditEmployeeProfile />} />
 
