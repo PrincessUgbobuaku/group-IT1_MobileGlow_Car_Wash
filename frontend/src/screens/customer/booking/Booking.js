@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "./Booking.css";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
-import Slider from "react-slick"; // ✅ Add this
-import "slick-carousel/slick/slick.css"; // ✅ Add this
-import "slick-carousel/slick/slick-theme.css"; // ✅ Add this
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import bookingImage1 from "../../../assets/booking-interface-tire-clean-water-pressure.png";
 import bookingImage2 from "../../../assets/booking-interface-wash-attendant-washing-tire.png";
 import { FaStar, FaTrash } from "react-icons/fa";
@@ -94,7 +94,7 @@ const Booking = () => {
   const images = [bookingImage1, bookingImage2, bookingImage1, bookingImage2];
 
   return (
-    <div className="booking-layout">
+    <div className="booking-layout app-content">
       {/* Header */}
       <div className="booking-header">
         <div className="breadcrumb">
