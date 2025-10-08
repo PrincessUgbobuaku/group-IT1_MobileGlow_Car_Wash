@@ -1,6 +1,12 @@
 /* CleaningServiceManagement.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;500;600&display=swap');
 
+/* Ensure navbar maintains dark blue background */
+.navbar {
+    background: #004aad !important;
+    color: white !important;
+}
+
 .cleaning-service-management {
     padding: 2rem;
     font-family: 'Montserrat', sans-serif;
