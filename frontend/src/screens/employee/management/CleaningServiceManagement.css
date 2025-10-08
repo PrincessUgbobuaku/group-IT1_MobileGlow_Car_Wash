@@ -1,11 +1,14 @@
 /* CleaningServiceManagement.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;500;600&display=swap');
 
 .cleaning-service-management {
     padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: #1f2937;
     background-color: #ffffff;
     min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* HEADER */
@@ -16,9 +19,10 @@
 }
 
 .header h1 {
+    font-family: 'Inter', sans-serif;
     font-size: 2rem;
-    font-weight: 600;
-    color: #1f2937;
+    font-weight: 700;
+    color: #0C2D48;
     margin: 0 0 0.5rem 0;
 }
 
@@ -27,6 +31,7 @@
     margin: 0 0 1rem 0;
     font-size: 1rem;
     line-height: 1.5;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .admin-links {
@@ -69,6 +74,14 @@
 .action-right {
     display: flex;
     gap: 0.5rem;
+    justify-content: center;
+    flex: 1;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .search-bar {
@@ -78,7 +91,31 @@
     border: 1px solid #d1d5db;
     border-radius: 6px;
     padding: 0.5rem 0.75rem;
-    min-width: 200px;
+    min-width: 300px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.search-icon-btn {
+    background: transparent;
+    color: #6b7280;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.search-icon-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+    transform: scale(1.1);
 }
 
 .search-bar input {
@@ -95,27 +132,29 @@
 
 /* BUTTONS */
 .btn {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
     cursor: pointer;
     border: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .btn-primary {
-    background: #3b82f6;
+    background: #145DA0;
     color: #fff;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .btn-primary:hover {
-    background: #2563eb;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: #0C2D48;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary {
@@ -125,6 +164,8 @@
 
 .btn-secondary:hover {
     background: #4b5563;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-outline {
@@ -172,6 +213,44 @@
     background-color: transparent;
 }
 
+/* Edit and Delete buttons in table */
+.btn-edit {
+    background-color: #145DA0;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+}
+
+.btn-edit:hover:not(:disabled) {
+    background-color: #0C2D48;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-delete:hover:not(:disabled) {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* CREATE SERVICE SECTION */
+.create-service-section {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
 /* LOADING */
 .loading-container {
     text-align: center;
@@ -182,7 +261,7 @@
     width: 40px;
     height: 40px;
     border: 5px solid #ccc;
-    border-top: 5px solid #007bff;
+    border-top: 5px solid #145DA0;
     border-radius: 50%;
     margin: 0 auto 1rem;
     animation: spin 1s linear infinite;
@@ -234,6 +313,9 @@
 }
 
 .form-header h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: #0C2D48;
     margin: 0;
 }
 
@@ -253,29 +335,32 @@
 
 .service-form label {
     margin-bottom: 0.3rem;
-    font-weight: 500;
+    font-weight: 600;
+    color: #0C2D48;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .service-form input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .service-form textarea {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
     resize: vertical;
     min-height: 60px;
-    font-family: inherit;
+    font-family: 'Montserrat', sans-serif;
     font-size: inherit;
 }
 
 .service-form textarea:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #145DA0;
+    box-shadow: 0 0 0 2px rgba(20, 93, 160, 0.2);
 }
 
 .form-row {
@@ -352,10 +437,11 @@
 .services-table th {
     background-color: #f9fafb;
     font-weight: 600;
-    color: #374151;
+    color: #0C2D48;
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .services-table th:first-child {
@@ -386,8 +472,9 @@
 }
 
 .service-name {
-    font-weight: 500;
-    color: #1f2937;
+    font-weight: 600;
+    color: #0C2D48;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .service-category {
@@ -408,13 +495,15 @@
 
 .service-price {
     font-weight: 600;
-    color: #059669;
+    color: #145DA0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .service-actions {
     display: flex;
     justify-content: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 /* Action Dropdown */
@@ -625,8 +714,18 @@
         justify-content: center;
     }
 
+    .search-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
     .search-bar {
-        min-width: 150px;
+        min-width: 200px;
+        max-width: 300px;
+    }
+    
+    .search-icon-btn {
+        align-self: center;
     }
 
     .services-table-container {
