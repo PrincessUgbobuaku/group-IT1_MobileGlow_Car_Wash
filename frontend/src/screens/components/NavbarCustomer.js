@@ -33,7 +33,7 @@ const NavbarCustomer = () => {
                     {isOpen && (
                         <ul className="dropdown-menu">
                             <li><a href="/profiles">Profile</a></li>
-                            <li><a href="/vehicle page">Vehicle Page</a></li>
+                            <li><a href="/vehicles">Vehicle Page</a></li>
                             <li><a href="/Booking History">Booking History</a></li>
                             <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
