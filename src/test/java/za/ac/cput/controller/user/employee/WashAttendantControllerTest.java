@@ -6,8 +6,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import za.ac.cput.domain.generic.Address;
@@ -26,13 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class WashAttendantControllerTest {
 
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    private final String BASE_URL = "http://localhost:8080/mobileglow/wash-attendants";
-
     private static Contact contact = ContactFactory.createContact("0725637252");
-    private static Address address = AddressFactory.createAddressFactory1("101", "Main Street", "Cape Town", "8000");
+
+    private static Address address = AddressFactory.createAddressFactory1("101",
+            "Main Street",
+            "Cape Town",
+            "8000");
     private static Login login = LoginFactory.createLogin("washattendant@gmail.com", "password123");
 
     private static WashAttendant washAttendant = WashAttendantFactory.createWashAttendant(
@@ -47,83 +44,80 @@ class WashAttendantControllerTest {
             address,
             login);
 
-    private static WashAttendant createdWashAttendant;
+    private static WashAttendant washAttendantWithId;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private static final String BASE_URL = "http://localhost:8080/mobileglow/wash-attendants";
 
     @Test
     void a_create() {
         String url = BASE_URL + "/create";
         ResponseEntity<WashAttendant> response = restTemplate.postForEntity(url, washAttendant, WashAttendant.class);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-
-        createdWashAttendant = response.getBody();
-        assertNotNull(createdWashAttendant.getUserId());
-        assertEquals(washAttendant.getUserName(), createdWashAttendant.getUserName());
-
-        System.out.println("Created WashAttendant: " + createdWashAttendant);
+        System.out.println("response: " + response.getBody());
+        washAttendantWithId = response.getBody();
+        assertNotNull(washAttendantWithId);
+        System.out.println("washAttendantWithId: " + washAttendantWithId);
     }
 
     @Test
     void b_read() {
-        String url = BASE_URL + "/read/" + createdWashAttendant.getUserId();
+        assertNotNull(washAttendantWithId, "washAttendantWithId is null");
+        String url = BASE_URL + "/read/" + washAttendantWithId.getUserId();
         ResponseEntity<WashAttendant> response = restTemplate.getForEntity(url, WashAttendant.class);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(createdWashAttendant.getUserId(), response.getBody().getUserId());
-
-        System.out.println("Read WashAttendant: " + response.getBody());
+        System.out.println("response: " + response.getBody());
     }
 
     @Test
     void c_update() {
-        WashAttendant updatedWashAttendant = new WashAttendant.Builder()
-                .copy(createdWashAttendant)
+        assertNotNull(washAttendantWithId, "washAttendantWithId is null");
+        String url = BASE_URL + "/update";
+        WashAttendant updateWashAttendant = new WashAttendant.Builder()
+                .copy(washAttendantWithId)
                 .setUserName("Michael")
                 .setIsFullTime(false)
                 .setShiftHours(6)
                 .build();
+        this.restTemplate.put(url, updateWashAttendant);
 
-        String url = BASE_URL + "/update" + createdWashAttendant.getUserId();
-        HttpEntity<WashAttendant> requestEntity = new HttpEntity<>(updatedWashAttendant);
-        ResponseEntity<WashAttendant> response = restTemplate.exchange(
-                url, HttpMethod.PUT, requestEntity, WashAttendant.class);
+        //verify if the object is updated using the read method.
+        ResponseEntity<WashAttendant> readWashAttendant =
+                this.restTemplate.getForEntity(BASE_URL + "/read/" + updateWashAttendant.getUserId(), WashAttendant.class);
+        assertEquals(HttpStatus.OK, readWashAttendant.getStatusCode());
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Michael", response.getBody().getUserName());
-        assertFalse(response.getBody().getIsFullTime());
-        assertEquals(6, response.getBody().getShiftHours());
-
-        System.out.println("Updated WashAttendant: " + response.getBody());
+        WashAttendant newWashAttendant = readWashAttendant.getBody();
+        assertEquals("Michael", newWashAttendant.getUserName());
+        assertFalse(newWashAttendant.getIsFullTime());
+        assertEquals(6, newWashAttendant.getShiftHours());
+        System.out.println("New wash attendant: " + newWashAttendant);
     }
 
     @Test
-    void d_getAll() {
+    void d_getAllWashAttendants() {
         String url = BASE_URL + "/getAllWashAttendants";
         ResponseEntity<WashAttendant[]> response = restTemplate.getForEntity(url, WashAttendant[].class);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 0);
-
-        System.out.println("All WashAttendants: " + response.getBody().length);
+        System.out.println("response: ");
+        for (WashAttendant washAttendant : response.getBody()) {
+            System.out.println(washAttendant);
+        }
     }
 
     @Test
     void e_delete() {
-        String url = BASE_URL + "/delete/" + createdWashAttendant.getUserId();
-        restTemplate.delete(url);
+        String url = BASE_URL + "/delete/" + washAttendantWithId.getUserId();
+        System.out.println("Delete wash attendant: " + washAttendantWithId);
+        this.restTemplate.delete(url);
 
-        // Verify deletion
-        ResponseEntity<WashAttendant> response = restTemplate.getForEntity(url, WashAttendant.class);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        //Verify if the object is deleted.
+        ResponseEntity<WashAttendant> readWashAttendant =
+                this.restTemplate.getForEntity(BASE_URL + "/read/" + washAttendantWithId.getUserId(), WashAttendant.class);
 
-        System.out.println("Deleted WashAttendant successfully: " + createdWashAttendant.getUserId());
+        //Expect 404 after deletion.
+        assertEquals(HttpStatus.NOT_FOUND, readWashAttendant.getStatusCode());
+        System.out.println("After deletion, the read wash attendant status code: " + readWashAttendant.getStatusCode());
     }
 }

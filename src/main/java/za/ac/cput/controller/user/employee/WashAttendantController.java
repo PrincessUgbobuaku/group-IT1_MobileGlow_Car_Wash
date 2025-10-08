@@ -7,7 +7,7 @@ import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.service.user.employee.IWashAttendantService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/wash-attendants")
 public class WashAttendantController {
@@ -34,17 +34,14 @@ public class WashAttendantController {
         return ResponseEntity.ok(washAttendant);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<WashAttendant> update(@RequestBody WashAttendant washAttendant) {
-        if (washAttendant.getUserId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        WashAttendant updatedWashAttendant = washAttendantService.update(washAttendant);
-        if (updatedWashAttendant == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedWashAttendant);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<WashAttendant> update(@PathVariable Long id, @RequestBody WashAttendant washAttendant) {
+        washAttendant = new WashAttendant.Builder()
+                .copy(washAttendant)
+                .setUserId(id)
+                .build();
+        WashAttendant updated = washAttendantService.update(washAttendant);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")
@@ -77,7 +74,7 @@ public class WashAttendantController {
         }
     }
 
-    @GetMapping("/getAllWashAttendants")
+    @GetMapping("getAllWashAttendants")
     public ResponseEntity<List<WashAttendant>> getAll() {
         List<WashAttendant> washAttendants = washAttendantService.getAllWashAttendants();
         return ResponseEntity.ok(washAttendants);
