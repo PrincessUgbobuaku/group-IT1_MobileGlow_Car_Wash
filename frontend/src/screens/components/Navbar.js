@@ -9,6 +9,16 @@ const Navbar = () => {
         setIsOpen(!isOpen);
     };
 
+    const handleAboutUs = () => {
+        // Navigate to About Us page
+        window.location.href = "/AboutUs";
+    };
+
+    const handleContactUs = () => {
+        // Navigate to Contact Us page
+        window.location.href = "/ContactUs";
+    };
+
     return (
         <nav className="navbar">
             <div className="logo">Mobile Car Wash</div>
@@ -23,8 +33,8 @@ const Navbar = () => {
                     </button>
                     {isOpen && (
                         <ul className="dropdown-menu">
-                            <li><a href="/about">About Us</a></li>
-                            <li><a href="/contact">Contact Us</a></li>
+                            <li><button onClick={handleAboutUs}>About Us</button></li>
+                            <li><button onClick={handleContactUs}>Contact Us</button></li>
                         </ul>
                     )}
                 </div>

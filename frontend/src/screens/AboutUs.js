@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AboutUs.css';
-import './components/Footer';
-import './components/NavBar';
+// import './components/Footer';
+// import './components/NavBar';
 
 const AboutUs = () => {
     const [visibleSections, setVisibleSections] = useState({});
