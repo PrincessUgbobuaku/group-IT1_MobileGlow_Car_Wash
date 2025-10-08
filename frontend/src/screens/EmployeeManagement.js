@@ -27,7 +27,6 @@ const EmployeeManagement = () => {
     const [activeTab, setActiveTab] = useState('all');
     const [loading, setLoading] = useState(true);
     const [formLoading, setFormLoading] = useState(false);
-    const [deletingId, setDeletingId] = useState(null); // Track which employee is being deleted
 
     useEffect(() => {
         fetchEmployees();
@@ -56,6 +55,23 @@ const EmployeeManagement = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Helper function to check for duplicate employee names
+    const isDuplicateEmployee = (userName, userSurname, currentEmployeeId = null) => {
+        const normalizedFirstName = userName.toLowerCase().trim();
+        const normalizedLastName = userSurname.toLowerCase().trim();
+
+        return employees.some(emp => {
+            // Skip the current employee when editing
+            if (currentEmployeeId && emp.userId === currentEmployeeId) {
+                return false;
+            }
+            return (
+                emp.userName.toLowerCase().trim() === normalizedFirstName &&
+                emp.userSurname.toLowerCase().trim() === normalizedLastName
+            );
+        });
     };
 
     const handleSearch = (e) => {
@@ -89,41 +105,16 @@ const EmployeeManagement = () => {
         setShowForm(true);
     };
 
-    const handleDelete = async (id, type) => {
-        if (!window.confirm('Are you sure you want to delete this employee?')) {
-            return;
-        }
-
-        setDeletingId(id); // Start loading for this specific item
-        try {
-            switch (type) {
-                case EMPLOYEE_TYPES.MANAGER:
-                    await employeeServiceSimple.deleteManager(id);
-                    break;
-                case EMPLOYEE_TYPES.ACCOUNTANT:
-                    await employeeServiceSimple.deleteAccountant(id);
-                    break;
-                case EMPLOYEE_TYPES.WASH_ATTENDANT:
-                    await employeeServiceSimple.deleteWashAttendant(id);
-                    break;
-                default:
-                    throw new Error('Unknown employee type');
-            }
-
-            setEmployees(employees.filter(emp => emp.userId !== id));
-            setFilteredEmployees(filteredEmployees.filter(emp => emp.userId !== id));
-            toast.success('Employee deleted successfully');
-        } catch (error) {
-            console.error('Delete error:', error);
-            toast.error('Failed to delete employee');
-        } finally {
-            setDeletingId(null); // Stop loading
-        }
-    };
-
     const handleSubmit = async (formData) => {
         try {
             setFormLoading(true);
+
+            // Check for duplicate employee names (excluding current employee when editing)
+            const currentEmployeeId = selectedEmployee ? selectedEmployee.userId : null;
+            if (isDuplicateEmployee(formData.userName, formData.userSurname, currentEmployeeId)) {
+                toast.error(`An employee named "${formData.userName} ${formData.userSurname}" already exists. Please use a different name.`);
+                return;
+            }
 
             // 1. Prepare the base data structure
             const baseData = {
@@ -136,7 +127,7 @@ const EmployeeManagement = () => {
                 roleDescription: 'EMPLOYEE'
             };
 
-            // 2. If we are updating, include the userId IMMEDIATELY
+            // 2. Include the userId for updates
             if (selectedEmployee) {
                 baseData.userId = selectedEmployee.userId;
             }
@@ -144,7 +135,7 @@ const EmployeeManagement = () => {
             let apiData = { ...baseData };
             let serviceCall;
 
-            // 3. Add type-specific fields to the baseData (which now has the userId if it's an update)
+            // 3. Add type-specific fields
             switch (formData.type) {
                 case EMPLOYEE_TYPES.MANAGER:
                     apiData = {
@@ -153,9 +144,7 @@ const EmployeeManagement = () => {
                         department: formData.department,
                         position: formData.position
                     };
-                    serviceCall = selectedEmployee ?
-                        employeeServiceSimple.updateManager(apiData) :
-                        employeeServiceSimple.createManager(apiData);
+                    serviceCall = employeeServiceSimple.updateManager(apiData);
                     break;
 
                 case EMPLOYEE_TYPES.ACCOUNTANT:
@@ -165,9 +154,7 @@ const EmployeeManagement = () => {
                         hasTaxFillingAuthority: formData.hasTaxFillingAuthority,
                         certificationNumber: formData.certificationNumber
                     };
-                    serviceCall = selectedEmployee ?
-                        employeeServiceSimple.updateAccountant(apiData) :
-                        employeeServiceSimple.createAccountant(apiData);
+                    serviceCall = employeeServiceSimple.updateAccountant(apiData);
                     break;
 
                 case EMPLOYEE_TYPES.WASH_ATTENDANT:
@@ -178,9 +165,7 @@ const EmployeeManagement = () => {
                         yearsOfExperience: formData.yearsOfExperience,
                         specialization: formData.specialization
                     };
-                    serviceCall = selectedEmployee ?
-                        employeeServiceSimple.updateWashAttendant(apiData) :
-                        employeeServiceSimple.createWashAttendant(apiData);
+                    serviceCall = employeeServiceSimple.updateWashAttendant(apiData);
                     break;
 
                 default:
@@ -189,14 +174,14 @@ const EmployeeManagement = () => {
 
             // 4. Make the API call
             await serviceCall;
-            toast.success(`Employee ${selectedEmployee ? 'updated' : 'created'} successfully`);
+            toast.success('Employee updated successfully');
             await fetchEmployees(); // Refresh the list
             setShowForm(false);
             setSelectedEmployee(null);
 
         } catch (error) {
             console.error('Submit error:', error);
-            toast.error(selectedEmployee ? 'Failed to update employee' : 'Failed to create employee');
+            toast.error('Failed to update employee');
         } finally {
             setFormLoading(false);
         }
@@ -229,51 +214,7 @@ const EmployeeManagement = () => {
             <div className="em-header">
                 <div className="em-header-content">
                     <h1>Employee Management</h1>
-                    <p>Manage your team members and their roles</p>
-                </div>
-                <button
-                    className="em-primary-btn"
-                    onClick={() => setShowForm(true)}
-                    disabled={formLoading}
-                >
-                    {formLoading ? '⏳' : '+'} Add Employee
-                </button>
-            </div>
-
-            <div className="em-controls">
-                <div className="em-search">
-                    <input
-                        type="text"
-                        placeholder="Search employees..."
-                        value={searchTerm}
-                        onChange={handleSearch}
-                        className="em-search-input"
-                        disabled={formLoading}
-                    />
-                </div>
-
-                <div className="em-filters">
-                    <button
-                        className={`em-filter-btn ${activeTab === 'all' ? 'active' : ''}`}
-                        onClick={() => filterByStatus('all')}
-                        disabled={formLoading}
-                    >
-                        All Employees
-                    </button>
-                    <button
-                        className={`em-filter-btn ${activeTab === 'active' ? 'active' : ''}`}
-                        onClick={() => filterByStatus('active')}
-                        disabled={formLoading}
-                    >
-                        Active
-                    </button>
-                    <button
-                        className={`em-filter-btn ${activeTab === 'inactive' ? 'active' : ''}`}
-                        onClick={() => filterByStatus('inactive')}
-                        disabled={formLoading}
-                    >
-                        Inactive
-                    </button>
+                    <p>View and manage your team members</p>
                 </div>
             </div>
 
@@ -300,6 +241,39 @@ const EmployeeManagement = () => {
                 </div>
             </div>
 
+            <div className="em-controls">
+                <div className="em-search">
+                    <input
+                        type="text"
+                        placeholder="Search employees by name, email, or position..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        className="em-search-input"
+                    />
+                </div>
+
+                <div className="em-filters">
+                    <button
+                        className={`em-filter-btn ${activeTab === 'all' ? 'active' : ''}`}
+                        onClick={() => filterByStatus('all')}
+                    >
+                        All Employees
+                    </button>
+                    <button
+                        className={`em-filter-btn ${activeTab === 'active' ? 'active' : ''}`}
+                        onClick={() => filterByStatus('active')}
+                    >
+                        Active
+                    </button>
+                    <button
+                        className={`em-filter-btn ${activeTab === 'inactive' ? 'active' : ''}`}
+                        onClick={() => filterByStatus('inactive')}
+                    >
+                        Inactive
+                    </button>
+                </div>
+            </div>
+
             <div className="em-content">
                 {showForm ? (
                     <EmployeeForm
@@ -307,16 +281,13 @@ const EmployeeManagement = () => {
                         onSubmit={handleSubmit}
                         onCancel={handleCancel}
                         loading={formLoading}
+                        isDuplicateEmployee={isDuplicateEmployee}
                     />
                 ) : (
                     <EmployeeTable
                         employees={filteredEmployees}
                         onEdit={handleEdit}
-                        onDelete={handleDelete}
                         onRefresh={fetchEmployees}
-                        onAddNew={() => setShowForm(true)}
-                        loading={formLoading}
-                        deletingId={deletingId}
                     />
                 )}
             </div>
@@ -327,7 +298,7 @@ const EmployeeManagement = () => {
 };
 
 // Employee Form Component
-const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
+const EmployeeForm = ({ employee, onSubmit, onCancel, loading, isDuplicateEmployee }) => {
     const [formData, setFormData] = useState({
         userName: '',
         userSurname: '',
@@ -355,6 +326,8 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
         yearsOfExperience: '',
         specialization: ''
     });
+
+    const [nameError, setNameError] = useState('');
 
     useEffect(() => {
         if (employee) {
@@ -405,10 +378,35 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
         } else {
             setFormData(prev => ({ ...prev, [field]: value }));
         }
+
+        // Clear name error when user starts typing in name fields
+        if ((field === 'userName' || field === 'userSurname') && nameError) {
+            setNameError('');
+        }
+    };
+
+    const validateName = () => {
+        if (!formData.userName.trim() || !formData.userSurname.trim()) {
+            return true; // Let required field validation handle empty names
+        }
+
+        const currentEmployeeId = employee ? employee.userId : null;
+        if (isDuplicateEmployee(formData.userName, formData.userSurname, currentEmployeeId)) {
+            setNameError(`An employee named "${formData.userName} ${formData.userSurname}" already exists.`);
+            return false;
+        }
+
+        setNameError('');
+        return true;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validate names for duplicates
+        if (!validateName()) {
+            return;
+        }
 
         const requiredFields = ['userName', 'userSurname', 'login.emailAddress', 'contact.phoneNumber'];
         const missingFields = requiredFields.filter(field => {
@@ -592,13 +590,13 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
         <div className="em-form-overlay">
             <div className="em-form-container scrollable-form">
                 <div className="em-form-header">
-                    <h2>{employee ? 'Edit Employee' : 'Add New Employee'}</h2>
+                    <h2>Edit Employee</h2>
                     <button
                         className="em-close-btn"
                         onClick={onCancel}
                         disabled={loading}
                     >
-                        ×
+                        Close
                     </button>
                 </div>
 
@@ -610,7 +608,7 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                                 value={formData.type}
                                 onChange={(e) => handleInputChange('type', e.target.value)}
                                 className={!formData.type ? 'error' : ''}
-                                disabled={!!employee || loading}
+                                disabled={loading}
                                 required
                             >
                                 <option value={EMPLOYEE_TYPES.MANAGER}>Manager</option>
@@ -621,7 +619,6 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                     </div>
 
                     <div className="section-header">
-                        <span className="section-icon">👤</span>
                         <h3>Personal Information</h3>
                     </div>
 
@@ -632,10 +629,11 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                                 type="text"
                                 value={formData.userName}
                                 onChange={(e) => handleInputChange('userName', e.target.value)}
-                                className={!formData.userName ? 'error' : ''}
+                                className={!formData.userName || nameError ? 'error' : ''}
                                 placeholder="Enter first name"
                                 required
                                 disabled={loading}
+                                onBlur={validateName}
                             />
                         </div>
                         <div className="form-group">
@@ -644,16 +642,22 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                                 type="text"
                                 value={formData.userSurname}
                                 onChange={(e) => handleInputChange('userSurname', e.target.value)}
-                                className={!formData.userSurname ? 'error' : ''}
+                                className={!formData.userSurname || nameError ? 'error' : ''}
                                 placeholder="Enter last name"
                                 required
                                 disabled={loading}
+                                onBlur={validateName}
                             />
                         </div>
                     </div>
 
+                    {nameError && (
+                        <div className="form-error-message">
+                            {nameError}
+                        </div>
+                    )}
+
                     <div className="section-header">
-                        <span className="section-icon">📞</span>
                         <h3>Contact Information</h3>
                     </div>
 
@@ -685,7 +689,6 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                     </div>
 
                     <div className="section-header">
-                        <span className="section-icon">🏠</span>
                         <h3>Address Information</h3>
                     </div>
 
@@ -735,7 +738,6 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                     {renderTypeSpecificFields()}
 
                     <div className="section-header">
-                        <span className="section-icon">⚙️</span>
                         <h3>Employment Status</h3>
                     </div>
 
@@ -756,10 +758,9 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
                         <button
                             type="submit"
                             className="em-primary-btn"
-                            disabled={loading}
+                            disabled={loading || nameError}
                         >
-                            {loading ? '⏳ ' : ''}
-                            {employee ? 'Update' : 'Create'} Employee
+                            {loading ? 'Updating...' : 'Update Employee'}
                         </button>
                         <button
                             type="button"
@@ -776,8 +777,8 @@ const EmployeeForm = ({ employee, onSubmit, onCancel, loading }) => {
     );
 };
 
-// Employee Table Component
-const EmployeeTable = ({ employees, onEdit, onDelete, onRefresh, onAddNew, loading, deletingId }) => {
+// Employee Table Component (unchanged)
+const EmployeeTable = ({ employees, onEdit, onRefresh }) => {
     return (
         <div className="em-table-container">
             <div className="em-table-header">
@@ -786,90 +787,103 @@ const EmployeeTable = ({ employees, onEdit, onDelete, onRefresh, onAddNew, loadi
                     <button
                         className="em-secondary-btn"
                         onClick={onRefresh}
-                        disabled={loading}
                     >
-                        🔄 Refresh
-                    </button>
-                    <button
-                        className="em-primary-btn"
-                        onClick={onAddNew}
-                        disabled={loading}
-                    >
-                        ➕ Add Employee
+                        Refresh List
                     </button>
                 </div>
             </div>
 
-            <div className="em-employees-grid">
-                {employees.map((employee) => (
-                    <div key={`${employee.type}-${employee.userId}`} className="em-employee-card">
-                        <div className="em-employee-header">
-                            <div className="em-employee-avatar">
-                                {employee.userName?.charAt(0)}{employee.userSurname?.charAt(0)}
-                            </div>
-                            <div className="em-employee-status">
-                                <span className={`status-dot ${employee.isActive ? 'active' : 'inactive'}`}></span>
-                                {employee.isActive ? 'Active' : 'Inactive'}
-                            </div>
-                        </div>
-
-                        <div className="em-employee-info">
-                            <h3>{employee.userName} {employee.userSurname}</h3>
-                            <p className="em-employee-type">{employee.type}</p>
-                            <p className="em-employee-email">{employee.login?.emailAddress}</p>
-                            <p className="em-employee-phone">{employee.contact?.phoneNumber}</p>
-                            <p className="em-employee-position">{employee.position}</p>
-
-                            {employee.type === EMPLOYEE_TYPES.ACCOUNTANT && (
-                                <p className="em-employee-detail">
-                                    📊 {employee.employeeType} • {employee.hasTaxFillingAuthority ? 'Tax Authority' : 'No Tax Authority'}
-                                </p>
-                            )}
-                            {employee.type === EMPLOYEE_TYPES.WASH_ATTENDANT && (
-                                <p className="em-employee-detail">
-                                    ⏰ {employee.shift} • ZAR {employee.hourlyRate}/hr
-                                </p>
-                            )}
-                            {employee.type === EMPLOYEE_TYPES.MANAGER && employee.hireDate && (
-                                <p className="em-employee-date">
-                                    📅 Hired: {new Date(employee.hireDate).toLocaleDateString()}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="em-employee-actions">
-                            <button
-                                className="em-action-btn edit"
-                                onClick={() => onEdit(employee)}
-                                title="Edit"
-                                disabled={loading}
-                            >
-                                ✏️
-                            </button>
-                            <button
-                                className="em-action-btn delete"
-                                onClick={() => onDelete(employee.userId, employee.type)}
-                                title="Delete"
-                                disabled={loading || deletingId === employee.userId}
-                            >
-                                {deletingId === employee.userId ? '⏳' : '🗑️'}
-                            </button>
-                        </div>
-                    </div>
-                ))}
+            <div className="table-wrapper">
+                <table className="em-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Position/Details</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {employees.map((employee) => (
+                        <tr key={`${employee.type}-${employee.userId}`}>
+                            <td>
+                                <div className="employee-name">
+                                    <strong>{employee.userName} {employee.userSurname}</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <span className="employee-type">{employee.type}</span>
+                            </td>
+                            <td>{employee.login?.emailAddress}</td>
+                            <td>{employee.contact?.phoneNumber}</td>
+                            <td>
+                                {employee.type === 'Manager' && (
+                                    <div>
+                                        <div>{employee.position}</div>
+                                        <div className="employee-detail">{employee.department}</div>
+                                        {employee.hireDate && (
+                                            <div className="employee-date">
+                                                Hired: {new Date(employee.hireDate).toLocaleDateString()}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                {employee.type === 'Accountant' && (
+                                    <div>
+                                        <div>{employee.employeeType}</div>
+                                        <div className="employee-detail">
+                                            {employee.hasTaxFillingAuthority ? 'Tax Authority' : 'No Tax Authority'}
+                                        </div>
+                                        <div className="employee-detail">
+                                            Cert: {employee.certificationNumber}
+                                        </div>
+                                    </div>
+                                )}
+                                {employee.type === 'Wash Attendant' && (
+                                    <div>
+                                        <div>Shift: {employee.shift}</div>
+                                        <div className="employee-detail">
+                                            Rate: ZAR {employee.hourlyRate}/hr
+                                        </div>
+                                        {employee.yearsOfExperience && (
+                                            <div className="employee-detail">
+                                                Exp: {employee.yearsOfExperience} years
+                                            </div>
+                                        )}
+                                        {employee.specialization && (
+                                            <div className="employee-detail">
+                                                Specialization: {employee.specialization}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </td>
+                            <td>
+                                    <span className={`status-badge ${employee.isActive ? 'active' : 'inactive'}`}>
+                                        {employee.isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                            </td>
+                            <td>
+                                <button
+                                    className="edit-btn"
+                                    onClick={() => onEdit(employee)}
+                                    title="Edit Employee"
+                                >
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
 
                 {employees.length === 0 && (
                     <div className="em-empty-state">
-                        <div className="em-empty-icon">👥</div>
                         <h3>No employees found</h3>
-                        <p>Try adjusting your search or add a new employee</p>
-                        <button
-                            className="em-primary-btn"
-                            onClick={onAddNew}
-                            disabled={loading}
-                        >
-                            Add First Employee
-                        </button>
+                        <p>Try adjusting your search criteria</p>
                     </div>
                 )}
             </div>
