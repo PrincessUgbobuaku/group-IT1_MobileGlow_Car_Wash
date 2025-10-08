@@ -17,9 +17,9 @@ const ContactUs = () => {
     const navigate = useNavigate();
 
     const EMAILJS_CONFIG = {
-        SERVICE_ID: 'service_t8xcg8k', // Your service ID
-        TEMPLATE_ID: 'template_8s0ryoj', // You need to get this from EmailJS
-        USER_ID: 'sqpo7Bji9gBBnZBTW' // You need to get this from EmailJStemplate_8s0ryoj
+        SERVICE_ID: 'service_t8xcg8k', 
+        TEMPLATE_ID: 'template_8s0ryoj', 
+        USER_ID: 'sqpo7Bji9gBBnZBTW' 
     };
 
     useEffect(() => {
