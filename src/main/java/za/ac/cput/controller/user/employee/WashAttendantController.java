@@ -7,7 +7,7 @@ import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.service.user.employee.IWashAttendantService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/wash-attendants")
 public class WashAttendantController {
@@ -77,7 +77,7 @@ public class WashAttendantController {
         }
     }
 
-    @GetMapping("/getAllWashAttendants")
+    @GetMapping("getAllWashAttendants")
     public ResponseEntity<List<WashAttendant>> getAll() {
         List<WashAttendant> washAttendants = washAttendantService.getAllWashAttendants();
         return ResponseEntity.ok(washAttendants);
