@@ -23,8 +23,8 @@ const NavbarCustomer = () => {
             <div className="logo">Mobile Car Wash</div>
 
             <div className="nav-links">
-                <a href="/about" className="nav-btn">About Us</a>
-                <a href="/Contact Us" className="nav-btn">Contact Us</a>
+                <a href="/aboutus" className="nav-btn">About Us</a>
+                <a href="/ContactUs" className="nav-btn">Contact Us</a>
 
                 <div className="dropdown">
                     <button className="menu-btn" onClick={toggleMenu}>
