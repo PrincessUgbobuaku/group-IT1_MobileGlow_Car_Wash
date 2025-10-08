@@ -1,10 +1,11 @@
-package za.ac.cput.service.user.employee.impl;
+package za.ac.cput.service.user.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.user.employee.Accountant;
 //import za.ac.cput.repository.user.employee.impl.IAccountantRepository;
 import za.ac.cput.repository.user.employee.IAccountantRepository;
+import za.ac.cput.service.user.UserService;
 import za.ac.cput.service.user.employee.IAccountantService;
 
 import java.util.List;
@@ -15,13 +16,17 @@ public class AccountantService implements IAccountantService {
     private final IAccountantRepository accountantRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public AccountantService(IAccountantRepository accountantRepository) {
         this.accountantRepository = accountantRepository;
     }
 
     @Override
     public Accountant create(Accountant accountant) {
-        return accountantRepository.save(accountant);
+        Accountant encryptAccountant = userService.encryptUserPassword(accountant);
+        return accountantRepository.save(encryptAccountant);
     }
 
     @Override

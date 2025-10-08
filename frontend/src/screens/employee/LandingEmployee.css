@@ -1,0 +1,119 @@
+/* LandingEmployee.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;500;600&display=swap');
+
+.employee-landing-page {
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+/* Hero */
+.employee-hero-section {
+    background: linear-gradient(135deg, #B1D4E0 0%, #2E8BC0 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.employee-hero-heading {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.5rem;
+    color: #0C2D48;
+    margin-bottom: 1rem;
+}
+
+.employee-hero-subheading {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    color: white;
+}
+
+/* Actions Section */
+.employee-actions-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.employee-section-heading {
+    font-size: 2rem;
+    color: #0C2D48;
+    text-align: center;
+    margin-bottom: 3rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.employee-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+.employee-action-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.employee-action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.employee-action-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #145DA0;
+}
+
+.employee-action-card h3 {
+    font-family: 'Inter', sans-serif;
+    color: #0C2D48;
+    margin-bottom: 0.5rem;
+}
+
+.employee-action-card p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Footer */
+.employee-footer {
+    background-color: #0C2D48;
+    color: #B1D4E0;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}
+
+/*.feature-icon img {*/
+/*    width: 60px;   !* adjust as needed *!*/
+/*    height: 60px;*/
+/*    object-fit: contain;*/
+/*}*/
+
+/*.feature-icon {*/
+/*    font-size: 3.5rem; !* increased size *!*/
+/*    margin-bottom: 1rem;*/
+/*    height: 80px;      !* taller for larger emojis *!*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*}*/
+
+
+.feature-icon img {
+    width: 60px;            /* take full width of the card */
+    max-width: 400px;       /* limit size so it’s not too big */
+    height: 60px;           /* keeps the image ratio */
+    border-radius: 12px;    /* rounded corners */
+    margin: 1rem auto;      /* center + spacing */
+    display: block;
+}
+

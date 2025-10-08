@@ -1,468 +1,418 @@
 import React, { useState, useEffect } from 'react';
-import { profileService } from '../services/profileService';
-import LoadingSpinner from '../components/LoadingSpinner';
+import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
-    const [customers, setCustomers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [showForm, setShowForm] = useState(false);
-    const [editingCustomer, setEditingCustomer] = useState(null);
-    const [formData, setFormData] = useState({
-        userName: '',
-        userSurname: '',
-        isActive: true,
-        roleDescription: 'CLIENT',
-        customerDOB: '',
-        login: {
-            loginID: '',
-            username: '',
-            password: ''
-        },
-        address: {
-            addressID: '',
-            streetNumber: '',
-            streetName: '',
-            suburb: '',
-            city: '',
-            postalCode: ''
-        },
-        contact: {
-            contactID: '',
-            phoneNumber: '',
-            emailAddress: ''
-        }
-    });
-
-    const roleDescriptions = ['CLIENT', 'EMPLOYEE'];
-
-    useEffect(() => {
-        fetchCustomers();
-    }, []);
-
-    const fetchCustomers = async () => {
-        try {
-            setLoading(true);
-            const data = await profileService.getAllCustomers();
-            setCustomers(data);
-            setError(null);
-        } catch (err) {
-            setError('Failed to fetch customer accounts');
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-
-        if (name.includes('.')) {
-            const [section, field] = name.split('.');
-            setFormData(prev => ({
-                ...prev,
-                [section]: {
-                    ...prev[section],
-                    [field]: value
-                }
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: name === 'isActive' ? value === 'true' : value
-            }));
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (editingCustomer) {
-                await profileService.updateCustomer(editingCustomer.userId, formData);
-            } else {
-                await profileService.createCustomer(formData);
-            }
-            fetchCustomers();
-            resetForm();
-        } catch (err) {
-            setError('Failed to save customer account');
-            console.error(err);
-        }
-    };
-
-    const handleEdit = (customer) => {
-        setEditingCustomer(customer);
-        setFormData({
-            userName: customer.userName || '',
-            userSurname: customer.userSurname || '',
-            isActive: customer.isActive !== undefined ? customer.isActive : true,
-            roleDescription: customer.roleDescription || 'CLIENT',
-            customerDOB: customer.customerDOB || '',
-            login: {
-                loginID: customer.login?.loginID || '',
-                username: customer.login?.username || '',
-                password: customer.login?.password || ''
-            },
-            address: {
-                addressID: customer.address?.addressID || '',
-                streetNumber: customer.address?.streetNumber || '',
-                streetName: customer.address?.streetName || '',
-                suburb: customer.address?.suburb || '',
-                city: customer.address?.city || '',
-                postalCode: customer.address?.postalCode || ''
-            },
-            contact: {
-                contactID: customer.contact?.contactID || '',
-                phoneNumber: customer.contact?.phoneNumber || '',
-                emailAddress: customer.contact?.emailAddress || ''
-            }
-        });
-        setShowForm(true);
-    };
-
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this customer account? This action cannot be undone.')) {
-            try {
-                await profileService.deleteCustomer(id);
-                fetchCustomers();
-            } catch (err) {
-                setError('Failed to delete customer account');
-                console.error(err);
-            }
-        }
-    };
-
-    const resetForm = () => {
-        setFormData({
-            userName: '',
-            userSurname: '',
-            isActive: true,
-            roleDescription: 'CLIENT',
-            customerDOB: '',
-            login: {
-                loginID: '',
-                username: '',
-                password: ''
-            },
-            address: {
-                addressID: '',
-                streetNumber: '',
-                streetName: '',
-                suburb: '',
-                city: '',
-                postalCode: ''
-            },
-            contact: {
-                contactID: '',
-                phoneNumber: '',
-                emailAddress: ''
-            }
-        });
-        setEditingCustomer(null);
-        setShowForm(false);
-    };
-
-    if (loading) {
-        return <LoadingSpinner text="Loading customer accounts..." />;
+  const initialManager = {
+    userName: '',
+    userSurname: '',
+    isActive: false,
+    roleDescription: '',
+    employeeType: '',
+    hireDate: '',
+    contact: {
+      phoneNumber: ''
+    },
+    address: {
+      streetNumber: '',
+      streetName: '',
+      city: '',
+      postalCode: ''
+    },
+    login: {
+      emailAddress: '',
+      password: ''
     }
+  };
 
+  const [manager, setManager] = useState(initialManager);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [messageType, setMessageType] = useState('error');
+
+  // Save original state for cancel
+  const [originalManager, setOriginalManager] = useState(initialManager);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userEmail = localStorage.getItem('userEmail');
+      const userRole = localStorage.getItem('userRoleDescription');
+      if (!userEmail) {
+        setStatusMessage('No user logged in');
+        setMessageType('error');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        let users = [];
+        if (userRole === 'CLIENT') {
+          const response = await fetch('http://localhost:8080/mobileglow/api/customers');
+          if (response.ok) {
+            users = await response.json();
+          } else {
+            setStatusMessage('Failed to fetch user data');
+            setMessageType('error');
+            return;
+          }
+        } else {
+          // For employees, fetch from all employee endpoints
+          const endpoints = [
+            'http://localhost:8080/mobileglow/Manager/getAllManagers',
+            'http://localhost:8080/mobileglow/Accountant/getAllAccountants',
+            'http://localhost:8080/mobileglow/wash-attendants/getAllWashAttendants'
+          ];
+          for (const endpoint of endpoints) {
+            try {
+              const response = await fetch(endpoint);
+              if (response.ok) {
+                const data = await response.json();
+                users = users.concat(data);
+              }
+            } catch (error) {
+              console.error('Error fetching from', endpoint, error);
+            }
+          }
+        }
+        const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
+        if (loggedInUser) {
+          setManager(loggedInUser);
+          setOriginalManager(loggedInUser);
+        } else {
+          setStatusMessage('User data not found');
+          setMessageType('error');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setStatusMessage('Something went wrong while fetching data');
+        setMessageType('error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setManager({ ...manager, [name]: value });
+  };
+
+  const handleContactChange = (e) => {
+    const { name, value } = e.target;
+    setManager({
+      ...manager,
+      contact: {
+        ...manager.contact,
+        [name]: value
+      }
+    });
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setManager({
+      ...manager,
+      address: {
+        ...manager.address,
+        [name]: value
+      }
+    });
+  };
+
+  const handleLoginChange = (e) => {
+    const { name, value } = e.target;
+    setManager({
+      ...manager,
+      login: {
+        ...manager.login,
+        [name]: value
+      }
+    });
+  };
+
+  const handleEdit = () => {
+    setOriginalManager(manager); // Save current data for cancel
+    setIsEditing(true);
+  };
+
+  const handleUpdate = async () => {
+    const userRole = localStorage.getItem('userRoleDescription');
+    try {
+      let endpoint;
+      if (userRole === 'CLIENT') {
+        endpoint = `http://localhost:8080/mobileglow/api/customers/${manager.userId}`;
+      } else {
+        if (manager.employeeType === 'ACCOUNTANT') {
+          endpoint = 'http://localhost:8080/mobileglow/Accountant/update';
+        } else if (manager.employeeType === 'WashAttendant') {
+          endpoint = 'http://localhost:8080/mobileglow/wash-attendants/update';
+        } else {
+          endpoint = 'http://localhost:8080/mobileglow/Manager/update';
+        }
+      }
+      const token = localStorage.getItem('token');
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify(manager)
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setManager(updatedUser);
+        setOriginalManager(updatedUser);
+        setIsEditing(false);
+        setStatusMessage('Profile updated successfully!');
+        setMessageType('success');
+        setTimeout(() => { setStatusMessage(''); setMessageType('error'); }, 5000);
+      } else {
+        setStatusMessage('Failed to update profile');
+        setMessageType('error');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setStatusMessage('Something went wrong while updating');
+      setMessageType('error');
+    }
+  };
+
+  const handleCancel = () => {
+    setManager(originalManager);
+    setIsEditing(false);
+  };
+
+  const handleDelete = () => setShowDeleteConfirm(true);
+
+  const confirmDelete = async () => {
+    const userRole = localStorage.getItem('userRoleDescription');
+    try {
+      let endpoint;
+      if (userRole === 'CLIENT') {
+        endpoint = `http://localhost:8080/mobileglow/api/customers/${manager.userId}`;
+      } else {
+        if (manager.employeeType === 'ACCOUNTANT') {
+          endpoint = `http://localhost:8080/mobileglow/Accountant/delete/${manager.userId}`;
+        } else if (manager.employeeType === 'WashAttendant') {
+          endpoint = `http://localhost:8080/mobileglow/wash-attendants/delete/${manager.userId}`;
+        } else {
+          endpoint = `http://localhost:8080/mobileglow/Manager/delete/${manager.userId}`;
+        }
+      }
+      const token = localStorage.getItem('token');
+      const response = await fetch(endpoint, {
+        method: 'DELETE',
+        headers: {
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        }
+      });
+
+      if (response.ok) {
+        setStatusMessage('Profile deleted successfully!');
+        setMessageType('success');
+        setTimeout(() => { setStatusMessage(''); setMessageType('error'); }, 5000);
+        setTimeout(() => (window.location.href = '/login'), 2000);
+      } else {
+        setStatusMessage('Failed to delete profile');
+        setMessageType('error');
+      }
+    } catch (error) {
+      console.error('Error deleting profile:', error);
+      setStatusMessage('Something went wrong while deleting');
+      setMessageType('error');
+    }
+    setShowDeleteConfirm(false);
+  };
+
+  const cancelDelete = () => setShowDeleteConfirm(false);
+
+  const userRole = localStorage.getItem('userRoleDescription');
+  const navigate = useNavigate();
+
+  if (loading) {
     return (
-        <div className="profile-page">
-            <div className="page-header">
-                <h1>Customer Account Management</h1>
-                <button
-                    className="btn btn-primary"
-                    onClick={() => setShowForm(true)}
-                >
-                    Create New Account
-                </button>
-            </div>
-
-            {error && (
-                <div className="error-message">
-                    {error}
-                    <button onClick={() => setError(null)}>×</button>
-                </div>
-            )}
-
-            {showForm && (
-                <div className="form-container">
-                    <h2>{editingCustomer ? 'Edit Customer Account' : 'Create New Customer Account'}</h2>
-                    <form onSubmit={handleSubmit} className="profile-form">
-                        <div className="form-section">
-                            <h3>Basic Information</h3>
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="userName">First Name *</label>
-                                    <input
-                                        type="text"
-                                        id="userName"
-                                        name="userName"
-                                        value={formData.userName}
-                                        onChange={handleInputChange}
-                                        required
-                                        placeholder="Enter first name"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="userSurname">Last Name *</label>
-                                    <input
-                                        type="text"
-                                        id="userSurname"
-                                        name="userSurname"
-                                        value={formData.userSurname}
-                                        onChange={handleInputChange}
-                                        required
-                                        placeholder="Enter last name"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="customerDOB">Date of Birth</label>
-                                    <input
-                                        type="date"
-                                        id="customerDOB"
-                                        name="customerDOB"
-                                        value={formData.customerDOB}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="roleDescription">Role</label>
-                                    <select
-                                        id="roleDescription"
-                                        name="roleDescription"
-                                        value={formData.roleDescription}
-                                        onChange={handleInputChange}
-                                    >
-                                        {roleDescriptions.map(role => (
-                                            <option key={role} value={role}>{role}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="isActive">Account Status</label>
-                                <select
-                                    id="isActive"
-                                    name="isActive"
-                                    value={formData.isActive.toString()}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="form-section">
-                            <h3>Login Information</h3>
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="login.loginID">Login ID</label>
-                                    <input
-                                        type="text"
-                                        id="login.loginID"
-                                        name="login.loginID"
-                                        value={formData.login.loginID}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter login ID"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="login.username">Username</label>
-                                    <input
-                                        type="text"
-                                        id="login.username"
-                                        name="login.username"
-                                        value={formData.login.username}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter username"
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="login.password">Password</label>
-                                <input
-                                    type="password"
-                                    id="login.password"
-                                    name="login.password"
-                                    value={formData.login.password}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter password"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-section">
-                            <h3>Contact Information</h3>
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="contact.phoneNumber">Phone Number</label>
-                                    <input
-                                        type="tel"
-                                        id="contact.phoneNumber"
-                                        name="contact.phoneNumber"
-                                        value={formData.contact.phoneNumber}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter phone number"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="contact.emailAddress">Email Address</label>
-                                    <input
-                                        type="email"
-                                        id="contact.emailAddress"
-                                        name="contact.emailAddress"
-                                        value={formData.contact.emailAddress}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter email address"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="form-section">
-                            <h3>Address Information</h3>
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="address.streetNumber">Street Number</label>
-                                    <input
-                                        type="text"
-                                        id="address.streetNumber"
-                                        name="address.streetNumber"
-                                        value={formData.address.streetNumber}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter street number"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="address.streetName">Street Name</label>
-                                    <input
-                                        type="text"
-                                        id="address.streetName"
-                                        name="address.streetName"
-                                        value={formData.address.streetName}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter street name"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="address.suburb">Suburb</label>
-                                    <input
-                                        type="text"
-                                        id="address.suburb"
-                                        name="address.suburb"
-                                        value={formData.address.suburb}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter suburb"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="address.city">City</label>
-                                    <input
-                                        type="text"
-                                        id="address.city"
-                                        name="address.city"
-                                        value={formData.address.city}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter city"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="address.postalCode">Postal Code</label>
-                                <input
-                                    type="text"
-                                    id="address.postalCode"
-                                    name="address.postalCode"
-                                    value={formData.address.postalCode}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter postal code"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-actions">
-                            <button type="submit" className="btn btn-primary">
-                                {editingCustomer ? 'Update Account' : 'Create Account'}
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-secondary"
-                                onClick={resetForm}
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            )}
-
-            <div className="profiles-list">
-                <h2>Customer Accounts ({customers.length})</h2>
-                {customers.length === 0 ? (
-                    <p className="no-data">No customer accounts found. Create your first account above.</p>
-                ) : (
-                    <div className="table-container">
-                        <table className="profiles-table">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Status</th>
-                                <th>Role</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>City</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {customers.map((customer) => (
-                                <tr key={customer.userId}>
-                                    <td>{customer.userId}</td>
-                                    <td>{`${customer.userName || ''} ${customer.userSurname || ''}`.trim() || 'N/A'}</td>
-                                    <td>
-                      <span className={`status ${customer.isActive ? 'active' : 'inactive'}`}>
-                        {customer.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                                    </td>
-                                    <td>{customer.roleDescription || 'N/A'}</td>
-                                    <td>{customer.contact?.phoneNumber || 'N/A'}</td>
-                                    <td>{customer.contact?.emailAddress || 'N/A'}</td>
-                                    <td>{customer.address?.city || 'N/A'}</td>
-                                    <td>
-                                        <button
-                                            className="btn btn-small btn-secondary"
-                                            onClick={() => handleEdit(customer)}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            className="btn btn-small btn-danger"
-                                            onClick={() => handleDelete(customer.userId)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </div>
-        </div>
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <h2>Loading Manager Profile...</h2>
+      </div>
     );
+  }
+
+  return (
+    <>
+      <div className="profile-page">
+        <button
+          onClick={() => navigate(userRole === 'CLIENT' ? '/LandingCustomer' : '/LandingEmployee')}
+          style={{
+            fontSize: 24,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            marginBottom: '1rem',
+          }}
+          aria-label="Go back"
+        >
+          ←
+        </button>
+        <h2>{manager.userName} {manager.userSurname}'s Profile</h2>
+        {statusMessage && <div className={`${messageType}-message`}>{statusMessage}</div>}
+
+        <form className="profile-form" onSubmit={(e) => e.preventDefault()}>
+          <div className="form-section">
+            <div className="form-row">
+              {[
+                { label: 'First Name', name: 'userName', placeholder: 'Enter first name' },
+                { label: 'Last Name', name: 'userSurname', placeholder: 'Enter last name' },
+                { label: 'Employee Type', name: 'employeeType', disabled: true },
+                { label: 'Hire Date', name: 'hireDate', type: 'date' },
+                { label: 'Role Description', name: 'roleDescription', disabled: true }
+              ].filter(item => userRole === 'CLIENT' ? item.name !== 'employeeType' && item.name !== 'hireDate' : true).map(({ label, name, placeholder, disabled, type = 'text' }) => (
+                <div className="form-group" key={name}>
+                  <label>{label}</label>
+                  <input
+                    type={type}
+                    name={name}
+                    value={manager[name]}
+                    onChange={handleChange}
+                    disabled={!isEditing || disabled}
+                    placeholder={placeholder}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Contact Details</h3>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  value={manager.contact.phoneNumber}
+                  onChange={handleContactChange}
+                  disabled={!isEditing}
+                  placeholder="Enter phone number"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Address Details</h3>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Street Number</label>
+                <input
+                  type="text"
+                  name="streetNumber"
+                  value={manager.address.streetNumber}
+                  onChange={handleAddressChange}
+                  disabled={!isEditing}
+                  placeholder="Enter street number"
+                />
+              </div>
+              <div className="form-group">
+                <label>Street Name</label>
+                <input
+                  type="text"
+                  name="streetName"
+                  value={manager.address.streetName}
+                  onChange={handleAddressChange}
+                  disabled={!isEditing}
+                  placeholder="Enter street name"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>City</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={manager.address.city}
+                  onChange={handleAddressChange}
+                  disabled={!isEditing}
+                  placeholder="Enter city"
+                />
+              </div>
+              <div className="form-group">
+                <label>Postal Code</label>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={manager.address.postalCode}
+                  onChange={handleAddressChange}
+                  disabled={!isEditing}
+                  placeholder="Enter postal code"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>Login Details</h3>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="emailAddress"
+                  value={manager.login.emailAddress}
+                  onChange={handleLoginChange}
+                  disabled={!isEditing}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={manager.login.password}
+                  onChange={handleLoginChange}
+                  disabled={!isEditing}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            {!isEditing ? (
+              <>
+                <button type="button" className="btn btn-primary" onClick={handleEdit}>Edit</button>
+                <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete</button>
+              </>
+            ) : (
+              <>
+                <button type="button" className="btn btn-primary" onClick={handleUpdate}>Update</button>
+                <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+              </>
+            )}
+          </div>
+        </form>
+      </div>
+
+      {showDeleteConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h4>Are you sure you want to delete this profile?</h4>
+            <div className="modal-buttons">
+              <button className="danger-btn" onClick={confirmDelete}>Yes, Delete</button>
+              <button className="secondary-btn" onClick={cancelDelete}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default ProfilePage;

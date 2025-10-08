@@ -1,16 +1,32 @@
 .confirm-container {
-  padding: 40px;
-  font-family: 'Arial', sans-serif;
+  padding: 32px 0
+ 
 }
 
 .breadcrumb {
-  font-size: 14px;
-  color: #777;
-  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: #666;
 }
 
-h1 {
-      font-size: 48px;
+.breadcrumb-link {
+  text-decoration: none;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.dot {
+  color: #aaa;
+  padding: 0 10px;
+  position: relative;
+  top: 2px;
+}
+
+.confirm-container h1 {
+      font-size: 60px;
       font-weight: bold;
       margin-bottom: 2rem;
 }
@@ -20,9 +36,8 @@ h1 {
   gap: 40px;
 }
 
-/* Left Panel */
-.confirm-left {
-  flex: 2;
+.confirm-container .confirm-left {
+  width: 60%;
 }
 
 .form-section {
@@ -68,9 +83,9 @@ textarea {
   resize: vertical;
 }
 
-/* Right Panel */
-.confirm-summary {
-  flex: 1;
+
+.confirm-container .confirm-summary {
+  width: 40%;
   border: 1px solid #ddd;
   background: #fafafa;
   padding: 20px;
@@ -78,13 +93,15 @@ textarea {
 }
 
 .confirm-summary h3 {
-  margin-top: 0;
+  margin: 0;
+  font-size: 30px;
 }
 
 .location {
   color: #666;
   font-size: 14px;
   margin-bottom: 10px;
+  margin-top: 5px;
 }
 
 .date-time p {
@@ -99,13 +116,8 @@ textarea {
   font-weight: bold;
 }
 
-.pay-now {
-  color: green;
-  font-size: 14px;
-}
-
 .pay-at-venue {
-  color: #777;
+  color: green;
   font-size: 13px;
 }
 

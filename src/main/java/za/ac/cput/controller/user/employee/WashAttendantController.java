@@ -7,7 +7,7 @@ import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.service.user.employee.IWashAttendantService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/wash-attendants")
 public class WashAttendantController {

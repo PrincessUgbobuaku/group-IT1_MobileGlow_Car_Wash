@@ -1,7 +1,100 @@
 import React, { useState, useEffect } from 'react';
-import { vehicleService } from '../services/vehicleService';
-import LoadingSpinner from '../components/LoadingSpinner';
+import axios from 'axios';
 import './VehiclePage.css';
+
+// Vehicle Service API functions
+const VEHICLE_API = '/api/vehicle';
+const API_BASE_URL = 'http://localhost:8080/mobileglow';
+
+const vehicleService = {
+    // Get all vehicles (simple version without customer details)
+    getSimpleVehicles: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}${VEHICLE_API}/simple`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching simple vehicles:', error);
+            throw error;
+        }
+    },
+
+    // Get all vehicles
+    getAllVehicles: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}${VEHICLE_API}/findAll`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching vehicles:', error);
+            throw error;
+        }
+    },
+
+    // Get vehicle by ID
+    getVehicleById: async (id) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}${VEHICLE_API}/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching vehicle ${id}:`, error);
+            throw error;
+        }
+    },
+
+    // Create new vehicle
+    createVehicle: async (vehicleData) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}${VEHICLE_API}/create`, vehicleData);
+            return response.data;
+        } catch (error) {
+            console.error('Error creating vehicle:', error);
+            throw error;
+        }
+    },
+
+    // Update vehicle
+    updateVehicle: async (id, vehicleData) => {
+        try {
+            const response = await axios.put(`${API_BASE_URL}${VEHICLE_API}/update/${id}`, vehicleData);
+            return response.data;
+        } catch (error) {
+            console.error(`Error updating vehicle ${id}:`, error);
+            throw error;
+        }
+    },
+
+    // Delete vehicle
+    deleteVehicle: async (id) => {
+        try {
+            const response = await axios.delete(`${API_BASE_URL}${VEHICLE_API}/delete/${id}`);
+            return response.status === 204; // Success if no content
+        } catch (error) {
+            console.error(`Error deleting vehicle ${id}:`, error);
+            throw error;
+        }
+    },
+
+    // Find vehicle by plate number
+    findVehicleByPlateNumber: async (plateNumber) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}${VEHICLE_API}/plate/${plateNumber}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error finding vehicle by plate ${plateNumber}:`, error);
+            throw error;
+        }
+    },
+
+    // Find vehicles by customer ID
+    findVehiclesByCustomerId: async (customerId) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}${VEHICLE_API}/customer/${customerId}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error finding vehicles for customer ${customerId}:`, error);
+            throw error;
+        }
+    }
+};
 
 const VehiclePage = () => {
     const [vehicles, setVehicles] = useState([]);
@@ -88,7 +181,6 @@ const VehiclePage = () => {
             });
     };
 
-
     const handleEdit = (vehicle) => {
         setEditingVehicle(vehicle);
         setFormData({
@@ -128,7 +220,12 @@ const VehiclePage = () => {
     };
 
     if (loading) {
-        return <LoadingSpinner text="Loading vehicles..." />;
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Loading vehicles...</p>
+            </div>
+        );
     }
 
     return (
@@ -139,8 +236,12 @@ const VehiclePage = () => {
                     className="btn btn-primary"
                     onClick={() => setShowForm(true)}
                 >
-                    Add New Vehicle
+                    + Add Vehicle
                 </button>
+            </div>
+
+            <div className="page-subtitle">
+                <p>Keep your ride details up to date in one place. Add, edit, or remove vehicles from your profile so booking the right service is quick and hassle-free.</p>
             </div>
 
             {error && (
@@ -236,50 +337,50 @@ const VehiclePage = () => {
             )}
 
             <div className="vehicles-list">
-                <h2>Vehicles ({vehicles.length})</h2>
                 {vehicles.length === 0 ? (
-                    <p className="no-data">No vehicles found. Add your first vehicle above.</p>
+                    <div className="no-data">
+                        <p>No vehicles found. Add your first vehicle above.</p>
+                    </div>
                 ) : (
-                    <div className="table-container">
-                        <table className="vehicles-table">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Plate Number</th>
-                                <th>Make</th>
-                                <th>Model</th>
-                                <th>Color</th>
-                                <th>Customer ID</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {vehicles.map((vehicle) => (
-                                <tr key={vehicle.vehicleID}>
-                                    <td>{vehicle.vehicleID}</td>
-                                    <td>{vehicle.carPlateNumber}</td>
-                                    <td>{vehicle.carMake}</td>
-                                    <td>{vehicle.carModel}</td>
-                                    <td>{vehicle.carColour}</td>
-                                    <td>{vehicle.customer?.userId || 'N/A'}</td>
-                                    <td>
-                                        <button
-                                            className="btn btn-small btn-secondary"
-                                            onClick={() => handleEdit(vehicle)}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            className="btn btn-small btn-danger"
-                                            onClick={() => handleDelete(vehicle.vehicleID)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                    <div className="vehicles-grid">
+                        {vehicles.map((vehicle) => (
+                            <div className="vehicle-card" key={vehicle.vehicleID}>
+                                <div className="vehicle-info">
+                                    <div className="vehicle-info-item">
+                                        <span className="vehicle-info-label">Plate Number:</span>
+                                        <span className="vehicle-info-value">{vehicle.carPlateNumber}</span>
+                                    </div>
+                                    <div className="vehicle-info-item">
+                                        <span className="vehicle-info-label">Make:</span>
+                                        <span className="vehicle-info-value">{vehicle.carMake}</span>
+                                    </div>
+                                    <div className="vehicle-info-item">
+                                        <span className="vehicle-info-label">Model:</span>
+                                        <span className="vehicle-info-value">{vehicle.carModel}</span>
+                                    </div>
+                                    <div className="vehicle-info-item">
+                                        <span className="vehicle-info-label">Colour:</span>
+                                        <span className="vehicle-info-value">{vehicle.carColour}</span>
+                                    </div>
+                                </div>
+                                <div className="vehicle-actions">
+                                    <button
+                                        className="btn-icon edit"
+                                        onClick={() => handleEdit(vehicle)}
+                                        title="Edit vehicle"
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button
+                                        className="btn-icon delete"
+                                        onClick={() => handleDelete(vehicle.vehicleID)}
+                                        title="Delete vehicle"
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>

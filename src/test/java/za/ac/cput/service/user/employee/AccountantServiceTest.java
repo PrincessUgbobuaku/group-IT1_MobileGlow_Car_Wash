@@ -14,7 +14,7 @@ import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.factory.generic.ContactFactory;
 import za.ac.cput.factory.user.LoginFactory;
 import za.ac.cput.factory.user.employee.AccountantFactory;
-import za.ac.cput.service.user.employee.impl.AccountantService;
+import za.ac.cput.service.user.employee.AccountantService;
 
 import static org.junit.jupiter.api.Assertions.*;
 

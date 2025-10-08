@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import './BookingVehicle.css';
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import "./BookingVehicle.css";
 
 const BookingVehicle = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { cart, totalPrice, selectedDateTime, serviceIds } = location.state || {};
+  // Only use state from location
+  const {
+    cart = [],
+    totalPrice = 0,
+    selectedDateTime = null,
+    serviceIds = [],
+  } = location.state || {};
+
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
-  const userId = 5; // example
+  const userId = 5; // Replace with dynamic value if needed
+  const [hasConflict, setHasConflict] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
@@ -18,100 +26,176 @@ const BookingVehicle = () => {
       .then((data) => {
         setVehicles(Array.isArray(data) ? data : []);
       })
-      .catch((error) => console.error('Error fetching vehicles:', error));
+      .catch((error) => console.error("Error fetching vehicles:", error));
   }, [userId]);
 
-  const handleVehicleChange = (event) => {
-    setSelectedVehicleId(event.target.value);
+  const handleVehicleChange = async (event) => {
+    const vehicleId = event.target.value;
+    setSelectedVehicleId(vehicleId);
+    setHasConflict(false); // Reset conflict
+
+    if (!vehicleId || !selectedDateTime) return;
+
+    try {
+      // ✅ Fix ISO formatting issue
+      const dateObj = new Date(selectedDateTime);
+      const formattedDateTime = `${dateObj.getFullYear()}-${String(
+        dateObj.getMonth() + 1
+      ).padStart(2, "0")}-${String(dateObj.getDate()).padStart(
+        2,
+        "0"
+      )}T${String(dateObj.getHours()).padStart(2, "0")}:${String(
+        dateObj.getMinutes()
+      ).padStart(2, "0")}:00`;
+
+      const response = await fetch(
+        `http://localhost:8080/mobileglow/api/bookings/check-conflict?vehicleId=${vehicleId}&bookingDateTime=${encodeURIComponent(
+          formattedDateTime
+        )}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to check booking conflict.");
+      }
+
+      const conflict = await response.json();
+      setHasConflict(conflict);
+
+      if (conflict) {
+        alert("⚠️ This vehicle is already booked at the selected time.");
+      }
+    } catch (error) {
+      console.error("Error checking conflict:", error);
+      alert("An error occurred while checking vehicle booking availability.");
+    }
   };
 
+  const selectedVehicle = vehicles.find(
+    (v) => String(v.vehicleID) === selectedVehicleId
+  );
+
   const handleContinue = () => {
-    if (!selectedVehicleId) {
+    if (!selectedVehicleId || !selectedVehicle) {
       alert("Please select a vehicle!");
       return;
     }
 
-    const selectedVehicle = vehicles.find(v => String(v.vehicleID) === selectedVehicleId);
-
-    if (!selectedVehicle) {
-      alert("Selected vehicle not found!");
-      return;
-    }
-
-    // Pass serviceIds forward here as well
     navigate("/confirm", {
       state: {
         cart,
         totalPrice,
         selectedDateTime,
         selectedVehicle,
-        serviceIds, // pass this along
+        serviceIds,
       },
     });
   };
+
   return (
     <div className="booking-vehicle-container">
-      <div className="left-panel">
-        <h2 className="booking-page-heading">Select Vehicle for Cleaning</h2>
+      <div className="breadcrumb">
+        <Link to="/" className="breadcrumb-link">
+          Home
+        </Link>
+        <span className="dot">•</span>
 
-        <div className="vehicle-selection">
-          <label>Select your vehicle:</label>
-          <select onChange={handleVehicleChange} value={selectedVehicleId}>
-            <option value="">Select Vehicle</option>
-            {vehicles.length > 0 ? (
-              vehicles.map(vehicle => (
-                <option
-                  key={vehicle.vehicleID}
-                  value={String(vehicle.vehicleID)}
-                >
-                  {vehicle.carMake} {vehicle.carModel}
-                </option>
-              ))
-            ) : (
-              <option disabled>No vehicles available</option>
-            )}
-          </select>
-        </div>
-
-        <button
-          className="continue-btn"
-          onClick={handleContinue}
-          disabled={!selectedVehicleId}
+        <Link
+          to="/booking"
+          className="breadcrumb-link"
+          state={{ cart, totalPrice }}
         >
-          Continue
-        </button>
+          Select a service
+        </Link>
+        <span className="dot">•</span>
+
+        <Link
+          to="/bookingtwo"
+          className="breadcrumb-link"
+          state={{ cart, totalPrice, selectedDateTime, serviceIds }}
+        >
+          Select a date and time
+        </Link>
+        <span className="dot">•</span>
+
+        <strong>Select vehicle</strong>
       </div>
 
-      <div className="right-panel">
-        <div className="business-info">
-          <h3>MobileGlow Car Wash</h3>
-          <p>4.9 ⭐ (32)</p>
-          <p>Parklands, Cape Town</p>
+      <h2 className="booking-page-heading">Select Vehicle</h2>
+
+      <div className="left-right-panel-container">
+        <div className="left-panel">
+          <div className="vehicle-selection">
+            <label>Select your vehicle:</label>
+            <select onChange={handleVehicleChange} value={selectedVehicleId}>
+              <option value="">Select Vehicle</option>
+              {vehicles.length > 0 ? (
+                vehicles.map((vehicle) => (
+                  <option
+                    key={vehicle.vehicleID}
+                    value={String(vehicle.vehicleID)}
+                  >
+                    {vehicle.carMake} {vehicle.carModel}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No vehicles available</option>
+              )}
+            </select>
+            {/* <-- Add conflict message here */}
+            {hasConflict && (
+              <p style={{ color: "red", marginTop: "0.5rem" }}>
+                ⚠️ This vehicle is already booked at the selected time. Please
+                choose another.
+              </p>
+            )}
+          </div>
         </div>
 
-        <div className="summary-section">
-          <h4>Selected Services</h4>
-          <ul>
-            {cart.map((item, index) => (
-              <li key={index}>
-                {item.serviceName.replace(/_/g, ' ')} - R {item.priceOfService}
-              </li>
-            ))}
-          </ul>
+        <div className="right-panel">
+          <div className="vehicle-business-info">
+            <h3>MobileGlow Car Wash</h3>
+            <p>4.9 ⭐ (32)</p>
+            <p>Parklands, Cape Town</p>
+          </div>
 
-          <h4>Date & Time</h4>
-          <p>{selectedDateTime ? new Date(selectedDateTime).toLocaleString() : "Not selected"}</p>
+          <div className="summary-section">
+            <h4>Selected Services</h4>
+            <ul>
+              {cart.map((item, index) => (
+                <li key={index}>
+                  {item.serviceName.replace(/_/g, " ")} - R{" "}
+                  {item.priceOfService}
+                </li>
+              ))}
+            </ul>
 
-          <h4>Vehicle</h4>
-          <p>
-            {selectedVehicleId
-              ? vehicles.find(v => String(v.vehicleID) === selectedVehicleId)?.carMake + " " +
-                vehicles.find(v => String(v.vehicleID) === selectedVehicleId)?.carModel
-              : "Not selected"}
-          </p>
+            <h4>Date & Time</h4>
+            <p>
+              {selectedDateTime
+                ? new Date(selectedDateTime).toLocaleString()
+                : "Not selected"}
+            </p>
 
-          <div className="total-price">
-            <strong>Total:</strong> R {totalPrice}
+            <h4>Vehicle</h4>
+            <p>
+              {selectedVehicle
+                ? `${selectedVehicle.carMake} ${selectedVehicle.carModel}`
+                : "Not selected"}
+            </p>
+
+            <div className="total-price">
+              <strong>Total:</strong> R {totalPrice}
+            </div>
+          </div>
+
+          <div className="right-panel-continue">
+            <button
+              className="continue-btn"
+              onClick={handleContinue}
+              disabled={!selectedVehicleId || hasConflict}
+            >
+              Continue
+            </button>
           </div>
         </div>
       </div>
