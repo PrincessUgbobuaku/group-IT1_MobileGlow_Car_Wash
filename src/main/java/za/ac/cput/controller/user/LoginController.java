@@ -110,4 +110,32 @@ public class LoginController {
         return true;
     }
 
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        if (request.getEmail() == null || request.getCurrentPassword() == null || request.getNewPassword() == null) {
+            return ResponseEntity.badRequest().body("{\"message\":\"Email, current password, and new password are required\"}");
+        }
+
+        boolean success = loginService.changePassword(request.getEmail(), request.getCurrentPassword(), request.getNewPassword());
+        if (success) {
+            return ResponseEntity.ok("{\"message\":\"Password changed successfully\"}");
+        } else {
+            return ResponseEntity.status(400).body("{\"message\":\"Failed to change password. Check current password or user existence.\"}");
+        }
+    }
+
+    // DTO for change password request
+    public static class ChangePasswordRequest {
+        private String email;
+        private String currentPassword;
+        private String newPassword;
+
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getCurrentPassword() { return currentPassword; }
+        public void setCurrentPassword(String currentPassword) { this.currentPassword = currentPassword; }
+        public String getNewPassword() { return newPassword; }
+        public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+    }
+
 }

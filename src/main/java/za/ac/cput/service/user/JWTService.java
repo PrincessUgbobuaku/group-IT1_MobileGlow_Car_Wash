@@ -19,17 +19,7 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private static final String secretKey;
-
-    static {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to generate JWT secret key", e);
-        }
-    }
+    private static final String SECRET_KEY = "bXlTZWNyZXRLZXlGb3JKV1RteVNlY3JldEtleUZvckpXVHQ=";
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -45,7 +35,7 @@ public class JWTService {
     }
 
     private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

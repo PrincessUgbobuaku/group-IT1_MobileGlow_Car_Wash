@@ -13,6 +13,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState('');
   const [messageType, setMessageType] = useState('error');
+  const [imageUrl, setImageUrl] = useState(null);
 
   const navigate = useNavigate();
 
@@ -30,7 +31,12 @@ const ProfilePage = () => {
       try {
         let users = [];
         if (userRole === 'CLIENT') {
-          const response = await fetch('http://localhost:8080/mobileglow/api/customers');
+          const token = localStorage.getItem('authToken');
+          const response = await fetch('http://localhost:8080/mobileglow/api/customers', {
+            headers: {
+              'Authorization': token ? `Bearer ${token}` : '',
+            },
+          });
           if (response.ok) {
             users = await response.json();
           } else {
@@ -39,26 +45,51 @@ const ProfilePage = () => {
             return;
           }
         } else {
-          const endpoints = [
-            'http://localhost:8080/mobileglow/Manager/getAllManagers',
-            'http://localhost:8080/mobileglow/Accountant/getAllAccountants',
-            'http://localhost:8080/mobileglow/wash-attendants/getAllWashAttendants'
+          const endpointTypes = [
+            { url: 'http://localhost:8080/mobileglow/Manager/getAllManagers', type: 'Manager' },
+            { url: 'http://localhost:8080/mobileglow/Accountant/getAllAccountants', type: 'Accountant' },
+            { url: 'http://localhost:8080/mobileglow/wash-attendants/getAllWashAttendants', type: 'WashAttendant' }
           ];
-          for (const endpoint of endpoints) {
+          for (const { url, type } of endpointTypes) {
             try {
-              const response = await fetch(endpoint);
+              const response = await fetch(url);
               if (response.ok) {
                 const data = await response.json();
-                users = users.concat(data);
+                users = users.concat(data.map(u => ({ ...u, employeeType: type })));
               }
             } catch (error) {
-              console.error('Error fetching from', endpoint, error);
+              console.error('Error fetching from', url, error);
             }
           }
         }
         const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
         if (loggedInUser) {
           setClient(loggedInUser);
+          // Fetch image if available
+          if (loggedInUser.imageName) {
+            let imageEndpoint = '';
+            if (userRole === 'CLIENT') {
+              imageEndpoint = `http://localhost:8080/mobileglow/api/customers/image/${loggedInUser.userId}`;
+            } else {
+              const type = loggedInUser.employeeType;
+              if (type === 'Manager') {
+                imageEndpoint = `http://localhost:8080/mobileglow/Manager/image/${loggedInUser.userId}`;
+              } else if (type === 'Accountant') {
+                imageEndpoint = `http://localhost:8080/mobileglow/Accountant/image/${loggedInUser.userId}`;
+              } else if (type === 'WashAttendant') {
+                imageEndpoint = `http://localhost:8080/mobileglow/wash-attendants/image/${loggedInUser.userId}`;
+              }
+            }
+            if (imageEndpoint) {
+              fetch(imageEndpoint)
+                .then(response => response.blob())
+                .then(blob => {
+                  const url = URL.createObjectURL(blob);
+                  setImageUrl(url);
+                })
+                .catch(error => console.error('Error fetching image:', error));
+            }
+          }
         } else {
           setStatusMessage('User data not found');
           setMessageType('error');
@@ -103,7 +134,11 @@ const ProfilePage = () => {
         {/* LEFT SIDE - PROFILE CARD */}
         <div className="profile-card">
           <div className="avatar-section">
-            <div className="avatar-circle">{initials}</div>
+            {imageUrl ? (
+              <img src={imageUrl} alt="Profile" className="avatar-image" />
+            ) : (
+              <div className="avatar-circle">{initials}</div>
+            )}
             <button className="edit-link" onClick={() => navigate(userRole === 'CLIENT' ? '/EditCustomerProfile' : '/EditEmployeeProfile')}>
               Edit
             </button>

@@ -12,4 +12,5 @@ import java.util.List;
 public interface ILoginService extends IService<Login, Long> {
     List<Login> getAllLogins();
     Login findByEmailAddress(String email);
+    boolean changePassword(String email, String currentPassword, String newPassword);
 }

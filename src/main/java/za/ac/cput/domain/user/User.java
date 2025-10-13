@@ -18,6 +18,11 @@ public abstract class User {
     protected String userSurname;
     protected Boolean isActive;
 
+    protected String imageName;
+    protected String imageType;
+    @Lob
+    protected byte[] imageData;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role_description", length = 50)
     protected User.RoleDescription roleDescription;
@@ -58,6 +63,17 @@ public abstract class User {
 
     public RoleDescription getRoleDescription() {
         return roleDescription;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+    public byte[] getImageData() {
+        return imageData;
     }
 
     public Contact getContact() {

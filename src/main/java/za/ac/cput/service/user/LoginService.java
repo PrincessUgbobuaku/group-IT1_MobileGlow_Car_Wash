@@ -75,6 +75,24 @@ public class LoginService implements ILoginService {
         return true;
     }
 
-    
+    @Override
+    public boolean changePassword(String email, String currentPassword, String newPassword) {
+        Login login = findByEmailAddress(email);
+        if (login == null) {
+            return false;
+        }
+        if (!checkPassword(currentPassword, login.getPassword())) {
+            return false;
+        }
+        // Encode the new password
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        Login updatedLogin = new Login.Builder()
+                .setLoginID(login.getLoginID())
+                .setEmailAddress(login.getEmailAddress())
+                .setPassword(encodedNewPassword)
+                .build();
+        update(updatedLogin);
+        return true;
+    }
 }
 
