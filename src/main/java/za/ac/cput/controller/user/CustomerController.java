@@ -2,8 +2,10 @@
 package za.ac.cput.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import za.ac.cput.domain.user.Customer;
 import za.ac.cput.service.user.CustomerService;
 
@@ -22,8 +24,14 @@ public class CustomerController {
 
     // CREATE
     @PostMapping("/create")
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
-        return ResponseEntity.ok(service.create(customer));
+    public ResponseEntity<Customer> create(@RequestPart Customer customer,
+                                           @RequestPart(required = false) MultipartFile imageFile) {
+        try {
+            Customer created = service.create(customer, imageFile);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     // READ
@@ -34,15 +42,38 @@ public class CustomerController {
     }
 
     // UPDATE
-    @PutMapping("/{id}")
-    public ResponseEntity<Customer> update(@PathVariable Long id, @RequestBody Customer customer) {
-        customer = new Customer.Builder()
-                .copy(customer)
-                .setUserId(id)
-                .build();
-        Customer updated = service.update(customer);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    /*@PutMapping("/{id}")
+    public ResponseEntity<Customer> update(@PathVariable Long id,
+                                           @RequestPart Customer customer,
+                                           @RequestPart(required = false) MultipartFile imageFile) {
+        try {
+            customer = new Customer.Builder()
+                    .copy(customer)
+                    .setUserId(id)
+                    .build();
+            Customer updated = imageFile != null && !imageFile.isEmpty() ?
+                service.update(customer, imageFile) : service.update(customer);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }*/
+
+    // UPDATE
+    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Customer> updateCustomer(
+            @PathVariable Long id,
+            @RequestPart("customer") Customer customer,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+        try {
+            Customer updated = service.updateCustomer(id, customer, imageFile);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
+
 
     // DELETE
     @DeleteMapping("/{id}")
@@ -94,5 +125,17 @@ public class CustomerController {
         System.out.println("Saved customer with isActive: " + saved.getIsActive());
 
         return ResponseEntity.ok(saved);
+    }
+
+    // Get customer image
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        Customer customer = service.read(id);
+        if (customer == null || customer.getImageData() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(customer.getImageType()))
+                .body(customer.getImageData());
     }
 }

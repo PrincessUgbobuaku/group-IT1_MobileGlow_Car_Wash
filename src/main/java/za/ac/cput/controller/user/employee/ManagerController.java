@@ -1,8 +1,10 @@
 package za.ac.cput.controller.user.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import za.ac.cput.domain.user.employee.Manager;
 import za.ac.cput.service.user.employee.ManagerService;
 
@@ -21,9 +23,28 @@ public class ManagerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Manager> create(@RequestBody Manager manager) {
-        Manager created = managerService.create(manager);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<Manager> create(@RequestPart Manager manager,
+                                          @RequestPart MultipartFile imageFile) {
+        try {
+            Manager created = managerService.create(manager, imageFile);
+            return ResponseEntity.ok(created);
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/image/{Id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long Id) {
+        Manager manager = managerService.read(Id);
+        byte[] imageFile = manager.getImageData();
+
+        if (manager == null || manager.getImageData() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(manager.getImageType()))
+                .body(imageFile);
     }
 
     @GetMapping("/read/{Id}")
@@ -35,14 +56,18 @@ public class ManagerController {
         return ResponseEntity.ok(manager);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Manager> update(@PathVariable Long id, @RequestBody Manager manager) {
-        manager = new Manager.Builder()
-                .copy(manager)
-                .setUserId(id)
-                .build();
-        Manager updated = managerService.update(manager);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    @PutMapping(value = "/update/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Manager> updateManager(
+            @PathVariable Long id,
+            @RequestPart("employee") Manager manager,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+        try {
+            Manager updated = managerService.updateManager(id, manager, imageFile);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/getAllManagers")

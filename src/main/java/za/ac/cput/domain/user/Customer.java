@@ -9,6 +9,7 @@ import za.ac.cput.domain.generic.Contact;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,9 @@ public class Customer extends User {
         this.userSurname = builder.userSurname;
         this.isActive = builder.isActive;
         this.roleDescription = builder.roleDescription;
+        this.imageName = builder.imageName;
+        this.imageType = builder.imageType;
+        this.imageData = builder.imageData;
         this.login = builder.login;
         this.address = builder.address;
         this.contact = builder.contact;
@@ -48,15 +52,18 @@ public class Customer extends User {
     public String toString() {
         return "Customer{" +
                 "customerDOB=" + customerDOB +
-                ", vehicles=" + vehicles.size() +
-                ", userId=" + getUserId() +
-                ", userName='" + getUserName() + '\'' +
-                ", userSurname='" + getUserSurname() + '\'' +
-                ", isActive=" + getIsActive() +
-                ", roleDescription=" + getRoleDescription() +
-                ", contact=" + getContact() +
-                ", address=" + getAddress() +
-                ", login=" + getLogin() +
+                ", vehicles=" + vehicles +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userSurname='" + userSurname + '\'' +
+                ", isActive=" + isActive +
+                ", imageName='" + imageName + '\'' +
+                ", imageType='" + imageType + '\'' +
+                ", imageData=" + Arrays.toString(imageData) +
+                ", roleDescription=" + roleDescription +
+                ", contact=" + contact +
+                ", address=" + address +
+                ", login=" + login +
                 '}';
     }
 
@@ -66,6 +73,9 @@ public class Customer extends User {
         private String userSurname;
         private Boolean isActive;
         private User.RoleDescription roleDescription;
+        private String imageName;
+        private String imageType;
+        private byte[] imageData;
         private Login login;
         private Address address;
         private Contact contact;
@@ -90,6 +100,18 @@ public class Customer extends User {
         }
         public Builder setRoleDescription(User.RoleDescription roleDescription) {
             this.roleDescription = roleDescription;
+            return this;
+        }
+        public Builder setImageName(String imageName) {
+            this.imageName = imageName;
+            return this;
+        }
+        public Builder setImageType(String imageType) {
+            this.imageType = imageType;
+            return this;
+        }
+        public Builder setImageData(byte[] imageData) {
+            this.imageData = imageData;
             return this;
         }
         public Builder setLogin(Login login) {
@@ -119,6 +141,9 @@ public class Customer extends User {
             this.userSurname = customer.userSurname;
             this.isActive = customer.isActive;
             this.roleDescription = customer.roleDescription;
+            this.imageName = customer.imageName;
+            this.imageType = customer.imageType;
+            this.imageData = customer.imageData;
             this.login = customer.login;
             this.address = customer.address;
             this.contact = customer.contact;

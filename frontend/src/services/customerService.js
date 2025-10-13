@@ -1,4 +1,4 @@
-import api from './api';
+import api, { apiClient } from './api';
 
 const CUSTOMER_API = '/api/customers';
 
@@ -38,7 +38,33 @@ export const customerService = {
     // Update customer
     updateCustomer: async (id, customerData) => {
         try {
-            const response = await api.put(`${CUSTOMER_API}/${id}`, customerData);
+            let data = customerData;
+            let headers = {};
+            if (customerData instanceof FormData) {
+                // If FormData, create new FormData with 'customer' as JSON part
+                const formData = new FormData();
+                const customerObj = {};
+                for (const [key, value] of customerData.entries()) {
+                    if (key === 'imageFile') {
+                        formData.append('imageFile', value);
+                    } else {
+                // Flatten keys like contact.phoneNumber to nested object
+                const keys = key.split('.');
+                let obj = customerObj;
+                for (let i = 0; i < keys.length - 1; i++) {
+                    if (!obj[keys[i]]) obj[keys[i]] = {};
+                    obj = obj[keys[i]];
+                }
+                // Handle null values properly
+                const finalValue = value === "null" || value === "" ? null : value;
+                obj[keys[keys.length - 1]] = finalValue;
+                    }
+                }
+                formData.append('customer', new Blob([JSON.stringify(customerObj)], { type: 'application/json' }));
+                data = formData;
+                headers = { 'Content-Type': 'multipart/form-data' };
+            }
+            const response = await apiClient.put(`${CUSTOMER_API}/${id}`, data, { headers });
             return response.data;
         } catch (error) {
             console.error(`Error updating customer ${id}:`, error);

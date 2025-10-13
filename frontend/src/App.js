@@ -26,6 +26,7 @@ import AboutUs from "./screens/AboutUs";
 import ContactUs from "./screens/ContactUs";
 import EditCustomerProfile from "./screens/EditCustomerProfile";
 import EditEmployeeProfile from "./screens/EditEmployeeProfile";
+import PasswordReset from "./screens/components/PasswordReset";
 
 
 function App()  {
@@ -61,6 +62,7 @@ function App()  {
 
           <Route path="/EditCustomerProfile" element={<EditCustomerProfile />} />
           <Route path="/EditEmployeeProfile" element={<EditEmployeeProfile />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
 
       </Routes>
     </Router>

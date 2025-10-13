@@ -23,20 +23,21 @@
 //                 })
 //             });
 
-//             if (response.ok) {
-//                 const data = await response.json();
-//                 alert(data.message);
-//                 localStorage.setItem('userEmail', login.email);
-//                 localStorage.setItem('userRoleDescription', data.role_description);
-//                 if (data.role_description === 'EMPLOYEE') {
-//                     navigate('/profile');
-//                 } else {
-//                     navigate('/profile'); // Later update this for client dashboard
-//                 }
-//             } else {
-//                 const error = await response.text();
-//                 alert(error);
-//             }
+            // if (response.ok) {
+            //     const data = await response.json();
+            //     alert(data.message);
+            //     localStorage.setItem('userEmail', login.email);
+            //     localStorage.setItem('userRoleDescription', data.role_description);
+            //     localStorage.setItem('token', data.token);
+            //     if (data.role_description === 'EMPLOYEE') {
+            //         navigate('/profile');
+            //     } else {
+            //         navigate('/profile'); // Later update this for client dashboard
+            //     }
+            // } else {
+            //     const error = await response.text();
+            //     alert(error);
+            // }
 //         } catch (error) {
 //             console.error('Error logging in:', error);
 //             alert('Something went wrong!');
