@@ -6,10 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="a5dd69a6-01ce-4925-bc75-cfec013b599e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/booking/Booking.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/employee/booking/ManageBookings.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/booking/ManageBookings.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/screens/employee/booking/ManageBookings.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/employee/booking/ManageBookings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/AccountantServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/user/employee/AccountantServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/LoginForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/screens/customer/LandingCustomer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/screens/customer/LandingCustomer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/employeeService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/employeeService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/za/ac/cput/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/za/ac/cput/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/za/ac/cput/service/booking/CleaningServiceServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,10 +25,16 @@
       <list>
         <option value="Interface" />
         <option value="Class" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Adaeze Princess Ugbobuaku &lt;160437054+princessugbobuaku@users.noreply.github.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -40,7 +50,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -53,39 +63,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.AddressControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookingFactoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookingFactoryTest.testCreateBookingWithMultiplePayments.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookingFactoryTest.testCreateBookingWithoutPayments.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookingServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookingServiceTest.setupEntities.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BookingServiceTest.testCreate.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CleaningServiceFactoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CleaningServiceFactoryTest.testCreateSingleCleaningService.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CleaningServiceServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CleaningServiceServiceTest.testCreate.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CustomerServiceTest.create.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CustomerServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PaymentFactoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PaymentFactoryTest.testCreatePaymentForExistingBooking.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PaymentServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PaymentServiceTest.setupEntities.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.VehicleServiceTest.create.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.VehicleServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.WashAttendantServiceTest.a_create.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.WashAttendantServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;230098010&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/USB Drive/ADP362S/MobileGlow_Car_Wash - Revised/frontend/src/assets&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "JUnit.AddressControllerTest.executor": "Run",
+    "JUnit.BookingFactoryTest.executor": "Run",
+    "JUnit.BookingFactoryTest.testCreateBookingWithMultiplePayments.executor": "Run",
+    "JUnit.BookingFactoryTest.testCreateBookingWithoutPayments.executor": "Run",
+    "JUnit.BookingServiceTest.executor": "Run",
+    "JUnit.BookingServiceTest.setupEntities.executor": "Run",
+    "JUnit.BookingServiceTest.testCreate.executor": "Run",
+    "JUnit.CleaningServiceFactoryTest.executor": "Run",
+    "JUnit.CleaningServiceFactoryTest.testCreateSingleCleaningService.executor": "Run",
+    "JUnit.CleaningServiceServiceTest.executor": "Run",
+    "JUnit.CleaningServiceServiceTest.testCreate.executor": "Run",
+    "JUnit.CustomerServiceTest.create.executor": "Run",
+    "JUnit.CustomerServiceTest.executor": "Run",
+    "JUnit.PaymentFactoryTest.executor": "Run",
+    "JUnit.PaymentFactoryTest.testCreatePaymentForExistingBooking.executor": "Run",
+    "JUnit.PaymentServiceTest.executor": "Run",
+    "JUnit.PaymentServiceTest.setupEntities.executor": "Run",
+    "JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking.executor": "Run",
+    "JUnit.VehicleServiceTest.create.executor": "Run",
+    "JUnit.VehicleServiceTest.executor": "Run",
+    "JUnit.WashAttendantServiceTest.a_create.executor": "Run",
+    "JUnit.WashAttendantServiceTest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "218120192",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/USB Drive/ADP362S/MobileGlow_Car_Wash - Revised/frontend/src/assets",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "npm.start.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\USB Drive\ADP362S\MobileGlow_Car_Wash - Revised\frontend\src\assets" />
@@ -126,22 +139,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BookingServiceTest.testCreate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="MobileGlow_Car_Wash" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="za.ac.cput.service.booking.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="za.ac.cput.service.booking" />
-      <option name="MAIN_CLASS_NAME" value="za.ac.cput.service.booking.BookingServiceTest" />
-      <option name="METHOD_NAME" value="testCreate" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="PaymentServiceTest.testCreatePaymentWithExistingBooking" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="MobileGlow_Car_Wash" />
       <extension name="coverage">
@@ -174,13 +171,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="npm.start" />
         <item itemvalue="JUnit.AddressControllerTest" />
         <item itemvalue="JUnit.PaymentServiceTest.testCreatePaymentWithExistingBooking" />
         <item itemvalue="JUnit.WashAttendantServiceTest.a_create" />
-        <item itemvalue="JUnit.BookingServiceTest.testCreate" />
       </list>
     </recent_temporary>
   </component>
@@ -194,5 +201,19 @@
       <updated>1755896945852</updated>
     </task>
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge pull request #107 from PrincessUgbobuaku/230098010&#10;&#10;Updated port numbers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge pull request #107 from PrincessUgbobuaku/230098010&#10;&#10;Updated port numbers" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/frontend/src/screens/ContactUs.js</url>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

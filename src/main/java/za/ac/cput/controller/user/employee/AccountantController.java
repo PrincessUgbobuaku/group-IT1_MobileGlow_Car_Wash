@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.user.employee.Accountant;
+import za.ac.cput.service.user.employee.IAccountantService;
 import za.ac.cput.service.user.employee.AccountantService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/Accountant")
 public class AccountantController {
@@ -34,17 +35,14 @@ public class AccountantController {
         return ResponseEntity.ok(accountant);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Accountant> update(@RequestBody Accountant accountant) {
-        if (accountant.getUserId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Accountant updatedAccountant = accountantService.update(accountant);
-        if (updatedAccountant == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedAccountant);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Accountant> update(@PathVariable Long id, @RequestBody Accountant accountant) {
+        accountant = new Accountant.Builder()
+                .copy(accountant)
+                .setUserId(id)
+                .build();
+        Accountant updated = accountantService.update(accountant);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")

@@ -16,6 +16,7 @@ import za.ac.cput.service.user.CustomerService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,9 +32,17 @@ class VehicleServiceTest {
     private Customer customer;
     private Vehicle vehicle1;
     private Vehicle vehicle2;
+    
+    // Generate unique plate numbers to avoid duplicates
+    private String uniquePlate1;
+    private String uniquePlate2;
 
     @BeforeEach
     void setUp() {
+        // Generate unique plate numbers for each test run
+        uniquePlate1 = "SVC" + UUID.randomUUID().toString().substring(0, 4);
+        uniquePlate2 = "SVC" + UUID.randomUUID().toString().substring(0, 4);
+        
         customer = new Customer.Builder()
                 .setUserName("Liam")
                 .setUserSurname("Doe")
@@ -46,7 +55,7 @@ class VehicleServiceTest {
         customer = customerService.create(customer);
 
         vehicle1 = new Vehicle.Builder()
-                .setCarPlateNumber("ABC123")
+                .setCarPlateNumber(uniquePlate1)
                 .setCarMake("Toyota")
                 .setCarColour("Red")
                 .setCarModel("Corolla")
@@ -54,7 +63,7 @@ class VehicleServiceTest {
                 .build();
 
         vehicle2 = new Vehicle.Builder()
-                .setCarPlateNumber("XYZ789")
+                .setCarPlateNumber(uniquePlate2)
                 .setCarMake("Honda")
                 .setCarColour("Blue")
                 .setCarModel("Civic")
@@ -69,8 +78,9 @@ class VehicleServiceTest {
     @Rollback(false) //added by Princess
     @Order(1)
     void create() {
+        String newPlate = "NEW" + UUID.randomUUID().toString().substring(0, 4);
         Vehicle newVehicle = new Vehicle.Builder()
-                .setCarPlateNumber("LMN456")
+                .setCarPlateNumber(newPlate)
                 .setCarMake("Ford")
                 .setCarColour("Black")
                 .setCarModel("Focus")
@@ -80,7 +90,7 @@ class VehicleServiceTest {
         Vehicle created = service.create(newVehicle);
         System.out.println("CREATE Result: " + created);
         assertNotNull(created.getVehicleID());
-        assertEquals("LMN456", created.getCarPlateNumber());
+        assertEquals(newPlate, created.getCarPlateNumber());
     }
 
     @Test

@@ -85,8 +85,22 @@ public class VehicleControllerTest {
                 .build();
 
         // Persist vehicles using controller and update references
-        ResponseEntity<Vehicle> response1 = controller.create((Map<String, Object>) vehicle1);
-        ResponseEntity<Vehicle> response2 = controller.create((Map<String, Object>) vehicle2);
+        Map<String, Object> vehicle1Data = new HashMap<>();
+        vehicle1Data.put("carPlateNumber", vehicle1.getCarPlateNumber());
+        vehicle1Data.put("carMake", vehicle1.getCarMake());
+        vehicle1Data.put("carColour", vehicle1.getCarColour());
+        vehicle1Data.put("carModel", vehicle1.getCarModel());
+        vehicle1Data.put("customerId", vehicle1.getCustomer().getUserId());
+        
+        Map<String, Object> vehicle2Data = new HashMap<>();
+        vehicle2Data.put("carPlateNumber", vehicle2.getCarPlateNumber());
+        vehicle2Data.put("carMake", vehicle2.getCarMake());
+        vehicle2Data.put("carColour", vehicle2.getCarColour());
+        vehicle2Data.put("carModel", vehicle2.getCarModel());
+        vehicle2Data.put("customerId", vehicle2.getCustomer().getUserId());
+        
+        ResponseEntity<Vehicle> response1 = controller.create(vehicle1Data);
+        ResponseEntity<Vehicle> response2 = controller.create(vehicle2Data);
 
         // Update references with the persisted entities (they now have IDs)
         vehicle1 = response1.getBody();
@@ -108,7 +122,14 @@ public class VehicleControllerTest {
                 .setCustomer(customer)
                 .build();
 
-        ResponseEntity<Vehicle> response = controller.create((Map<String, Object>) newVehicle);
+        Map<String, Object> newVehicleData = new HashMap<>();
+        newVehicleData.put("carPlateNumber", newVehicle.getCarPlateNumber());
+        newVehicleData.put("carMake", newVehicle.getCarMake());
+        newVehicleData.put("carColour", newVehicle.getCarColour());
+        newVehicleData.put("carModel", newVehicle.getCarModel());
+        newVehicleData.put("customerId", newVehicle.getCustomer().getUserId());
+        
+        ResponseEntity<Vehicle> response = controller.create(newVehicleData);
         System.out.println("CREATE Result: " + response.getBody());
 
         assertEquals(HttpStatus.OK, response.getStatusCode()); // Your controller returns 200, not 201

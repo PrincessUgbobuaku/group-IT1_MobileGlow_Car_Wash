@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { apiClient } from '../../../services/api';
 import './CleaningServiceManagement.css';
+import NavbarEmployee from "../../components/NavbarEmployee";
 
 // Cleaning Service API functions
 const CLEANING_SERVICE_API = '/api/cleaningservice';
-const API_BASE_URL = 'http://localhost:8080/mobileglow';
 
 const cleaningServiceService = {
     // Get all cleaning services
     getAllCleaningServices: async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}${CLEANING_SERVICE_API}/getAll`);
+            console.log('Fetching all cleaning services...');
+            const response = await apiClient.get(`${CLEANING_SERVICE_API}/getAll`);
+            console.log('Cleaning services fetched:', response.data);
             return response.data;
         } catch (error) {
             console.error('Error fetching cleaning services:', error);
+            console.error('Error status:', error.response?.status);
+            console.error('Error data:', error.response?.data);
             throw error;
         }
     },
@@ -21,7 +25,9 @@ const cleaningServiceService = {
     // Get cleaning service by ID
     getCleaningServiceById: async (id) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}${CLEANING_SERVICE_API}/read/${id}`);
+            console.log(`Fetching cleaning service with ID: ${id}`);
+            const response = await apiClient.get(`${CLEANING_SERVICE_API}/read/${id}`);
+            console.log('Cleaning service fetched:', response.data);
             return response.data;
         } catch (error) {
             console.error(`Error fetching cleaning service ${id}:`, error);
@@ -32,9 +38,14 @@ const cleaningServiceService = {
     // Create new cleaning service
     createCleaningService: async (serviceData) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}${CLEANING_SERVICE_API}/create`, serviceData);
+            console.log('Creating cleaning service with data:', serviceData);
+            const response = await apiClient.post(`${CLEANING_SERVICE_API}/create`, serviceData);
+            console.log('Cleaning service created:', response.data);
             return { success: true, data: response.data };
         } catch (error) {
+            console.error('Error creating cleaning service:', error);
+            console.error('Error status:', error.response?.status);
+            console.error('Error data:', error.response?.data);
             if (error.response?.status === 400 && error.response?.data?.message?.includes('already exists')) {
                 return { success: false, error: 'DUPLICATE', message: 'Service already exists with this name' };
             }
@@ -45,10 +56,14 @@ const cleaningServiceService = {
     // Update cleaning service
     updateCleaningService: async (id, serviceData) => {
         try {
-            const response = await axios.put(`${API_BASE_URL}${CLEANING_SERVICE_API}/update/${id}`, serviceData);
+            console.log(`Updating cleaning service with ID: ${id}`, serviceData);
+            const response = await apiClient.put(`${CLEANING_SERVICE_API}/update/${id}`, serviceData);
+            console.log('Cleaning service updated:', response.data);
             return response.data;
         } catch (error) {
             console.error(`Error updating cleaning service ${id}:`, error);
+            console.error('Error status:', error.response?.status);
+            console.error('Error data:', error.response?.data);
             throw error;
         }
     },
@@ -56,10 +71,14 @@ const cleaningServiceService = {
     // Delete cleaning service
     deleteCleaningService: async (id) => {
         try {
-            const response = await axios.delete(`${API_BASE_URL}${CLEANING_SERVICE_API}/delete/${id}`);
+            console.log(`Deleting cleaning service with ID: ${id}`);
+            const response = await apiClient.delete(`${CLEANING_SERVICE_API}/delete/${id}`);
+            console.log('Delete response status:', response.status);
             return response.status === 204; // Success if no content
         } catch (error) {
             console.error(`Error deleting cleaning service ${id}:`, error);
+            console.error('Error status:', error.response?.status);
+            console.error('Error data:', error.response?.data);
             throw error;
         }
     }
@@ -74,13 +93,6 @@ const CleaningServiceManagement = () => {
     const [validationPopup, setValidationPopup] = useState({ show: false, message: '' });
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedServices, setSelectedServices] = useState(new Set());
-    const [newServiceData, setNewServiceData] = useState({
-        serviceName: '',
-        category: '',
-        description: '',
-        duration: '',
-        price: ''
-    });
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleteType, setDeleteType] = useState('single'); // 'single' or 'bulk'
@@ -93,7 +105,21 @@ const CleaningServiceManagement = () => {
         description: ''
     });
 
+    // Authentication helper function
+    const getAuthToken = () => {
+        return localStorage.getItem('authToken') || localStorage.getItem('token');
+    };
+
     useEffect(() => {
+        // Check if user is authenticated
+        const token = getAuthToken();
+        console.log('Auth token status:', token ? 'Present' : 'Missing');
+        
+        if (!token) {
+            setError('Authentication required. Please log in first.');
+            return;
+        }
+        
         fetchServices();
     }, []);
 
@@ -104,8 +130,12 @@ const CleaningServiceManagement = () => {
             setServices(data);
             setError(null);
         } catch (err) {
-            setError('Failed to fetch services');
-            console.error('Error:', err);
+            console.error('Error fetching services:', err);
+            if (err.response?.status === 401) {
+                setError('Authentication failed. Please log in again.');
+            } else {
+                setError(err.response?.data?.message || 'Failed to fetch services. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -205,8 +235,12 @@ const CleaningServiceManagement = () => {
                 }
             }
         } catch (err) {
-            setError(editingService ? 'Failed to update service' : 'Failed to create service');
-            console.error('Error:', err);
+            console.error('Error in handleSubmit:', err);
+            if (err.response?.status === 401) {
+                setError('Authentication failed. Please log in again.');
+            } else {
+                setError(err.response?.data?.message || (editingService ? 'Failed to update service' : 'Failed to create service'));
+            }
         } finally {
             setLoading(false);
         }
@@ -246,8 +280,12 @@ const CleaningServiceManagement = () => {
             setError(null);
             fetchServices(); // Refresh the list
         } catch (err) {
-            setError(deleteType === 'single' ? 'Failed to delete service' : 'Failed to delete some services');
-            console.error('Error:', err);
+            console.error('Error in confirmDelete:', err);
+            if (err.response?.status === 401) {
+                setError('Authentication failed. Please log in again.');
+            } else {
+                setError(err.response?.data?.message || (deleteType === 'single' ? 'Failed to delete service' : 'Failed to delete some services'));
+            }
         } finally {
             setLoading(false);
             setShowDeletePopup(false);
@@ -314,72 +352,6 @@ const CleaningServiceManagement = () => {
         setShowDeletePopup(true);
     };
 
-    // Handle inline editing for new service row
-    const handleNewServiceInputChange = (field, value) => {
-        setNewServiceData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-    };
-
-    // Create new service from inline form
-    const handleCreateInlineService = async () => {
-        if (!newServiceData.serviceName || !newServiceData.category || !newServiceData.duration || !newServiceData.price) {
-            setValidationPopup({
-                show: true,
-                message: 'Please fill in all required fields'
-            });
-            return;
-        }
-
-        // Validate duration is within limits
-        const duration = parseFloat(newServiceData.duration);
-        if (duration < 0.5 || duration > 5) {
-            setValidationPopup({
-                show: true,
-                message: 'Duration must be between 0.5 and 5 hours'
-            });
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const processedData = {
-                serviceName: newServiceData.serviceName,
-                category: newServiceData.category,
-                priceOfService: parseFloat(newServiceData.price),
-                duration: parseFloat(newServiceData.duration)
-            };
-
-            const result = await cleaningServiceService.createCleaningService(processedData);
-
-            if (result.success) {
-                // Save description locally for the new service
-                if (newServiceData.description.trim() && result.data?.cleaningServiceId) {
-                    setServiceDescriptions(prev => new Map(prev).set(result.data.cleaningServiceId, newServiceData.description));
-                }
-
-                setError(null);
-                setNewServiceData({
-                    serviceName: '',
-                    category: '',
-                    description: '',
-                    duration: '',
-                    price: ''
-                });
-                fetchServices();
-            } else if (result.error === 'DUPLICATE') {
-                setValidationPopup({ show: true, message: result.message });
-            } else {
-                setError('Failed to create service');
-            }
-        } catch (err) {
-            setError('Failed to create service');
-            console.error('Error:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // Handle service actions (edit/delete from table)
     const handleServiceAction = (service, action) => {
@@ -401,13 +373,10 @@ const CleaningServiceManagement = () => {
 
     return (
         <div className="cleaning-service-management">
+            <NavbarEmployee/>
             <div className="header">
                 <h1>Manage Services</h1>
-                <p>Services dashboard</p>
-                <div className="admin-links">
-                    <a href="/profile-management" className="admin-link">👥 Profile Management</a>
-                    <a href="/vehicles" className="admin-link">🚗 Vehicle Management</a>
-                </div>
+                <p>Update and manage your cleaning services</p>
             </div>
 
             {error && (
@@ -419,27 +388,20 @@ const CleaningServiceManagement = () => {
 
             <div className="actions-bar">
                 <div className="action-left">
-                    <button
-                        className="btn-icon"
-                        title="Delete selected"
-                        onClick={handleBulkDelete}
-                        disabled={selectedServices.size === 0}
-                    >
-                        🗑️
-                    </button>
-                    <button className="btn-icon" title="Filters">
-                        🔍
-                    </button>
                 </div>
                 <div className="action-right">
-                    <div className="search-bar">
-                        🔍
-                        <input
-                            type="text"
-                            placeholder="Search"
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                        />
+                    <div className="search-container">
+                        <div className="search-bar">
+                            <input
+                                type="text"
+                                placeholder="Search services..."
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                            />
+                        </div>
+                        <button className="search-icon-btn" title="Search">
+                            🔍
+                        </button>
                     </div>
                 </div>
             </div>
@@ -585,99 +547,38 @@ const CleaningServiceManagement = () => {
                             <td className="service-duration">{service.duration} hours</td>
                             <td className="service-price">R {service.priceOfService}</td>
                             <td className="service-actions">
-                                <div className="action-dropdown">
-                                    <button className="btn-icon" title="More options">
-                                        ⋮
-                                    </button>
-                                    <div className="dropdown-menu">
-                                        <button onClick={() => handleServiceAction(service, 'edit')}>
-                                            ✏️ Edit
-                                        </button>
-                                        <button onClick={() => handleServiceAction(service, 'delete')}>
-                                            🗑️ Delete
-                                        </button>
-                                    </div>
-                                </div>
+                                <button
+                                    className="btn btn-edit"
+                                    onClick={() => handleServiceAction(service, 'edit')}
+                                    title="Edit service"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className="btn btn-delete"
+                                    onClick={() => handleServiceAction(service, 'delete')}
+                                    title="Delete service"
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     ))}
-                    <tr className="new-service-row">
-                        <td className="checkbox-cell">
-                            <input type="checkbox" className="service-checkbox" disabled />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                className="new-service-input"
-                                placeholder="+ New Service Name"
-                                value={newServiceData.serviceName}
-                                onChange={(e) => handleNewServiceInputChange('serviceName', e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                className="new-service-input"
-                                placeholder="Enter service category"
-                                value={newServiceData.category}
-                                onChange={(e) => handleNewServiceInputChange('category', e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                className="new-service-input"
-                                placeholder="Enter service description"
-                                value={newServiceData.description}
-                                onChange={(e) => handleNewServiceInputChange('description', e.target.value)}
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="number"
-                                className="new-service-input"
-                                placeholder="Enter service duration"
-                                value={newServiceData.duration}
-                                onChange={(e) => handleNewServiceInputChange('duration', e.target.value)}
-                                min="0.5"
-                                max="5"
-                                step="0.5"
-                            />
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                className="new-service-input"
-                                placeholder="Enter service price"
-                                value={newServiceData.price}
-                                onChange={(e) => handleNewServiceInputChange('price', e.target.value)}
-                            />
-                        </td>
-                        <td className="service-actions">
-                            <button
-                                className="btn-icon"
-                                title="Create service"
-                                onClick={handleCreateInlineService}
-                                disabled={loading}
-                            >
-                                ➕
-                            </button>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
 
-            {services.length === 0 && !loading && (
-                <div className="empty-state">
-                    <div className="empty-icon">🚗</div>
-                    <h3>No services found</h3>
-                    <p>Create your first cleaning service to get started</p>
-                    <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-                        Add First Service
-                    </button>
-                </div>
-            )}
+            {/* Create New Service Button */}
+            <div className="create-service-section">
+                <button 
+                    className="btn btn-primary" 
+                    onClick={() => setShowForm(true)}
+                    disabled={loading}
+                >
+                    Create New Service
+                </button>
+            </div>
+
 
             {/* Delete Confirmation Popup */}
             {showDeletePopup && (

@@ -1,3 +1,5 @@
+//ProfileManagement focuses on maintenance tasks for existing accounts (edit basic info, toggle status)
+
 import React, { useState, useEffect } from 'react';
 import { customerService } from '../services/customerService';
 import './ProfileManagement.css';

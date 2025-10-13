@@ -29,14 +29,15 @@ const styles = {
 
 const SignUp = () => {
     const location = useLocation();
-    const selectedRole = location.state?.selectedRole || 'Customer';
+    const selectedRole = location.state?.role || 'Customer';
 
     const [manager, setManager] = useState({
         userName: '',
         userSurname: '',
+        customerDOB: '',
         isActive: true,
         roleDescription: selectedRole === 'Employee' ? 'EMPLOYEE' : 'CLIENT',
-        employeeType: 'Manager',
+        employeeType: 'None',
         hireDate: '',
         contact: {
             phoneNumber: ''
@@ -48,32 +49,30 @@ const SignUp = () => {
     });
 
     const [isEditing, setIsEditing] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        const userEmail = localStorage.getItem('userEmail');
-        if (userEmail) {
-            const fetchManagerData = async () => {
-                try {
-                    const response = await fetch('http://localhost:8080/mobileglow/Manager/getAllManagers');
-                    if (response.ok) {
-                        const managers = await response.json();
-                        const loggedInManager = managers.find(m => m.login.emailAddress === userEmail);
-                        if (loggedInManager) {
-                            setManager(loggedInManager);
-                            setIsEditing(true);
-                        }
-                    } else {
-                        alert('Failed to fetch manager data');
-                    }
-                } catch (error) {
-                    console.error('Error fetching manager data:', error);
-                    alert('Something went wrong while fetching data');
-                }
-            };
-            fetchManagerData();
-        }
+        // Reset manager state to empty when component mounts or selectedRole changes
+        setManager({
+            userName: '',
+            userSurname: '',
+            customerDOB: '',
+            isActive: true,
+            roleDescription: selectedRole === 'Employee' ? 'EMPLOYEE' : 'CLIENT',
+            employeeType: 'None',
+            hireDate: '',
+            contact: {
+                phoneNumber: ''
+            },
+            login: {
+                emailAddress: '',
+                password: ''
+            }
+        });
+        setIsEditing(false);
     }, [selectedRole]);
+    const navigate = useNavigate();
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -110,7 +109,7 @@ const SignUp = () => {
         e.preventDefault();
 
         // Instead of saving here, navigate to address page with manager data
-        navigate('/address', { state: { manager } });
+        navigate('/AddressDetails', { state: { manager } });
     };
 
     const handleDelete = async () => {
@@ -175,9 +174,10 @@ const SignUp = () => {
                                         onChange={handleChange}
                                         required
                                     >
+                                        <option value="None">None</option>
                                         <option value="Accountant">Accountant</option>
                                         <option value="Manager">Manager</option>
-                                        <option value="washAttendent">washAttendent</option>
+                                        <option value="WashAttendant">WashAttendant</option>
                                     </select>
                                 </div>
 
