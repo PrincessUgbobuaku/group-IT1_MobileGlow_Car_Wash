@@ -12,6 +12,8 @@ import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.domain.user.Login;
 import za.ac.cput.domain.user.User;
 
+import java.util.Arrays;
+
 @Entity
 public class WashAttendant extends User {
     private boolean isFullTime;
@@ -31,6 +33,9 @@ public class WashAttendant extends User {
         this.employeeType = builder.employeeType;
         this.isFullTime = builder.isFullTime;
         this.shiftHours = builder.shiftHours;
+        this.imageName = builder.imageName;
+        this.imageType = builder.imageType;
+        this.imageData = builder.imageData;
         this.contact = builder.contact;
         this.address = builder.address;
         this.login = builder.login;
@@ -51,17 +56,20 @@ public class WashAttendant extends User {
     @Override
     public String toString() {
         return "WashAttendant{" +
-                "isFullTime=" + getIsFullTime() +
-                ", shiftHours=" + getShiftHours() +
-                ", employeeType='" + getEmployeeType() + '\'' +
-                ", userId=" + getUserId() +
-                ", userName='" + getUserName() + '\'' +
-                ", userSurname='" + getUserSurname() + '\'' +
-                ", isActive=" + getIsActive() +
-                ", roleDescription=" + getRoleDescription() +
-                ", contact=" + getContact() +
-                ", address=" + getAddress() +
-                ", login=" + getLogin()+
+                "isFullTime=" + isFullTime +
+                ", shiftHours=" + shiftHours +
+                ", employeeType='" + employeeType + '\'' +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userSurname='" + userSurname + '\'' +
+                ", isActive=" + isActive +
+                ", imageName='" + imageName + '\'' +
+                ", imageType='" + imageType + '\'' +
+                ", imageData=" + Arrays.toString(imageData) +
+                ", roleDescription=" + roleDescription +
+                ", contact=" + contact +
+                ", address=" + address +
+                ", login=" + login +
                 '}';
     }
 
@@ -74,6 +82,9 @@ public class WashAttendant extends User {
         private String employeeType;
         private boolean isFullTime;
         private int shiftHours;
+        private String imageName;
+        private String imageType;
+        private byte[] imageData;
         private Contact contact;
         private Address address;
         private Login login;
@@ -118,6 +129,21 @@ public class WashAttendant extends User {
             return this;
         }
 
+        public Builder setImageName(String imageName) {
+            this.imageName = imageName;
+            return this;
+        }
+
+        public Builder setImageType(String imageType) {
+            this.imageType = imageType;
+            return this;
+        }
+
+        public Builder setImageData(byte[] imageData) {
+            this.imageData = imageData;
+            return this;
+        }
+
         public Builder setContact(Contact contact) {
             this.contact = contact;
             return this;
@@ -142,6 +168,9 @@ public class WashAttendant extends User {
             this.employeeType = washAttendant.employeeType;
             this.isFullTime = washAttendant.isFullTime;
             this.shiftHours = washAttendant.shiftHours;
+            this.imageName = washAttendant.imageName;
+            this.imageType = washAttendant.imageType;
+            this.imageData = washAttendant.imageData;
             this.contact = washAttendant.contact;
             this.address = washAttendant.address;
             this.login = washAttendant.login;

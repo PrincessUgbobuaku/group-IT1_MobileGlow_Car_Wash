@@ -12,6 +12,8 @@ import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.domain.user.Login;
 import za.ac.cput.domain.user.User;
 
+import java.util.Arrays;
+
 @Entity
 public class Accountant extends User {
     private boolean hasTaxFillingAuthority;
@@ -29,6 +31,9 @@ public class Accountant extends User {
         this.roleDescription = builder.roleDescription;
         this.employeeType = builder.employeeType;
         this.hasTaxFillingAuthority = builder.hasTaxFillingAuthority;
+        this.imageName = builder.imageName;
+        this.imageType = builder.imageType;
+        this.imageData = builder.imageData;
         this.contact = builder.contact;
         this.address = builder.address;
         this.login= builder.login;
@@ -45,16 +50,19 @@ public class Accountant extends User {
     @Override
     public String toString() {
         return "Accountant{" +
-                "hasTaxFillingAuthority=" + getHasTaxFillingAuthority() +
-                ", employeeType='" + getEmployeeType() + '\'' +
-                ", userId=" + getUserId() +
-                ", userName='" + getUserName() + '\'' +
-                ", userSurname='" + getUserSurname() + '\'' +
-                ", isActive=" + getIsActive() +
-                ", roleDescription=" + getRoleDescription() +
-                ", contact=" + getContact() +
-                ", address=" + getAddress() +
-                ", login=" + getLogin() +
+                "hasTaxFillingAuthority=" + hasTaxFillingAuthority +
+                ", employeeType='" + employeeType + '\'' +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userSurname='" + userSurname + '\'' +
+                ", isActive=" + isActive +
+                ", imageName='" + imageName + '\'' +
+                ", imageType='" + imageType + '\'' +
+                ", imageData=" + Arrays.toString(imageData) +
+                ", roleDescription=" + roleDescription +
+                ", contact=" + contact +
+                ", address=" + address +
+                ", login=" + login +
                 '}';
     }
 
@@ -66,6 +74,9 @@ public class Accountant extends User {
         private User.RoleDescription roleDescription;
         private String employeeType;
         private boolean hasTaxFillingAuthority;
+        private String imageName;
+        private String imageType;
+        private byte[] imageData;
         private Contact contact;
         private Address address;
         private Login login;
@@ -105,6 +116,21 @@ public class Accountant extends User {
             return this;
         }
 
+        public Builder setImageName(String imageName) {
+            this.imageName = imageName;
+            return this;
+        }
+
+        public Builder setImageType(String imageType) {
+            this.imageType = imageType;
+            return this;
+        }
+
+        public Builder setImageData(byte[] imageData) {
+            this.imageData = imageData;
+            return this;
+        }
+
         public Builder setContact(Contact contact) {
             this.contact = contact;
             return this;
@@ -128,6 +154,9 @@ public class Accountant extends User {
             this.roleDescription = accountant.roleDescription;
             this.employeeType = accountant.employeeType;
             this.hasTaxFillingAuthority = accountant.hasTaxFillingAuthority;
+            this.imageName = accountant.imageName;
+            this.imageType = accountant.imageType;
+            this.imageData = accountant.imageData;
             this.contact = accountant.contact;
             this.address = accountant.address;
             this.login= accountant.login;

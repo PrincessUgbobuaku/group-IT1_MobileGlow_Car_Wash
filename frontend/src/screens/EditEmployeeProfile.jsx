@@ -13,6 +13,8 @@ const EditEmployeeProfile = () => {
     contact: { phoneNumber: "" },
     address: { streetNumber: "", streetName: "", city: "", postalCode: "" },
     login: { emailAddress: "" },
+    imageFile: null,
+    imagePreviewUrl: null,
   });
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState('');
@@ -30,20 +32,20 @@ const EditEmployeeProfile = () => {
 
       try {
         let users = [];
-        const endpoints = [
-          'http://localhost:8080/mobileglow/Manager/getAllManagers',
-          'http://localhost:8080/mobileglow/Accountant/getAllAccountants',
-          'http://localhost:8080/mobileglow/wash-attendants/getAllWashAttendants'
+        const endpointTypes = [
+          { url: 'http://localhost:8080/mobileglow/Manager/getAllManagers', type: 'Manager' },
+          { url: 'http://localhost:8080/mobileglow/Accountant/getAllAccountants', type: 'Accountant' },
+          { url: 'http://localhost:8080/mobileglow/wash-attendants/getAllWashAttendants', type: 'WashAttendant' }
         ];
-        for (const endpoint of endpoints) {
+        for (const { url, type } of endpointTypes) {
           try {
-            const response = await fetch(endpoint);
+            const response = await fetch(url);
             if (response.ok) {
               const data = await response.json();
-              users = users.concat(data);
+              users = users.concat(data.map(u => ({ ...u, employeeType: type })));
             }
           } catch (error) {
-            console.error('Error fetching from', endpoint, error);
+            console.error('Error fetching from', url, error);
           }
         }
         const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
@@ -75,10 +77,36 @@ const EditEmployeeProfile = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setEmployee({
+        ...employee,
+        imageFile: file,
+        imagePreviewUrl: URL.createObjectURL(file),
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await employeeService.updateEmployee(employee);
+      const formData = new FormData();
+      for (const key in employee) {
+        if (key === "imageFile") continue;
+        if (typeof employee[key] === "object" && employee[key] !== null) {
+          for (const subKey in employee[key]) {
+            formData.append(`${key}.${subKey}`, employee[key][subKey]);
+          }
+        } else {
+          formData.append(key, employee[key]);
+        }
+      }
+      if (employee.imageFile) {
+        formData.append("imageFile", employee.imageFile);
+      }
+
+      await employeeService.updateEmployee(formData);
 
       setStatusMessage('Profile updated successfully');
       setMessageType('success');
@@ -210,19 +238,36 @@ const EditEmployeeProfile = () => {
               placeholder="Enter city"
             />
           </div>
-          <div style={styles.group}>
-            <label style={styles.label}>Postal code</label>
-            <input
-              type="text"
-              value={employee.address.postalCode}
-              onChange={(e) => handleChange(e, "address", "postalCode")}
-              style={styles.input}
-              placeholder="Enter postal code"
-            />
-          </div>
+        <div style={styles.group}>
+          <label style={styles.label}>Postal code</label>
+          <input
+            type="text"
+            value={employee.address.postalCode}
+            onChange={(e) => handleChange(e, "address", "postalCode")}
+            style={styles.input}
+            placeholder="Enter postal code"
+          />
         </div>
+      </div>
 
-        <button type="submit" style={styles.saveBtn}>Save Changes</button>
+      <div style={styles.group}>
+        <label style={styles.label}>Choose File</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={styles.input}
+        />
+        {employee.imagePreviewUrl && (
+          <img
+            src={employee.imagePreviewUrl}
+            alt="Preview"
+            style={{ width: 100, height: 100, borderRadius: "50%", marginTop: 10 }}
+          />
+        )}
+      </div>
+
+      <button type="submit" style={styles.saveBtn}>Save Changes</button>
       </form>
     </div>
   );

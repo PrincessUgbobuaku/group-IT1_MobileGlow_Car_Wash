@@ -1,5 +1,5 @@
 // src/services/employeeService.js
-import api from './api';
+import api, { apiClient } from './api';
 
 // CORRECTED SERVICE - MATCHES YOUR ACTUAL CONTROLLERS
 export const employeeServiceSimple = {
@@ -68,8 +68,32 @@ export const employeeService = {
 
     // Update employee
     updateEmployee: async (employeeData) => {
-        const endpoint = getEndpointByType(employeeData.employeeType || employeeData.type, 'update');
-        return api.put(`${endpoint}/${employeeData.userId}`, employeeData);
+        const type = employeeData.get('employeeType') || employeeData.get('type');
+        const userId = employeeData.get('userId');
+        const endpoint = getEndpointByType(type, 'update');
+        // Create FormData with 'employee' as JSON part
+        const formData = new FormData();
+        const employeeObj = {};
+        for (const [key, value] of employeeData.entries()) {
+            if (key === 'imageFile') {
+                formData.append('imageFile', value);
+            } else {
+                // Flatten keys like contact.phoneNumber to nested object
+                const keys = key.split('.');
+                let obj = employeeObj;
+                for (let i = 0; i < keys.length - 1; i++) {
+                    if (!obj[keys[i]]) obj[keys[i]] = {};
+                    obj = obj[keys[i]];
+                }
+                obj[keys[keys.length - 1]] = value;
+            }
+        }
+        formData.append('employee', new Blob([JSON.stringify(employeeObj)], { type: 'application/json' }));
+        return apiClient.put(`${endpoint}/${userId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
     },
 
     // Delete employee

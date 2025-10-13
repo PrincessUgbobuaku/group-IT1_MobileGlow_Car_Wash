@@ -1,8 +1,10 @@
 package za.ac.cput.controller.user.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.service.user.employee.IWashAttendantService;
 
@@ -34,14 +36,18 @@ public class WashAttendantController {
         return ResponseEntity.ok(washAttendant);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<WashAttendant> update(@PathVariable Long id, @RequestBody WashAttendant washAttendant) {
-        washAttendant = new WashAttendant.Builder()
-                .copy(washAttendant)
-                .setUserId(id)
-                .build();
-        WashAttendant updated = washAttendantService.update(washAttendant);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    @PutMapping(value = "/update/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<WashAttendant> updateWashAttendant(
+            @PathVariable Long id,
+            @RequestPart("employee") WashAttendant washAttendant,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+        try {
+            WashAttendant updated = washAttendantService.updateWashAttendant(id, washAttendant, imageFile);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping("/delete/{id}")
@@ -80,5 +86,18 @@ public class WashAttendantController {
         return ResponseEntity.ok(washAttendants);
     }
 
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        WashAttendant washAttendant = washAttendantService.read(id);
+        byte[] imageFile = washAttendant.getImageData();
+
+        if (washAttendant == null || washAttendant.getImageData() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(washAttendant.getImageType()))
+                .body(imageFile);
+    }
 
 }
