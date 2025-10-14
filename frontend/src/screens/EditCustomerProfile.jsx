@@ -10,6 +10,8 @@ const EditCustomerProfile = () => {
     contact: { phoneNumber: "" },
     address: { streetNumber: "", streetName: "", city: "", postalCode: "" },
     login: { emailAddress: "" },
+    imageFile: null,
+    imagePreviewUrl: null,
   });
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState('');
@@ -56,10 +58,36 @@ const EditCustomerProfile = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setClient({
+        ...client,
+        imageFile: file,
+        imagePreviewUrl: URL.createObjectURL(file),
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await customerService.updateCustomer(client.userId, client);
+      const formData = new FormData();
+      for (const key in client) {
+        if (key === "imageFile") continue;
+        if (typeof client[key] === "object" && client[key] !== null) {
+          for (const subKey in client[key]) {
+            formData.append(`${key}.${subKey}`, client[key][subKey]);
+          }
+        } else {
+          formData.append(key, client[key]);
+        }
+      }
+      if (client.imageFile) {
+        formData.append("imageFile", client.imageFile);
+      }
+
+      await customerService.updateCustomer(client.userId, formData);
       setStatusMessage('Profile updated successfully');
       setMessageType('success');
       navigate("/profiles");
@@ -166,19 +194,36 @@ const EditCustomerProfile = () => {
               placeholder="City"
             />
           </div>
-          <div style={styles.group}>
-            <label style={styles.label}>Postal Code</label>
-            <input
-              type="text"
-              value={client.address.postalCode}
-              onChange={(e) => handleChange(e, "address", "postalCode")}
-              style={styles.input}
-              placeholder="Postal code"
-            />
-          </div>
+        <div style={styles.group}>
+          <label style={styles.label}>Postal Code</label>
+          <input
+            type="text"
+            value={client.address.postalCode}
+            onChange={(e) => handleChange(e, "address", "postalCode")}
+            style={styles.input}
+            placeholder="Postal code"
+          />
         </div>
+      </div>
 
-        <button type="submit" style={styles.saveBtn}>Save Changes</button>
+      <div style={styles.group}>
+        <label style={styles.label}>Choose File</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={styles.input}
+        />
+        {client.imagePreviewUrl && (
+          <img
+            src={client.imagePreviewUrl}
+            alt="Preview"
+            style={{ width: 100, height: 100, borderRadius: "50%", marginTop: 10 }}
+          />
+        )}
+      </div>
+
+      <button type="submit" style={styles.saveBtn}>Save Changes</button>
       </form>
     </div>
   );

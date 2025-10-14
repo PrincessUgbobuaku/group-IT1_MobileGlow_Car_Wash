@@ -1,10 +1,16 @@
 /* Import fonts to match landing page */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;500;600&display=swap');
 
+/* Ensure navbar maintains dark blue background */
+.navbar {
+    background: #004aad !important;
+    color: white !important;
+}
+
 .vehicle-page {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
+    padding: 0;
     font-family: 'Montserrat', sans-serif;
     max-width: 1400px;
     margin: 0 auto;

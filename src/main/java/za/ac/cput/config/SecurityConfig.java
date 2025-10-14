@@ -3,6 +3,7 @@ package za.ac.cput.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,22 +32,13 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    @Autowired
-    private JWTAuthenticationFilter jwtAuthFilter;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/Login/create", "/Login/authenticate").permitAll()
-                        .requestMatchers("/Manager/**", "/wash-attendants/**", "/Accountant/**", "/Customer/**", "/api/customers/**").permitAll()
-                        .requestMatchers("/api/vehicle/**").authenticated()
-                        .requestMatchers("/employee/**").hasRole("EMPLOYEE")
-                        .requestMatchers("/customer/**").hasRole("CLIENT")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable()) //this disables the form provided by security
                 .httpBasic(Customizer.withDefaults()); // keep basic auth for API tools like Postman
         return http.build();

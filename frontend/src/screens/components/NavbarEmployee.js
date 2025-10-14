@@ -24,7 +24,7 @@ const NavbarEmployee = () => {
 
             <div className="nav-links">
                 {/* Top-level navigation */}
-                <a href="/bookings" className="nav-btn">View Bookings</a>
+                <a href="/manage-bookings" className="nav-btn">View Bookings</a>
                 <a href="/cleaning-services/management" className="nav-btn">Update Services</a>
                 <a href="/performance" className="nav-btn">Performance</a>
                 <a href="/EmployeeManagement" className="nav-btn">Employees</a>
@@ -37,6 +37,7 @@ const NavbarEmployee = () => {
                     {isOpen && (
                         <ul className="dropdown-menu">
                             <li><a href="/profiles">Profile</a></li>
+                            <li><a href="/password-reset">Change password</a></li>
                             <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
                     )}
