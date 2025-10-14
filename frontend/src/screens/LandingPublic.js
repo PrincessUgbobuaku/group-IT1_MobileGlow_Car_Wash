@@ -1,5 +1,5 @@
 // LandingPublic.js
-import React from "react";
+import React from "react" ;
 import "./LandingPublic.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";  // adjust the path if needed
