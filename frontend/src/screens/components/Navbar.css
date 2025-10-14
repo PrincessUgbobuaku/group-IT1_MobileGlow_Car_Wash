@@ -2,16 +2,25 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #004aad;
+    background: #004aad !important;
     color: white;
     padding: 1rem 2rem;
 }
 
+/* Logo section */
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* spacing between logo and text */
 }
+
+.logo-img {
+    width: 60px;  /* adjust as needed */
+    height: 60px;
+    border-radius: 50%; /* optional: makes it circular */
+    object-fit: cover;
+}
+
 
 .nav-links {
     display: flex;
