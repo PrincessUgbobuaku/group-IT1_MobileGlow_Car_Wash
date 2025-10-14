@@ -23,8 +23,10 @@ const NavbarCustomer = () => {
             <div className="logo">Mobile Car Wash</div>
 
             <div className="nav-links">
-                <a href="/aboutus" className="nav-btn">About Us</a>
-                <a href="/ContactUs" className="nav-btn">Contact Us</a>
+                {/* 🔹 Add 'Our Services' link */}
+                <a href="#our-services" className="nav-btn">Our Services</a>
+                <a href="/about" className="nav-btn">About Us</a>
+                <a href="/Contact Us" className="nav-btn">Contact Us</a>
 
                 <div className="dropdown">
                     <button className="menu-btn" onClick={toggleMenu}>
@@ -34,8 +36,7 @@ const NavbarCustomer = () => {
                         <ul className="dropdown-menu">
                             <li><a href="/profiles">Profile</a></li>
                             <li><a href="/vehicles">Vehicle Page</a></li>
-                            <li><a href="/Booking History">Booking History</a></li>
-                            <li><a href="/password-reset">Change Password</a></li>
+                            <li><a href="/bookinghistory">Booking History</a></li>
                             <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
                     )}
