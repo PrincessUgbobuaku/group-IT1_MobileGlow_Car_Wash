@@ -15,6 +15,8 @@ import DETAILING_IMAGE from "../assets/detailing.png";
 import ENGINE_IMAGE from "../assets/engine.png";
 import WAXING_IMAGE from "../assets/waxing.png";
 import INTERIOR_IMAGE from "../assets/interior.png";
+import HERO_IMAGE from "../assets/hero-carwash.jpg";
+
 
 
 
@@ -146,12 +148,29 @@ export default function LandingPublic() {
             <Navbar />
 
             {/* Hero Section */}
-            <section className="hero-section">
+            <section
+                className="hero-section"
+                style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+            >
+                <div className="hero-overlay"></div>
+
                 <div className="hero-content">
                     <h1 className="hero-heading">We bring the shine to you.</h1>
-                    <h2 className="hero-subheading">Your car, our care – <span>Anywhere.</span></h2>
+                    <h2 className="hero-subheading">
+                        Your car, our care – <span>Anywhere.</span>
+                    </h2>
+
+                    <div className="book-now-container">
+                        <button
+                            onClick={() => (window.location.href = "/login")}
+                            className="cta-button primary"
+                        >
+                            BOOK NOW
+                        </button>
+                    </div>
                 </div>
             </section>
+
 
             {/* Features Section */}
             <section className="features-section">
@@ -173,13 +192,20 @@ export default function LandingPublic() {
             <Stats />
 
             {/* Categories Section */}
-            <section className="categories-section">
+            <section id="our-services" className="categories-section">
                 <div className="section-container">
                     <h2 className="section-heading">Our Services</h2>
-                    <p className="section-subheading">Professional car care services delivered to your doorstep at your convenience</p>
+                    <p className="section-subheading">
+                        Professional car care services delivered to your doorstep at your convenience
+                    </p>
                     <div className="categories-grid">
                         {categories.map((c, i) => (
-                            <CategoryCard key={i} title={c.title} description={c.description} imageUrl={c.imageUrl} />
+                            <CategoryCard
+                                key={i}
+                                title={c.title}
+                                description={c.description}
+                                imageUrl={c.imageUrl}
+                            />
                         ))}
                     </div>
 

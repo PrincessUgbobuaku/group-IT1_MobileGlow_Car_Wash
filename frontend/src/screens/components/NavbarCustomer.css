@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #004aad;
+    background: #004aad !important;
     color: white;
     padding: 1rem 2rem;
 }
@@ -79,4 +79,24 @@
 
 .dropdown-menu li:hover {
     background: #f0f0f0;
+}
+/* Log Out button (inside dropdown) */
+.dropdown-menu li .logout-btn {
+    background-color: #e63946; /* Red button */
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: block; /* makes it behave like <a> links */
+}
+
+/* Hover effect */
+.dropdown-menu li .logout-btn:hover {
+    background-color: #c62828; /* Darker red */
+    transform: scale(1.02);
 }
