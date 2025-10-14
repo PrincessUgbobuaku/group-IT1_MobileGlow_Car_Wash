@@ -15,6 +15,7 @@
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     text-align: center;
+    color: white;
 }
 
 .hero-subheading, .section-subheading, .nav-link, .mobile-nav-link {
@@ -97,33 +98,88 @@
 .mobile-nav-link:hover {
     background-color: #B1D4E0;
 }
-
+/*==================================*/
 /* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, #B1D4E0 0%, #2E8BC0 100%);
-    padding: 5rem 2rem;
+.employee-hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    color: white;
+    overflow: hidden;
 }
 
-.hero-content {
+/* Overlay to darken image for readability */
+.employee-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1;
+}
+
+/* ✅ Logo positioned top-left */
+.employee-hero-logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 2;
+    border: 2px solid white;
+}
+
+/* Hero content centered */
+.employee-hero-content {
+    position: relative;
+    z-index: 2;
     max-width: 800px;
-    margin: 0 auto;
+    padding: 2rem;
 }
 
-.hero-heading {
+/* Text styling */
+.employee-hero-heading {
+    font-family: 'Inter', sans-serif;
     font-size: 2.5rem;
-    color: #0C2D48;
+    color: #fff;
     margin-bottom: 1rem;
 }
 
-.hero-subheading {
-    font-size: 1.5rem;
-    color: white;
-    margin-bottom: 2rem;
+.employee-hero-subheading {
+    font-size: 1.2rem;
+    color: #f0f0f0;
 }
 
-.hero-subheading span {
-    color: #0C2D48;
+.employee-hero-subheading span {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .employee-hero-heading {
+        font-size: 2rem;
+    }
+
+    .employee-hero-subheading {
+        font-size: 1rem;
+    }
+
+    .employee-hero-logo {
+        width: 50px;
+        height: 50px;
+        top: 15px;
+        left: 20px;
+    }
 }
 
 /* Features Section */
@@ -145,14 +201,14 @@
     padding: 2rem 1rem;
 }
 
-/*.feature-icon {*/
-/*    font-size: 3.5rem; !* increased size *!*/
-/*    margin-bottom: 1rem;*/
-/*    height: 80px;      !* taller for larger emojis *!*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*}*/
+.feature-icon {
+    font-size: 3.5rem; /* increased size */
+    margin-bottom: 1rem;
+    height: 80px;      /* taller for larger emojis */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
 .feature-title {
@@ -167,21 +223,12 @@
 }
 
 /* Feature Images */
-/*.feature-image {*/
-/*    width: 100%;            !* take full width of the card *!*/
-/*    max-width: 400px;       !* limit size so it’s not too big *!*/
-/*    height: auto;           !* keeps the image ratio *!*/
-/*    border-radius: 12px;    !* rounded corners *!*/
-/*    margin: 1rem auto;      !* center + spacing *!*/
-/*    display: block;*/
-/*}*/
-
-/* Specific size for feature icons */
-.features-section .feature-image {
-    width: 100%;      /* adjust size as needed */
-    height: 100%;
-    object-fit: contain;
-    margin: 0 auto 1rem;  /* center the image and add spacing below */
+.feature-image {
+    width: 100%;            /* take full width of the card */
+    max-width: 400px;       /* limit size so it’s not too big */
+    height: auto;           /* keeps the image ratio */
+    border-radius: 12px;    /* rounded corners */
+    margin: 1rem auto;      /* center + spacing */
     display: block;
 }
 
@@ -383,6 +430,7 @@
     font-size: 1.1rem;
     margin-bottom: 2rem;
     line-height: 1.6;
+    color: white;
 }
 
 .loyalty-benefits {
@@ -573,5 +621,81 @@
     .legal-links {
         flex-direction: column;
         gap: 0.5rem;
+    }
+}
+/*=======================================*/
+.hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50vh; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+}
+
+/* Overlay to make text readable */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* darkens image for readability */
+    z-index: 1;
+}
+
+/* Hero content stays above overlay */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.hero-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.hero-subheading {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #f0f0f0;
+}
+
+.hero-subheading span {
+    color: white; /* a gold accent */
+}
+
+/* Book Now button */
+.book-now-container .cta-button.primary {
+    background: #004aad;
+    color: white;
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.book-now-container .cta-button.primary:hover {
+    background: #ffcc00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-heading {
+        font-size: 2rem;
+    }
+
+    .hero-subheading {
+        font-size: 1.2rem;
     }
 }
