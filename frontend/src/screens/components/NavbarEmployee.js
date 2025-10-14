@@ -38,6 +38,7 @@ const NavbarEmployee = () => {
                         <ul className="dropdown-menu">
                             <li><a href="/profiles">Profile</a></li>
                             <li><a href="/password-reset">Change password</a></li>
+                            <li><a href="/deactivate-account">Deactivate Account</a></li>
                             <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
                     )}

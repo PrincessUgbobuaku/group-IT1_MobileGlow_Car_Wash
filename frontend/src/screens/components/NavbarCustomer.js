@@ -36,6 +36,7 @@ const NavbarCustomer = () => {
                             <li><a href="/vehicles">Vehicle Page</a></li>
                             <li><a href="/Booking History">Booking History</a></li>
                             <li><a href="/password-reset">Change Password</a></li>
+                            <li><a href="/deactivate-account">Deactivate Account</a></li>
                             <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
                     )}
