@@ -22,13 +22,25 @@ public class ManagerController {
         this.managerService = managerService;
     }
 
+    // CREATE (JSON - for account creation without image)
     @PostMapping("/create")
-    public ResponseEntity<Manager> create(@RequestPart Manager manager,
-                                          @RequestPart MultipartFile imageFile) {
+    public ResponseEntity<Manager> create(@RequestBody Manager manager) {
+        try {
+            Manager created = managerService.create(manager);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // CREATE WITH IMAGE (Multipart - for profile updates with image)
+    @PostMapping("/create-with-image")
+    public ResponseEntity<Manager> createWithImage(@RequestPart Manager manager,
+                                                    @RequestPart(required = false) MultipartFile imageFile) {
         try {
             Manager created = managerService.create(manager, imageFile);
             return ResponseEntity.ok(created);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }
