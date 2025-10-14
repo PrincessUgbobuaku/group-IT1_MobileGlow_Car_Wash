@@ -22,10 +22,27 @@ public class AccountantController {
         this.accountantService = accountantService;
     }
 
+    // CREATE (JSON - for account creation without image)
     @PostMapping("/create")
     public ResponseEntity<Accountant> create(@RequestBody Accountant accountant) {
-        Accountant createdAccountant = accountantService.create(accountant);
-        return ResponseEntity.ok(createdAccountant);
+        try {
+            Accountant createdAccountant = accountantService.create(accountant);
+            return ResponseEntity.ok(createdAccountant);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // CREATE WITH IMAGE (Multipart - for profile updates with image)
+    @PostMapping("/create-with-image")
+    public ResponseEntity<Accountant> createWithImage(@RequestPart Accountant accountant,
+                                                       @RequestPart(required = false) MultipartFile imageFile) {
+        try {
+            Accountant created = accountantService.update(accountant, imageFile);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/read/{id}")

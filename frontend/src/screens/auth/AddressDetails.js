@@ -40,12 +40,21 @@ const AddressDetails = () => {
         postalCode: '',
     });
 
+    const [showModal, setShowModal] = useState(false);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setAddress({ ...address, [name]: value });
+        let updatedValue = value;
+
+        // Validate street number and postal code to allow only numerical values
+        if (name === 'streetNumber' || name === 'postalCode') {
+            updatedValue = value.replace(/\D/g, ''); // Remove non-numeric characters
+        }
+
+        setAddress({ ...address, [name]: updatedValue });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         if (!managerData) {
@@ -53,6 +62,13 @@ const AddressDetails = () => {
             navigate('/manager-form');
             return;
         }
+
+        // Show the confirmation modal instead of proceeding directly
+        setShowModal(true);
+    };
+
+    const handleConfirm = async () => {
+        setShowModal(false);
 
         let endpoint;
         let fullData;
@@ -191,8 +207,7 @@ const AddressDetails = () => {
             });
 
             if (response.ok) {
-                alert('Account created successfully!');
-                navigate(successRedirect);
+                navigate('/login');
             } else {
                 alert('Failed to create account.');
             }
@@ -284,6 +299,23 @@ const AddressDetails = () => {
                 </div>
             </div>
 
+            {/* Modal */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <p>By creating an account you are allowing our terms and conditions</p>
+                        <div className="modal-buttons">
+                            <button className="confirm-btn" onClick={handleConfirm}>
+                                Confirm
+                            </button>
+                            <button className="cancel-btn" onClick={() => setShowModal(false)}>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <style>{`
         h2 {
           text-align: center;
@@ -319,8 +351,8 @@ const AddressDetails = () => {
 
         .submit-btn {
           flex: 1;
-          background: #4CAF50;
-          color: white;
+          background: linear-gradient(90deg, #1976d2, #42a5f5);
+          color: #fff;
           padding: 14px;
           font-size: 16px;
           font-weight: 600;
@@ -331,7 +363,7 @@ const AddressDetails = () => {
         }
 
         .submit-btn:hover {
-          background: #45a049;
+          background: linear-gradient(90deg, #1565c0, #1e88e5);
         }
 
         .button-group {
@@ -340,8 +372,77 @@ const AddressDetails = () => {
           margin-top: 20px;
         }
 
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+        }
+
+        .modal-content {
+          padding: 20px 30px;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          text-align: center;
+          font-size: 16px;
+          font-weight: 500;
+          max-width: 400px;
+          width: 90%;
+          background: #fff;
+          color: #333;
+        }
+
+        .modal-buttons {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          margin-top: 20px;
+        }
+
+        .confirm-btn {
+          background: #fff;
+          color: #1976d2;
+          padding: 10px 20px;
+          font-size: 16px;
+          font-weight: 600;
+          border: 1px solid #1976d2;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+          background: #e3f2fd;
+        }
+
+        .cancel-btn {
+          background: #fff;
+          color: #d32f2f;
+          padding: 10px 20px;
+          font-size: 16px;
+          font-weight: 600;
+          border: 1px solid #d32f2f;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+          background: #fdecea;
+        }
+
         @media (max-width: 480px) {
           .button-group {
+            flex-direction: column;
+          }
+
+          .modal-buttons {
             flex-direction: column;
           }
         }

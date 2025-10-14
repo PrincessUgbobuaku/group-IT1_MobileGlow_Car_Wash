@@ -21,10 +21,27 @@ public class WashAttendantController {
         this.washAttendantService = washAttendantService;
     }
 
+    // CREATE (JSON - for account creation without image)
     @PostMapping("/create")
     public ResponseEntity<WashAttendant> create(@RequestBody WashAttendant washAttendant) {
-        WashAttendant createdWashAttendant = washAttendantService.create(washAttendant);
-        return ResponseEntity.ok(createdWashAttendant);
+        try {
+            WashAttendant createdWashAttendant = washAttendantService.create(washAttendant);
+            return ResponseEntity.ok(createdWashAttendant);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // CREATE WITH IMAGE (Multipart - for profile updates with image)
+    @PostMapping("/create-with-image")
+    public ResponseEntity<WashAttendant> createWithImage(@RequestPart WashAttendant washAttendant,
+                                                          @RequestPart(required = false) MultipartFile imageFile) {
+        try {
+            WashAttendant created = washAttendantService.update(washAttendant, imageFile);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/read/{id}")
