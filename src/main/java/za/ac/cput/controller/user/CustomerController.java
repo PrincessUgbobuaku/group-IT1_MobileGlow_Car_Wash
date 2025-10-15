@@ -22,10 +22,21 @@ public class CustomerController {
         this.service = service;
     }
 
-    // CREATE
+    // CREATE (JSON - for account creation without image)
     @PostMapping("/create")
-    public ResponseEntity<Customer> create(@RequestPart Customer customer,
-                                           @RequestPart(required = false) MultipartFile imageFile) {
+    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+        try {
+            Customer created = service.create(customer);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // CREATE WITH IMAGE (Multipart - for profile updates with image)
+    @PostMapping("/create-with-image")
+    public ResponseEntity<Customer> createWithImage(@RequestPart Customer customer,
+                                                    @RequestPart(required = false) MultipartFile imageFile) {
         try {
             Customer created = service.create(customer, imageFile);
             return ResponseEntity.ok(created);

@@ -48,6 +48,10 @@ const SignUp = () => {
         }
     });
 
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
+    const [employeeError, setEmployeeError] = useState('');
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
@@ -68,6 +72,10 @@ const SignUp = () => {
                 password: ''
             }
         });
+        setConfirmPassword('');
+        setPasswordError('');
+        setPhoneError('');
+        setEmployeeError('');
         setIsEditing(false);
     }, [selectedRole]);
     const navigate = useNavigate();
@@ -96,17 +104,56 @@ const SignUp = () => {
 
     const handleContactChange = (e) => {
         const { name, value } = e.target;
+        let phoneValue = value;
+
+        // Normalize phone number: if starts with +27, keep as is; if starts with 0, replace with +27
+        if (phoneValue.startsWith('0')) {
+            phoneValue = '+27' + phoneValue.slice(1);
+        }
+
+        // Validate phone number: must be +27 followed by 9 digits (total 12 characters)
+        const phoneRegex = /^\+27\d{9}$/;
+        if (phoneValue && !phoneRegex.test(phoneValue)) {
+            setPhoneError('Phone number must be 10 digits starting with 0 or +27 followed by 9 digits');
+        } else {
+            setPhoneError('');
+        }
+
         setManager({
             ...manager,
             contact: {
                 ...manager.contact,
-                [name]: value
+                [name]: phoneValue
             }
         });
     };
 
+    const handleConfirmPasswordChange = (e) => {
+        const value = e.target.value;
+        setConfirmPassword(value);
+        if (manager.login.password !== value) {
+            setPasswordError('Passwords do not match');
+        } else {
+            setPasswordError('');
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (selectedRole === 'Employee' && manager.employeeType === 'None') {
+            setEmployeeError('Please choose a role');
+            return;
+        }
+
+        if (manager.login.password !== confirmPassword) {
+            setPasswordError('Passwords do not match');
+            return;
+        }
+
+        if (phoneError) {
+            return;
+        }
 
         // Instead of saving here, navigate to address page with manager data
         navigate('/AddressDetails', { state: { manager } });
@@ -179,6 +226,7 @@ const SignUp = () => {
                                         <option value="Manager">Manager</option>
                                         <option value="WashAttendant">WashAttendant</option>
                                     </select>
+                                    {employeeError && <span style={{ color: 'red', fontSize: '12px', marginTop: '5px' }}>{employeeError}</span>}
                                 </div>
 
                                 <div className="form-group">
@@ -204,6 +252,7 @@ const SignUp = () => {
                                 placeholder="Enter phone number (e.g., 073...)"
                                 required
                             />
+                            {phoneError && <span style={{ color: 'red', fontSize: '12px', marginTop: '5px' }}>{phoneError}</span>}
                         </div>
 
                         <div className="form-group" style={{ marginTop: 20 }}>
@@ -228,6 +277,19 @@ const SignUp = () => {
                                 placeholder="Enter password"
                                 required
                             />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Confirm Password</label>
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
+                                placeholder="Confirm password"
+                                required
+                            />
+                            {passwordError && <span style={{ color: 'red', fontSize: '12px', marginTop: '5px' }}>{passwordError}</span>}
                         </div>
 
                         <div className="button-group" style={{ marginTop: 20 }}>
@@ -292,8 +354,8 @@ const SignUp = () => {
 
         .submit-btn {
           flex: 1;
-          background: #4CAF50;
-          color: white;
+          background: linear-gradient(90deg, #1976d2, #42a5f5);
+          color: #fff;
           padding: 14px;
           font-size: 16px;
           font-weight: 600;
@@ -304,7 +366,7 @@ const SignUp = () => {
         }
 
         .submit-btn:hover {
-          background: #45a049;
+          background: linear-gradient(90deg, #1565c0, #1e88e5);
         }
 
         .delete-btn {

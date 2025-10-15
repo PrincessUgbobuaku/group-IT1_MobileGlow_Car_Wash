@@ -17,6 +17,7 @@ import DETAILING_IMAGE from "../../assets/detailing.png";
 import ENGINE_IMAGE from "../../assets/engine.png";
 import WAXING_IMAGE from "../../assets/waxing.png";
 import INTERIOR_IMAGE from "../../assets/interior.png";
+import HERO_IMAGE from "../../assets/hero-carwash.jpg";
 
 
 // Feature Component
@@ -147,22 +148,44 @@ export default function LandingCustomer() {
             <NavbarCustomer />
 
             {/* Hero Section */}
-            <section className="hero-section">
+            <section
+                className="hero-section"
+                style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+            >
+                <div className="hero-overlay"></div>
+
                 <div className="hero-content">
                     <h1 className="hero-heading">We bring the shine to you.</h1>
-                    <h2 className="hero-subheading">Your car, our care – <span>Anywhere.</span></h2>
-                </div>
+                    <h2 className="hero-subheading">
+                        Your car, our care – <span>Anywhere.</span>
+                    </h2>
 
-                {/* Book Now Button */}
-                <div className="book-now-container">
-                    <button
-                        onClick={() => (window.location.href = "/Booking")}
-                        className="cta-button primary"
-                    >
-                        BOOK NOW
-                    </button>
+                    <div className="book-now-container">
+                        <button
+                            onClick={() => (window.location.href = "/booking")}
+                            className="cta-button primary"
+                        >
+                            BOOK NOW
+                        </button>
+                        <div className="scroll-down-hint">
+                            <p>Add vehicle below</p>
+                            <span
+                                className="down-arrow"
+                                onClick={() => {
+                                    window.scrollTo({
+                                        top: document.querySelector(".add-vehicle-section").offsetTop,
+                                        behavior: "smooth",
+                                    });
+                                }}>↓
+                            </span>
+
+                        </div>
+
+                    </div>
                 </div>
             </section>
+
+
 
             {/* Features Section */}
             <section className="features-section">
@@ -182,24 +205,49 @@ export default function LandingCustomer() {
 
             </section>
 
+            {/* Add Vehicle Section */}
+            <section className="add-vehicle-section">
+                <div className="section-container add-vehicle-container">
+                    <h2 className="section-heading">Want to add your vehicle?</h2>
+                    <p className="section-subheading">
+                        Manage your cars easily by adding them to your profile. This helps us serve you faster during bookings.
+                    </p>
+                    <div className="add-vehicle-btn-container">
+                        <button
+                            className="cta-button primary"
+                            onClick={() => (window.location.href = "/vehicles")}
+                        >
+                            Add Vehicle
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             {/* Stats Section */}
             <Stats />
 
             {/* Categories Section */}
-            <section className="categories-section">
+            <section id="our-services" className="categories-section">
                 <div className="section-container">
                     <h2 className="section-heading">Our Services</h2>
-                    <p className="section-subheading">Professional car care services delivered to your doorstep at your convenience</p>
+                    <p className="section-subheading">
+                        Professional car care services delivered to your doorstep at your convenience
+                    </p>
                     <div className="categories-grid">
                         {categories.map((c, i) => (
-                            <CategoryCard key={i} title={c.title} description={c.description} imageUrl={c.imageUrl} />
+                            <CategoryCard
+                                key={i}
+                                title={c.title}
+                                description={c.description}
+                                imageUrl={c.imageUrl}
+                            />
                         ))}
                     </div>
 
                     {/* Book Now Button */}
                     <div className="book-now-container">
                         <button
-                            onClick={() => (window.location.href = "/login")}
+                            onClick={() => (window.location.href = "/booking")}
                             className="cta-button primary"
                         >
                             BOOK NOW

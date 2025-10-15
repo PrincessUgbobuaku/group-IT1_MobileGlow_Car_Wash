@@ -97,33 +97,88 @@
 .mobile-nav-link:hover {
     background-color: #B1D4E0;
 }
-
+/*==================================*/
 /* Hero Section */
-.hero-section {
-    background: linear-gradient(135deg, #B1D4E0 0%, #2E8BC0 100%);
-    padding: 5rem 2rem;
+.employee-hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    color: white;
+    overflow: hidden;
 }
 
-.hero-content {
+/* Overlay to darken image for readability */
+.employee-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1;
+}
+
+/* ✅ Logo positioned top-left */
+.employee-hero-logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 2;
+    border: 2px solid white;
+}
+
+/* Hero content centered */
+.employee-hero-content {
+    position: relative;
+    z-index: 2;
     max-width: 800px;
-    margin: 0 auto;
+    padding: 2rem;
 }
 
-.hero-heading {
+/* Text styling */
+.employee-hero-heading {
+    font-family: 'Inter', sans-serif;
     font-size: 2.5rem;
-    color: #0C2D48;
+    color: #fff;
     margin-bottom: 1rem;
 }
 
-.hero-subheading {
-    font-size: 1.5rem;
-    color: white;
-    margin-bottom: 2rem;
+.employee-hero-subheading {
+    font-size: 1.2rem;
+    color: #f0f0f0;
 }
 
-.hero-subheading span {
-    color: #0C2D48;
+.employee-hero-subheading span {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .employee-hero-heading {
+        font-size: 2rem;
+    }
+
+    .employee-hero-subheading {
+        font-size: 1rem;
+    }
+
+    .employee-hero-logo {
+        width: 50px;
+        height: 50px;
+        top: 15px;
+        left: 20px;
+    }
 }
 
 /* Features Section */
@@ -566,3 +621,167 @@
         gap: 0.5rem;
     }
 }
+/*=======================================*/
+.hero-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50vh; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+}
+
+/* Overlay to make text readable */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* darkens image for readability */
+    z-index: 1;
+}
+
+/* Hero content stays above overlay */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+}
+
+.hero-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.hero-subheading {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #f0f0f0;
+}
+
+.hero-subheading span {
+    color: white; /* a gold accent */
+}
+
+/* Book Now button */
+.book-now-container .cta-button.primary {
+    background: #004aad;
+    color: white;
+    font-weight: bold;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.book-now-container .cta-button.primary:hover {
+    background: #ffcc00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-heading {
+        font-size: 2rem;
+    }
+
+    .hero-subheading {
+        font-size: 1.2rem;
+    }
+}
+
+/* Add Vehicle Section */
+.add-vehicle-section {
+    background-color: #f8f9fa;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+}
+
+.add-vehicle-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.add-vehicle-section .section-heading {
+    color: #0C2D48;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.add-vehicle-section .section-subheading {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+.add-vehicle-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.add-vehicle-btn-container .cta-button.primary {
+    background-color: #145DA0;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 50px;
+    padding: 0.9rem 2rem;
+    transition: all 0.3s ease;
+}
+
+.add-vehicle-btn-container .cta-button.primary:hover {
+    background-color: #0C2D48;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* Scroll-down hint below Book Now button */
+.scroll-down-hint {
+    margin-top: 1.8rem;
+    text-align: center;
+    color: white; /* White text for visibility */
+    font-weight: 700;
+    font-size: 1.5rem; /* Increased font size */
+    animation: fadeIn 1s ease-in;
+}
+
+.scroll-down-hint p {
+    margin: 0;
+    color: white; /* Ensure text is white even if parent overridden */
+}
+
+.down-arrow {
+    display: block;
+    font-size: 2.5rem; /* Bigger arrow */
+    color: white;
+    margin-top: 0.4rem;
+    animation: bounce 1.5s infinite;
+    cursor: default;
+}
+
+/* Arrow bounce animation */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(8px);
+    }
+    60% {
+        transform: translateY(4px);
+    }
+}
+
+/* Smooth fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+

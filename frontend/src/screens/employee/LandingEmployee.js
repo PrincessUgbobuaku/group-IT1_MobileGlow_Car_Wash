@@ -1,112 +1,82 @@
-//inga
 // src/screens/employee/LandingEmployee.js
 import React from "react";
 import NavbarEmployee from "../components/NavbarEmployee";
 import Footer from "../components/Footer";
-import "./LandingEmployee.css"; // reuse same CSS for consistent look
+import "./LandingEmployee.css";
 
 import bookingsIcon from "../../assets/bookings.png";
 import employeesIcon from "../../assets/employees.png";
 import servicesIcon from "../../assets/services.png";
 import performanceIcon from "../../assets/performance.png";
 
+import logo from "../../assets/logo.jpg";
+import heroCarwash from "../../assets/hero-carwash.jpg";
 
 const LandingEmployee = () => {
     return (
-        <div className="landing-page">
-            {/* Navbar */}
+        <div className="employee-landing-page">
             <NavbarEmployee />
 
             {/* Hero Section */}
-            <section className="hero-section">
-                <div className="hero-content">
-                    <h1 className="hero-heading">Welcome to Your Employee Dashboard</h1>
-                    {/*<p className="hero-subheading">*/}
-                    {/*    Here you can: Manage <span>bookings</span>, update <span>services</span>, and*/}
-                    {/*    track your <span>performance</span>.*/}
-                    {/*</p>*/}
+            <section
+                className="employee-hero-section"
+                style={{ backgroundImage: `url(${heroCarwash})` }}
+            >
+                <div className="employee-hero-overlay"></div>
+
+                {/* ✅ Logo at top-left corner */}
+                {/*<img src={logo} alt="Logo" className="employee-hero-logo" />*/}
+
+                {/* Centered content */}
+                <div className="employee-hero-content">
+                    {/*<img src={logo} alt="Logo" className="employee-hero-logo" />*/}
+
+                    <h1 className="employee-hero-heading">Welcome to Your Employee Dashboard</h1>
+                    <p className="employee-hero-subheading">
+                        Manage <span>bookings</span>, update <span>services</span>, and track your{" "}
+                        <span>performance</span> — all in one place.
+                    </p>
                 </div>
             </section>
 
             {/* Features Section */}
-            <section className="features-section">
-                <div className="section-container">
-                    <h2 className="section-heading">What You Can Do</h2>
-                    <p className="section-subheading">
-                        Access powerful tools to manage your work efficiently.
-                    </p>
-
-                    <div className="features-grid">
-                        <div className="feature">
-                            <div className="feature-icon">
-                                <img src={bookingsIcon} alt="View Bookings" />
-                            </div>
-                            <h3 className="feature-title">View Bookings</h3>
-                            <p className="feature-description">
-                                See upcoming and past bookings at a glance to stay organized.
-                            </p>
+            <section className="employee-actions-section">
+                <h2 className="employee-section-heading">What You Can Do</h2>
+                <div className="employee-actions-grid">
+                    <div className="employee-action-card">
+                        <div className="feature-icon">
+                            <img src={bookingsIcon} alt="View Bookings" />
                         </div>
-                        <div className="feature">
-                            <div className="feature-icon">
-                                <img src={servicesIcon} alt="Update Services" />
-                            </div>
-                            <h3 className="feature-title">Update Services</h3>
-                            <p className="feature-description">
-                                Easily edit the services you offer, including prices and availability.
-                            </p>
-                        </div>
-                        <div className="feature">
-                            <div className="feature-icon">
-                                <img src={performanceIcon} alt="Performance Tracking" />
-                            </div>
-                            <h3 className="feature-title">Performance Tracking</h3>
-                            <p className="feature-description">
-                                Monitor your performance, customer ratings, and growth over time.
-                            </p>
-                        </div>
-                        <div className="feature">
-                            <div className="feature-icon">
-                                <img src={employeesIcon} alt="Manage Profile" />
-                            </div>
-                            <h3 className="feature-title">Manage Profile</h3>
-                            <p className="feature-description">
-                                Update your details, profile picture, and contact information.
-                            </p>
-                        </div>
+                        <h3>View Bookings</h3>
+                        <p>See upcoming and past bookings at a glance to stay organized.</p>
                     </div>
 
-                </div>
-            </section>
+                    <div className="employee-action-card">
+                        <div className="feature-icon">
+                            <img src={servicesIcon} alt="Update Services" />
+                        </div>
+                        <h3>Update Services</h3>
+                        <p>Edit your offered services, including prices and availability.</p>
+                    </div>
 
-            {/* Stats Section */}
-            <section className="stats-section">
-                <div className="stats-container">
-                    <div className="stat">
-                        <div className="stat-number">1,250+</div>
-                        <div className="stat-label">Bookings Completed</div>
+                    <div className="employee-action-card">
+                        <div className="feature-icon">
+                            <img src={performanceIcon} alt="Performance Tracking" />
+                        </div>
+                        <h3>Performance Tracking</h3>
+                        <p>Monitor your ratings, reviews, and performance trends over time.</p>
                     </div>
-                    <div className="stat">
-                        <div className="stat-number">98%</div>
-                        <div className="stat-label">Customer Satisfaction</div>
-                    </div>
-                    <div className="stat">
-                        <div className="stat-number">50+</div>
-                        <div className="stat-label">Active Employees</div>
+
+                    <div className="employee-action-card">
+                        <div className="feature-icon">
+                            <img src={employeesIcon} alt="Manage Profile" />
+                        </div>
+                        <h3>Manage Profile</h3>
+                        <p>Update your personal info, profile photo, and contact details.</p>
                     </div>
                 </div>
             </section>
 
-            {/*/!* Call to Action *!/*/}
-            {/*<div className="book-now-container">*/}
-            {/*    <button*/}
-            {/*        className="cta-button primary"*/}
-            {/*        onClick={() => (window.location.href = "/login")}*/}
-            {/*    >*/}
-            {/*        Go to Dashboard*/}
-            {/*    </button>*/}
-            {/*</div>*/}
-
-            {/* Footer */}
             <Footer />
         </div>
     );

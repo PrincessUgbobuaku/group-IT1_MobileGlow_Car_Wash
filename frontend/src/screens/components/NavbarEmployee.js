@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NavbarEmployee.css";
+import logo from "../../assets/logo.jpg";
 
 const NavbarEmployee = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,7 @@ const NavbarEmployee = () => {
 
     return (
         <nav className="navbar">
+            <img src={logo} alt="Mobile Car Wash Logo" className="logo-img" />
             <div className="logo">Mobile Car Wash - Employee</div>
 
             <div className="nav-links">
@@ -38,6 +40,7 @@ const NavbarEmployee = () => {
                         <ul className="dropdown-menu">
                             <li><a href="/profiles">Profile</a></li>
                             <li><a href="/password-reset">Change password</a></li>
+                            <li><a href="/deactivate-account">Deactivate Account</a></li>
                             <li><button onClick={handleLogout} className="logout-btn">Log Out</button></li>
                         </ul>
                     )}
