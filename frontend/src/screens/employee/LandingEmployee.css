@@ -8,27 +8,98 @@
     background-color: #f8f9fa;
 }
 
-/* Hero */
+/* Hero Section */
 .employee-hero-section {
-    background: linear-gradient(135deg, #B1D4E0 0%, #2E8BC0 100%);
-    padding: 4rem 2rem;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: white;
+    overflow: hidden;
 }
 
+/* Dark overlay for readability */
+.employee-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1;
+}
+
+/* Content */
+.employee-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+/* Logo inside hero */
+/*.employee-logo {*/
+/*    width: 120px;*/
+/*    height: 120px;*/
+/*    object-fit: cover;*/
+/*    border-radius: 50%;*/
+/*    margin-bottom: 1.5rem;*/
+/*    border: 3px solid white;*/
+/*}*/
+
+.employee-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* spacing between logo and text */
+}
+
+.employee-logo-img {
+    width: 60px;  /* adjust as needed */
+    height: 60px;
+    border-radius: 50%; /* optional: makes it circular */
+    object-fit: cover;
+}
+
+/* Heading */
 .employee-hero-heading {
     font-family: 'Inter', sans-serif;
     font-size: 2.5rem;
-    color: #0C2D48;
+    color: #fff;
     margin-bottom: 1rem;
 }
 
+/* Subheading */
 .employee-hero-subheading {
     font-size: 1.2rem;
-    max-width: 700px;
-    margin: 0 auto;
     color: white;
 }
+
+.employee-hero-subheading span {
+    color: white;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .employee-hero-heading {
+        font-size: 2rem;
+    }
+
+    .employee-hero-subheading {
+        font-size: 1rem;
+    }
+
+    .employee-logo {
+        width: 90px;
+        height: 90px;
+    }
+}
+
 
 /* Actions Section */
 .employee-actions-section {

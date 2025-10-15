@@ -1,8 +1,8 @@
 // LandingPublic.js
-import React from "react";
+import React from "react" ;
 import "./LandingPublic.css";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer"; // adjust the path if needed
+import Footer from "./components/Footer";  // adjust the path if needed
 
 // Import images from src folder
 import qualityServiceIcon from "../assets/quality-service.png";
