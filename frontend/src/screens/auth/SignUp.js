@@ -53,6 +53,7 @@ const SignUp = () => {
     const [phoneError, setPhoneError] = useState('');
     const [employeeError, setEmployeeError] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+    const [strength, setStrength] = useState('');
 
     useEffect(() => {
         // Reset manager state to empty when component mounts or selectedRole changes
@@ -91,8 +92,19 @@ const SignUp = () => {
         setManager(updatedManager);
     };
 
+    const checkStrength = (value) => {
+        if (value.length < 6) return "Very weak";
+        if (value.match(/[A-Z]/) && value.match(/[0-9]/) && value.length >= 8)
+          return "Strong";
+        if (value.length >= 8) return "Medium";
+        return "Weak";
+    };
+
     const handleLoginChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'password') {
+            setStrength(checkStrength(value));
+        }
         setManager({
             ...manager,
             login: {
@@ -277,6 +289,9 @@ const SignUp = () => {
                                 placeholder="Enter password"
                                 required
                             />
+                            <div className={`strength ${strength.toLowerCase()}`}>
+                                {strength && <span>{strength}</span>}
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -350,6 +365,27 @@ const SignUp = () => {
           display: flex;
           gap: 15px;
           margin-top: 6px;
+        }
+
+        .strength {
+          margin-top: 5px;
+          font-size: 13px;
+        }
+
+        .strength.very {
+          color: #e74c3c;
+        }
+
+        .strength.weak {
+          color: #e67e22;
+        }
+
+        .strength.medium {
+          color: #f1c40f;
+        }
+
+        .strength.strong {
+          color: #2ecc71;
         }
 
         .submit-btn {
