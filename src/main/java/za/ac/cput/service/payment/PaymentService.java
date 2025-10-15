@@ -77,7 +77,7 @@ public class PaymentService implements IPaymentService {
         return paymentRepository.findByBooking_BookingId(bookingID);
     }
 
-    public Payment createPaymentForBookingWithTip(Long bookingId) {
+    public Payment createPaymentForBookingWithTip(Long bookingId, Payment.PaymentMethod paymentMethod) {
         Booking booking = bookingService.read(bookingId);
 
         if (booking == null) {
@@ -89,7 +89,7 @@ public class PaymentService implements IPaymentService {
 
         Payment payment = new Payment.Builder()
                 .setBooking(booking)
-                .setPaymentMethod(Payment.PaymentMethod.DEBIT)
+                .setPaymentMethod(paymentMethod) // Use parameter here
                 .setPaymentStatus(Payment.PaymentStatus.PAID)
                 .setPaymentAmount(paymentAmount)
                 .build();

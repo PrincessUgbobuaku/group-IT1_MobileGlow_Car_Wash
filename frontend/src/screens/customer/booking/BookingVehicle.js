@@ -17,16 +17,47 @@ const BookingVehicle = () => {
   const [vehicles, setVehicles] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState("");
 
-  const userId = 5; // Replace with dynamic value if needed
+  // const userId = 5; // Replace with dynamic value if needed
+  const userId = localStorage.getItem("userId"); // Dynamic
+  console.log("User ID from localStorage:", userId);
+
   const [hasConflict, setHasConflict] = useState(false);
 
+  // useEffect(() => {
+  //   fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setVehicles(Array.isArray(data) ? data : []);
+  //     })
+  //     .catch((error) => console.error("Error fetching vehicles:", error));
+  // }, [userId]);
+
   useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    console.log(
+      "🚀 [BookingVehicle] Fetched userId from localStorage:",
+      userId
+    );
+    console.log("🔑 [BookingVehicle] Fetched token from localStorage:", token);
+
     fetch(`http://localhost:8080/mobileglow/api/vehicle/customer/${userId}`)
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(
+          "📡 [BookingVehicle] Fetch response status:",
+          response.status
+        );
+        if (!response.ok) {
+          throw new Error("❌ Failed to fetch vehicles from backend");
+        }
+        return response.json();
+      })
       .then((data) => {
+        console.log("✅ [BookingVehicle] Vehicles fetched from API:", data);
         setVehicles(Array.isArray(data) ? data : []);
       })
-      .catch((error) => console.error("Error fetching vehicles:", error));
+      .catch((error) => {
+        console.error("🚨 [BookingVehicle] Error fetching vehicles:", error);
+      });
   }, [userId]);
 
   const handleVehicleChange = async (event) => {
@@ -37,7 +68,7 @@ const BookingVehicle = () => {
     if (!vehicleId || !selectedDateTime) return;
 
     try {
-      // ✅ Fix ISO formatting issue
+      // Fix ISO formatting issue
       const dateObj = new Date(selectedDateTime);
       const formattedDateTime = `${dateObj.getFullYear()}-${String(
         dateObj.getMonth() + 1
@@ -92,7 +123,7 @@ const BookingVehicle = () => {
   };
 
   return (
-    <div className="booking-vehicle-container">
+    <div className="booking-vehicle-container app-content">
       <div className="breadcrumb">
         <Link to="/" className="breadcrumb-link">
           Home

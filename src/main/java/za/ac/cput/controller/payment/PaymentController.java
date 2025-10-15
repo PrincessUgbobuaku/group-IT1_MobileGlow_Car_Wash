@@ -1,5 +1,7 @@
 package za.ac.cput.controller.payment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,8 @@ import java.util.List;
 @RequestMapping("/api/payments") // Matches BookingController pattern
 public class PaymentController {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+
     private final PaymentService paymentService;
 
     @Autowired
@@ -21,9 +25,30 @@ public class PaymentController {
 
     // CREATE - POST /api/payments
     @PostMapping
-    public ResponseEntity<Payment> create(@RequestBody Payment payment) {
-        Payment created = paymentService.create(payment);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<?> create(@RequestBody Payment payment) {
+        logger.info("Received payment creation request: {}", payment);
+        try {
+            // Log the payment method before saving
+            logger.info("Payment method before save: {}", payment.getPaymentMethod());
+
+            // Optional: Validate payment method enum if you have an enum class
+            // If not using enum, skip this block or add your own validation
+            /*
+            try {
+                PaymentMethod.valueOf(payment.getPaymentMethod());
+            } catch (IllegalArgumentException e) {
+                logger.error("Invalid payment method: {}", payment.getPaymentMethod());
+                return ResponseEntity.badRequest().body("Invalid payment method");
+            }
+            */
+
+            Payment created = paymentService.create(payment);
+            logger.info("Payment created successfully with ID: {}", created.getPaymentId());
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            logger.error("Error creating payment", e);
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+        }
     }
 
     // READ - GET /api/payments/{id}
@@ -35,19 +60,32 @@ public class PaymentController {
 
     // UPDATE - PUT /api/payments/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<Payment> update(@PathVariable Long id, @RequestBody Payment payment) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Payment payment) {
         if (!id.equals(payment.getPaymentId())) {
-            return ResponseEntity.badRequest().build();
+            logger.warn("Payment ID in path ({}) does not match ID in body ({})", id, payment.getPaymentId());
+            return ResponseEntity.badRequest().body("Payment ID mismatch");
         }
-        Payment updated = paymentService.update(payment);
-        return ResponseEntity.ok(updated);
+        try {
+            Payment updated = paymentService.update(payment);
+            logger.info("Payment updated successfully with ID: {}", updated.getPaymentId());
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            logger.error("Error updating payment", e);
+            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+        }
     }
 
     // DELETE - DELETE /api/payments/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = paymentService.delete(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        if (deleted) {
+            logger.info("Payment deleted with ID: {}", id);
+            return ResponseEntity.noContent().build();
+        } else {
+            logger.warn("Payment to delete not found with ID: {}", id);
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // GET ALL - GET /api/payments
