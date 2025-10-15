@@ -224,7 +224,7 @@ const BookingTwo = () => {
   };
 
   return (
-    <div className="booking-two-infinite-container">
+    <div className="booking-two-infinite-container app-content">
       <div className="breadcrumb">
         <Link to="/" className="breadcrumb-link">
           Home

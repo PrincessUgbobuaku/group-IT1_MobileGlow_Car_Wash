@@ -174,12 +174,34 @@ public class VehicleController {
     }
 
     // Find vehicles by customer
+    // @GetMapping("/customer/{customerId}")
+    // public ResponseEntity<List<Vehicle>> findByCustomerId(@PathVariable Long
+    // customerId) {
+    // return ResponseEntity.ok(vehicleService.findByCustomerId(customerId));
+    // }
+
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<Vehicle>> findByCustomerId(@PathVariable Long customerId) {
-        return ResponseEntity.ok(vehicleService.findByCustomerId(customerId));
+        System.out.println("📥 [VehicleController] Incoming request to fetch vehicles for customerId: " + customerId);
+
+        List<Vehicle> vehicles = vehicleService.findByCustomerId(customerId);
+
+        if (vehicles.isEmpty()) {
+            System.out.println("⚠️ [VehicleController] No vehicles found for customerId: " + customerId);
+        } else {
+            System.out.println(
+                    "✅ [VehicleController] Found " + vehicles.size() + " vehicle(s) for customerId: " + customerId);
+            for (Vehicle v : vehicles) {
+                System.out.println("   → Vehicle ID: " + v.getVehicleID() + ", Make: " + v.getCarMake() + ", Model: "
+                        + v.getCarModel());
+            }
+        }
+
+        return ResponseEntity.ok(vehicles);
     }
 
-    // Simple vehicles endpoint without customer details to avoid serialization issues
+    // Simple vehicles endpoint without customer details to avoid serialization
+    // issues
     @GetMapping("/simple")
     public ResponseEntity<List<Map<String, Object>>> getSimpleVehicles() {
         try {

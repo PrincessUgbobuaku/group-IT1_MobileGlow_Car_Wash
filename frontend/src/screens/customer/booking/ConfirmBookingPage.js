@@ -119,7 +119,7 @@ function ConfirmBookingPage() {
   };
 
   return (
-    <div className="confirm-container">
+    <div className="confirm-container app-content">
       <div className="breadcrumb">
         <a href="/" className="breadcrumb-link">
           Home
@@ -171,7 +171,7 @@ function ConfirmBookingPage() {
       <div className="confirm-content">
         {/* LEFT PANEL */}
         <div className="confirm-left">
-          <div className="form-section">
+          <div className="confirm-form-section">
             <h3>Payment method</h3>
             <button className="payment-button">
               <span role="img" aria-label="store">
