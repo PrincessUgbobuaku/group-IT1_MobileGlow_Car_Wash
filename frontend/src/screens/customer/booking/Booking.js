@@ -134,20 +134,7 @@ const Booking = () => {
           </a>
         </div>
 
-        {/* ✅ Carousel Section */}
-        <div className="carousel-wrapper">
-          <Slider {...carouselSettings}>
-            {images.map((img, index) => (
-              <div key={index}>
-                <img
-                  src={img}
-                  alt={`Car Wash ${index + 1}`}
-                  className="carousel-image"
-                />
-              </div>
-            ))}
-          </Slider>
-        </div>
+       
 
         <h2 className="services-title">Services</h2>
       </div>
