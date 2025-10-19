@@ -96,6 +96,7 @@ public class WashAttendantService implements IWashAttendantService {
                 .setContact(updatedWashAttendant.getContact() != null ? updatedWashAttendant.getContact() : existing.getContact())
                 .setLogin(updatedLogin)
                 .setEmployeeType(updatedWashAttendant.getEmployeeType() != null ? updatedWashAttendant.getEmployeeType() : existing.getEmployeeType())
+                .setHireDate(updatedWashAttendant.getHireDate() != null ? updatedWashAttendant.getHireDate() : existing.getHireDate())
                 .setIsFullTime(updatedWashAttendant.getIsFullTime())
                 .setShiftHours(updatedWashAttendant.getShiftHours())
                 .setImageName(imageName)

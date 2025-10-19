@@ -14,6 +14,7 @@ const ProfilePage = () => {
   const [statusMessage, setStatusMessage] = useState('');
   const [messageType, setMessageType] = useState('error');
   const [imageUrl, setImageUrl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -135,7 +136,7 @@ const ProfilePage = () => {
         <div className="profile-card">
           <div className="avatar-section">
             {imageUrl ? (
-              <img src={imageUrl} alt="Profile" className="avatar-image" />
+              <img src={imageUrl} alt="Profile" className="avatar-image" onClick={() => setIsModalOpen(true)} />
             ) : (
               <div className="avatar-circle">{initials}</div>
             )}
@@ -214,6 +215,16 @@ const ProfilePage = () => {
           <button className="add-btn">+ Add</button>
         </div>
       </div>
+
+      {/* Modal for full-size image */}
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <img src={imageUrl} alt="Full Profile" className="full-image" />
+            <button className="close-btn" onClick={() => setIsModalOpen(false)}>×</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

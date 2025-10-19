@@ -109,6 +109,7 @@ public class AccountantService implements IAccountantService {
                 .setLogin(updatedLogin)
                 .setEmployeeType(updatedAccountant.getEmployeeType() != null ? updatedAccountant.getEmployeeType() : existing.getEmployeeType())
                 .setHasTaxFillingAuthority(updatedAccountant.getHasTaxFillingAuthority())
+                .setHireDate(updatedAccountant.getHireDate() != null ? updatedAccountant.getHireDate() : existing.getHireDate())
                 .setImageName(imageName)
                 .setImageType(imageType)
                 .setImageData(imageData)
