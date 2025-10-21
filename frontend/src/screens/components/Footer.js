@@ -1,6 +1,9 @@
 // components/Footer.js
 import React from "react";
 import "./Footer.css"; // optional if you want a separate CSS
+import facebookLogo from "../../assets/facebook_logo.png";
+import instaLogo from "../../assets/insta_logo.png";
+
 
 const Footer = () => {
     return (
@@ -31,9 +34,28 @@ const Footer = () => {
                 <div className="footer-section">
                     <h4 className="footer-subheading">Connect With Us</h4>
                     <div className="social-icons">
-                        <a href="https://facebook.com" aria-label="Facebook">FB</a>
-                        <a href="https://twitter.com" aria-label="Twitter">TW</a>
-                        <a href="https://instagram.com" aria-label="Instagram">IG</a>
+                        <a
+                            href="https://facebook.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img
+                                src={facebookLogo}
+                                alt="Facebook"
+                                className="social-icon"
+                            />
+                        </a>
+                        <a
+                            href="https://www.instagram.com/mobile_glow_carwash?igsh=MWZleHdvbGliOWF4cA%3D%3D&utm_source=qr"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img
+                                src={instaLogo}
+                                alt="Instagram"
+                                className="social-icon"
+                            />
+                        </a>
                     </div>
                 </div>
             </div>
