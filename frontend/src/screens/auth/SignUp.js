@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import image1 from '../../assets/image-1.png';
 
 const styles = {
     pageContainer: {
@@ -223,6 +224,19 @@ const SignUp = () => {
                             />
                         </div>
 
+                        {selectedRole === 'Customer' && (
+                            <div className="form-group">
+                                <label>Date of Birth</label>
+                                <input
+                                    type="date"
+                                    name="customerDOB"
+                                    value={manager.customerDOB}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )}
+
                         {selectedRole === 'Employee' && (
                             <>
                                 <div className="form-group">
@@ -321,7 +335,7 @@ const SignUp = () => {
                 </div>
                 <div style={styles.rightContainer}>
                     <img
-                        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+                        src={image1}
                         alt="Car wash"
                         style={styles.image}
                     />

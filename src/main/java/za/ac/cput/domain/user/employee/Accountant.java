@@ -12,12 +12,15 @@ import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.domain.user.Login;
 import za.ac.cput.domain.user.User;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Entity
 public class Accountant extends User {
     private boolean hasTaxFillingAuthority;
     private String employeeType;
+    private LocalDate hireDate;
+
 
     protected Accountant() {
         super();
@@ -31,6 +34,7 @@ public class Accountant extends User {
         this.roleDescription = builder.roleDescription;
         this.employeeType = builder.employeeType;
         this.hasTaxFillingAuthority = builder.hasTaxFillingAuthority;
+        this.hireDate = builder.hireDate;
         this.imageName = builder.imageName;
         this.imageType = builder.imageType;
         this.imageData = builder.imageData;
@@ -47,11 +51,16 @@ public class Accountant extends User {
         return employeeType;
     }
 
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
     @Override
     public String toString() {
         return "Accountant{" +
                 "hasTaxFillingAuthority=" + hasTaxFillingAuthority +
                 ", employeeType='" + employeeType + '\'' +
+                ", hireDate=" + hireDate +
                 ", userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", userSurname='" + userSurname + '\'' +
@@ -74,6 +83,7 @@ public class Accountant extends User {
         private User.RoleDescription roleDescription;
         private String employeeType;
         private boolean hasTaxFillingAuthority;
+        private LocalDate hireDate;
         private String imageName;
         private String imageType;
         private byte[] imageData;
@@ -116,6 +126,11 @@ public class Accountant extends User {
             return this;
         }
 
+        public Builder setHireDate(LocalDate hireDate) {
+            this.hireDate = hireDate;
+            return this;
+        }
+
         public Builder setImageName(String imageName) {
             this.imageName = imageName;
             return this;
@@ -154,6 +169,7 @@ public class Accountant extends User {
             this.roleDescription = accountant.roleDescription;
             this.employeeType = accountant.employeeType;
             this.hasTaxFillingAuthority = accountant.hasTaxFillingAuthority;
+            this.hireDate = accountant.hireDate;
             this.imageName = accountant.imageName;
             this.imageType = accountant.imageType;
             this.imageData = accountant.imageData;

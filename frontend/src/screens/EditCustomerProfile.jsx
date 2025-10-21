@@ -160,6 +160,17 @@ const EditCustomerProfile = () => {
           />
         </div>
 
+        <div style={styles.group}>
+          <label style={styles.label}>Date of Birth</label>
+          <input
+            type="date"
+            value={client.customerDOB || ''}
+            onChange={(e) => handleChange(e, null, "customerDOB")}
+            style={styles.input}
+            placeholder="Enter date of birth"
+          />
+        </div>
+
         <div style={styles.row}>
           <div style={styles.group}>
             <label style={styles.label}>Street Number</label>
