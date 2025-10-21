@@ -1,10 +1,120 @@
-/* src/screens/components/Footer.css */
 .footer {
-    text-align: center;
-    padding: 1rem;
-    background: #004aad;
+    background-color: #004aad;
     color: white;
-    position: relative;
-    bottom: 0;
-    width: 100%;
+    padding: 2rem 1rem 1rem 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 2rem;
+}
+
+.footer-section {
+    flex: 1 1 200px;
+    text-align: left;
+}
+
+.footer-heading {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-subheading {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-text {
+    line-height: 1.5;
+    max-width: 250px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #ffcc00;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+}
+
+.social-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 2rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.legal-links a {
+    margin-left: 1rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.legal-links a:hover {
+    color: #ffcc00;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .legal-links a {
+        margin-left: 0;
+        margin-right: 1rem;
+    }
+
+    .social-icons {
+        justify-content: flex-start;
+    }
 }

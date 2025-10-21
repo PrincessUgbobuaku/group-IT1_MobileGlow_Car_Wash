@@ -73,7 +73,7 @@ const ReviewCarousel = () => {
   return (
     <section className="reviews-section">
       <div className="section-container">
-        <h2 className="carousel-heading">Customer Reviews</h2>
+        <h1 className="carousel-heading">Customer Reviews</h1>
         <p className="section-subheading">
           See what our customers are saying about our services
         </p>

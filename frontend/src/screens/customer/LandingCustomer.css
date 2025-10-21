@@ -1,4 +1,5 @@
-/* LandingPublic.css */
+
+/* LandingCustomer.css */
 
 /* Font imports */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Montserrat:wght@400;500;600&display=swap");
@@ -39,12 +40,9 @@
   flex-basis: 50%;
 }
 
-.about-us-text {
-  flex-basis: 50%;
-}
-
 .about-us-image {
-  flex-basis: 50%;
+  flex-basis: 10%;
+
 }
 
 .wash-cards-section {
@@ -71,6 +69,7 @@
 .wash-card:hover {
   transform: scale(1.05);
 }
+
 
 .parallax-section {
   height: 500px;
@@ -109,12 +108,19 @@
 
 .business-services {
   margin-top: 150px;
+
+}
+
+.business-services h1 {
+  color: #0C2D48;
 }
 
 .service-card-background-container {
-  background: #00297f;
+  background: whitesmoke;
   padding-bottom: 50px;
 }
+
+
 
 .service-card-grid {
   display: grid;
@@ -155,7 +161,7 @@
   /* box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); */
   /* transition: transform 0.3s ease; */
   border: none;
-  
+
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* <-- shadow here */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -208,6 +214,23 @@
 
 .card-overlay button:hover {
   background-color: #ddd;
+}
+
+.add-vehicle-section h1 {
+  color: #222222;
+  text-align: center;
+}
+
+.add-vehicle-section{
+  max-width: 1200px;
+  margin: 3rem auto;
+  gap: 2rem;
+  background-color: #ADD8E6;
+}
+
+.add-vehicle-btn-container{
+  text-align: center;
+  animation: glowPulse 2.5s ease-in-out infinite;
 }
 
 .why-choose-us-section {
@@ -409,6 +432,130 @@
     margin: 0 auto;
 }
 
+/* =====================
+   About Us Zoom Section
+   ===================== */
+.zoom-section {
+  width: 100%;
+  padding: 6rem 2rem;
+  display: flex;
+  justify-content: center;
+  background: #f9f9f9;
+  overflow: hidden;
+}
+
+.zoom-section-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.zoom-section-content.left .zoom-text {
+  order: 1;
+}
+
+.zoom-section-content.left .zoom-image-wrapper {
+  order: 2;
+}
+
+.zoom-section-content.right .zoom-text {
+  order: 2;
+}
+
+.zoom-section-content.right .zoom-image-wrapper {
+  order: 1;
+}
+
+.zoom-text {
+  flex: 1;
+  min-width: 300px;
+  font-family: 'Montserrat', sans-serif;
+  color: #222;
+}
+
+.zoom-text h1 {
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.zoom-text p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.zoom-image-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  min-width: 300px;
+  position: relative;
+}
+
+.zoom-image-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+}
+
+
+.zoom-image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transform: scale(1);
+  transition: transform 1.5s ease-in-out;
+  animation: zoomInOut 10s ease-in-out infinite;
+}
+
+/* Animate the image gently zooming in and out */
+@keyframes zoomInOut {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Optional: subtle hover boost for interaction */
+.zoom-image:hover {
+  transform: scale(1.2);
+  transition: transform 0.8s ease-in-out;
+}
+
+/* Optional animation on section load */
+.zoom-section-content {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.what-we-wash-text {
+  text-align: center;
+}
+
+.what-we-wash{
+  background: #ADD8E6;
+}
 /**/
 
 
