@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../../components/Navbar';
-import butterfly from '../../../assets/butterfly.png'; // Adjust path if needed
 import './ExteriorWashService.css';
 import Footer from '../../components/Footer';
 
 import waxing from '../../../assets/waxing.png';
-import tire from '../../../assets/tire.png';
+import tire from '../../../assets/image-3.png';
 import luxury from '../../../assets/luxury.png';
 import hero from '../../../assets/hero-carwash.jpg';
 import fleet from '../../../assets/fleet.png';

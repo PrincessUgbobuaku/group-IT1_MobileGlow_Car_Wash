@@ -548,12 +548,12 @@ const VehiclePage = () => {
 
 
     const renderVehicleTable = () => (
-        <div className="em-table-container">
-            <div className="em-table-header">
+        <div className="vehicle-table-container">
+            <div className="vehicle-table-header">
                 <h2>Vehicle List</h2>
-                <div className="em-table-actions">
+                <div className="vehicle-table-actions">
                     <button
-                        className="em-secondary-btn"
+                        className="vehicle-refresh-btn"
                         onClick={fetchVehicles}
                     >
                         Refresh List
@@ -561,8 +561,8 @@ const VehiclePage = () => {
                 </div>
             </div>
 
-            <div className="table-wrapper">
-                <table className="em-table">
+            <div className="vehicle-table-wrapper">
+                <table className="vehicle-table">
                     <thead>
                         <tr>
                             <th>Plate Number</th>
