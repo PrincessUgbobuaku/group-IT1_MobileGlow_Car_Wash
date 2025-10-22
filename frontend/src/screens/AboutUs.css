@@ -293,6 +293,19 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* New class for centered team member */
+.team-grid-centered {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.team-grid-centered .team-member {
+    max-width: 300px;
+    width: 100%;
 }
 
 .team-member {
@@ -407,6 +420,7 @@
     gap: 20px;
     justify-content: center;
 }
+
 
 .btn {
     padding: 12px 30px;
@@ -549,6 +563,3 @@
         padding: 20px;
     }
 }
-
-
-
