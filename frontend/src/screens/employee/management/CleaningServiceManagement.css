@@ -240,7 +240,7 @@
     margin: 1.5rem auto 2rem auto;
     width: 100%;
     max-width: 800px;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .search-bar-container:hover {
@@ -249,14 +249,14 @@
 
 .search-input {
     width: 100%;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
     border: none;
     border-radius: 10px;
     font-size: 1rem;
     background: transparent;
     transition: all 0.3s ease;
     box-sizing: border-box;
-    min-height: 48px;
+    min-height: 40px;
 }
 
 .search-input:focus {
@@ -272,7 +272,7 @@
    TABLE STYLES
    ======================================== */
 
-.em-table-container {
+.cleaning-services-table-container {
     background: white;
     border-radius: 20px;
     border: 1px solid #f1f5f9;
@@ -282,22 +282,24 @@
     margin-bottom: 2rem;
     width: 100%;
     max-width: 1200px;
+    padding: 0;
 }
 
-.em-table-container:hover {
+.cleaning-services-table-container:hover {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-.em-table-header {
+.cleaning-services-table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2rem;
     border-bottom: 1px solid #f1f5f9;
     background: linear-gradient(135deg, #fafbfc 0%, #f8fafc 100%);
+    width: 100%;
 }
 
-.em-table-header h2 {
+.cleaning-services-table-header h2 {
     font-size: 1.625rem;
     font-weight: 700;
     color: #111827;
@@ -306,7 +308,7 @@
     padding-left: 1rem;
 }
 
-.em-table-header h2::before {
+.cleaning-services-table-header h2::before {
     content: '';
     position: absolute;
     left: 0;
@@ -318,12 +320,12 @@
     border-radius: 2px;
 }
 
-.em-table-actions {
+.cleaning-services-table-actions {
     display: flex;
     gap: 1rem;
 }
 
-.em-secondary-btn {
+.cleaning-services-secondary-btn {
     padding: 0.75rem 1.5rem;
     border: 1px solid #e5e7eb;
     background: white;
@@ -335,42 +337,47 @@
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    margin-right: 60px;
     gap: 0.5rem;
 }
 
-.em-secondary-btn::before {
+.cleaning-services-secondary-btn::before {
     content: '🔄';
     font-size: 0.75rem;
 }
 
-.em-secondary-btn:hover {
+.cleaning-services-secondary-btn:hover {
     background: #f8fafc;
     border-color: #d1d5db;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.table-wrapper {
+.cleaning-services-table-wrapper {
     overflow-x: auto;
     border-radius: 0 0 20px 20px;
     scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    -ms-overflow-style: none; /* Internet Explorer 10+ *
 }
 
-.table-wrapper::-webkit-scrollbar {
+.cleaning-table-wrapper::-webkit-scrollbar {
     display: none; /* WebKit browsers (Chrome, Safari, Edge) */
 }
 
-.em-table {
+.cleaning-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
+    table-layout: fixed;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.em-table th {
+.cleaning-table th {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     padding: 1.25rem 1.5rem;
-    text-align: left;
+    text-align: center;
     font-weight: 700;
     color: #374151;
     border-bottom: 1px solid #e5e7eb;
@@ -381,29 +388,58 @@
     top: 0;
 }
 
-.em-table td {
+.cleaning-table td {
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid #f8fafc;
     vertical-align: top;
     transition: all 0.2s ease;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-.em-table tr {
+.cleaning-table tr {
     transition: all 0.3s ease;
 }
 
-.em-table tr:hover {
+.cleaning-table tr:hover {
     background: #fafbfc;
     transform: scale(1.002);
 }
 
-.em-table tr:hover td {
+.cleaning-table tr:hover td {
     background: rgba(248, 250, 252, 0.8);
     backdrop-filter: blur(4px);
 }
 
-.em-table tr:last-child td {
+.cleaning-table tr:last-child td {
     border-bottom: none;
+}
+
+/* Column width specifications for better content distribution */
+.cleaning-table th:nth-child(1),
+.cleaning-table td:nth-child(1) {
+    width: 25%; /* Service Name - needs more space */
+}
+
+.cleaning-table th:nth-child(2),
+.cleaning-table td:nth-child(2) {
+    width: 20%; /* Category */
+}
+
+.cleaning-table th:nth-child(3),
+.cleaning-table td:nth-child(3) {
+    width: 20%; /* Duration */
+}
+
+.cleaning-table th:nth-child(4),
+.cleaning-table td:nth-child(4) {
+    width: 15%; /* Price */
+}
+
+.cleaning-table th:nth-child(5),
+.cleaning-table td:nth-child(5) {
+    width: 20%; /* Actions - needs space for buttons */
 }
 
 /* Table Content Styles */
@@ -449,6 +485,8 @@
 .service-actions {
     display: flex;
     gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .edit-btn {
@@ -1241,8 +1279,8 @@
 
     .em-table-header {
         padding: 1.5rem;
-        flex-direction: column;
-        gap: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
     }
 

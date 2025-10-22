@@ -556,12 +556,12 @@ const CleaningServiceManagement = () => {
     );
 
     const renderServiceTable = () => (
-        <div className="em-table-container">
-            <div className="em-table-header">
+        <div className="cleaning-services-table-container">
+            <div className="cleaning-services-table-header">
                 <h2>Service List</h2>
-                <div className="em-table-actions">
+                <div className="cleaning-services-table-actions">
                     <button
-                        className="em-secondary-btn"
+                        className="cleaning-services-secondary-btn"
                         onClick={fetchServices}
                     >
                         Refresh List
@@ -569,8 +569,8 @@ const CleaningServiceManagement = () => {
                 </div>
             </div>
 
-            <div className="table-wrapper">
-                <table className="em-table">
+            <div className="cleaning-table-wrapper">
+                <table className="cleaning-table">
                     <thead>
                         <tr>
                             <th>Service Name</th>
