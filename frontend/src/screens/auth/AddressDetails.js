@@ -390,7 +390,7 @@ const AddressDetails = () => {
           border-radius: 10px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
           text-align: center;
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 500;
           max-width: 400px;
           width: 90%;
@@ -400,51 +400,66 @@ const AddressDetails = () => {
 
         .modal-buttons {
           display: flex;
-          gap: 10px;
+          gap: 15px;
           justify-content: center;
-          margin-top: 20px;
+          margin-top: 25px;
+          align-items: center;
         }
 
-        .confirm-btn {
-          background: #fff;
-          color: #1976d2;
-          padding: 10px 20px;
+         .confirm-btn, .cancel-btn {
+          padding: 12px 25px;
           font-size: 16px;
           font-weight: 600;
-          border: 1px solid #1976d2;
-          border-radius: 10px;
+          border: none;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.3s ease;
+          width: 140px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
+
+
+         .confirm-btn {
+          background: #1976d2;
+          color: #fff;
+        }
+
 
         .confirm-btn:hover {
-          background: #e3f2fd;
+          background: #1565c0;
+          transform: translateY(-2px);
         }
 
-        .cancel-btn {
-          background: #fff;
-          color: #d32f2f;
-          padding: 10px 20px;
-          font-size: 16px;
-          font-weight: 600;
-          border: 1px solid #d32f2f;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: all 0.3s ease;
+
+         .cancel-btn {
+          background: #d32f2f;
+          color: #fff;
         }
+
 
         .cancel-btn:hover {
-          background: #fdecea;
+          background: #c62828;
+          transform: translateY(-2px);
         }
+
 
         @media (max-width: 480px) {
           .button-group {
             flex-direction: column;
           }
 
-          .modal-buttons {
+           .modal-buttons {
             flex-direction: column;
+            gap: 10px;
           }
+
+          .confirm-btn, .cancel-btn {
+            width: 100%;
+            height: 48px;
+
         }
       `}</style>
         </>
