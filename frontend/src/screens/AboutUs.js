@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AboutUs.css';
-// import './components/Footer';
-// import './components/NavBar';
+import './components/Footer';
 
 const AboutUs = () => {
     const [visibleSections, setVisibleSections] = useState({});
@@ -42,8 +41,77 @@ const AboutUs = () => {
     };
 
     const handleBookNow = () => {
-        // You can add navigation to booking page here if needed
-        console.log('Book Now clicked');
+        navigate('/signup');
+    };
+
+    // Function to handle social media icon clicks
+    const handleSocialClick = (platform, profileName = '') => {
+        const urls = {
+            linkedin: `https://www.linkedin.com/in/${profileName}`,
+            twitter: `https://twitter.com/${profileName}`,
+            email: `mailto:${profileName}@mobileglow.com`
+        };
+
+        if (platform === 'email' && urls[platform]) {
+            window.location.href = urls[platform];
+        } else if (urls[platform]) {
+            window.open(urls[platform], '_blank', 'noopener,noreferrer');
+        }
+    };
+
+    // Team member data with social media profiles
+    const teamMembers = [
+        {
+            name: 'Abulele Manager',
+            role: 'Operations Manager',
+            bio: 'With over 15 years in the automotive industry, Abu ensures our operations run smoothly and efficiently.',
+            social: {
+                linkedin: 'abulele-manager',
+                twitter: 'abulele_m',
+                email: 'abulele'
+            }
+        },
+        {
+            name: 'Princess CEO',
+            role: 'Chief Executive Officer',
+            bio: 'Princess founded MobileGlow with a vision to revolutionize car care in South Africa.',
+            social: {
+                linkedin: 'princess-ceo',
+                twitter: 'princess_ceo',
+                email: 'princess'
+            }
+        },
+        {
+            name: 'Kwanda Tech',
+            role: 'Technology Director',
+            bio: 'Kwanda leads our tech initiatives, ensuring we stay at the forefront of automotive care technology.',
+            social: {
+                linkedin: 'kwanda-tech',
+                twitter: 'kwanda_tech',
+                email: 'kwanda'
+            }
+        },
+        {
+            name: 'Inga Finance',
+            role: 'Finance Manager',
+            bio: 'Inga keeps our finances in order and plans for sustainable growth and expansion.',
+            social: {
+                linkedin: 'inga-finance',
+                twitter: 'inga_finance',
+                email: 'inga'
+            }
+        }
+    ];
+
+    const tharkirahMember = {
+        name: 'Tharkirah Member',
+        role: 'Customer Relations Specialist',
+        bio: 'Tharkirah ensures our customers receive exceptional service and maintains strong relationships with our valued clients.',
+        social: {
+            linkedin: 'tharkirah-member',
+            twitter: 'tharkirah_crs',
+            email: 'tharkirah'
+        }
     };
 
     return (
@@ -142,28 +210,7 @@ const AboutUs = () => {
                 >
                     <h2 className="section-title">Meet Our Leadership Team</h2>
                     <div className="team-grid">
-                        {[
-                            {
-                                name: 'AbuLele Manager',
-                                role: 'Operations Manager',
-                                bio: 'With over 15 years in the automotive industry, Abu ensures our operations run smoothly and efficiently.'
-                            },
-                            {
-                                name: 'Princess CEO',
-                                role: 'Chief Executive Officer',
-                                bio: 'Princess founded MobileGlow with a vision to revolutionize car care in South Africa.'
-                            },
-                            {
-                                name: 'Kwanda Tech',
-                                role: 'Technology Director',
-                                bio: 'Kwanda leads our tech initiatives, ensuring we stay at the forefront of automotive care technology.'
-                            },
-                            {
-                                name: 'Inga Finance',
-                                role: 'Finance Manager',
-                                bio: 'Inga keeps our finances in order and plans for sustainable growth and expansion.'
-                            }
-                        ].map((member, index) => (
+                        {teamMembers.map((member, index) => (
                             <div key={index} className="team-member">
                                 <div className="member-image">
                                     <img
@@ -171,9 +218,36 @@ const AboutUs = () => {
                                         alt={member.name}
                                     />
                                     <div className="social-links">
-                                        <a href="#"><i className="fab fa-linkedin"></i></a>
-                                        <a href="#"><i className="fab fa-twitter"></i></a>
-                                        <a href="#"><i className="fas fa-envelope"></i></a>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleSocialClick('linkedin', member.social.linkedin);
+                                            }}
+                                            title="LinkedIn Profile"
+                                        >
+                                            <i className="fab fa-linkedin"></i>
+                                        </a>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleSocialClick('twitter', member.social.twitter);
+                                            }}
+                                            title="Twitter Profile"
+                                        >
+                                            <i className="fab fa-twitter"></i>
+                                        </a>
+                                        <a
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleSocialClick('email', member.social.email);
+                                            }}
+                                            title="Send Email"
+                                        >
+                                            <i className="fas fa-envelope"></i>
+                                        </a>
                                     </div>
                                 </div>
                                 <h5>{member.name}</h5>
@@ -181,6 +255,53 @@ const AboutUs = () => {
                                 <p className="bio">{member.bio}</p>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Tharkirah's card positioned below in center */}
+                    <div className="team-grid-centered">
+                        <div className="team-member">
+                            <div className="member-image">
+                                <img
+                                    src={`https://ui-avatars.com/api/?name=Tharkirah+Member&size=120&background=4a6cf7&color=fff`}
+                                    alt="Tharkirah Member"
+                                />
+                                <div className="social-links">
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleSocialClick('linkedin', tharkirahMember.social.linkedin);
+                                        }}
+                                        title="LinkedIn Profile"
+                                    >
+                                        <i className="fab fa-linkedin"></i>
+                                    </a>
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleSocialClick('twitter', tharkirahMember.social.twitter);
+                                        }}
+                                        title="Twitter Profile"
+                                    >
+                                        <i className="fab fa-twitter"></i>
+                                    </a>
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleSocialClick('email', tharkirahMember.social.email);
+                                        }}
+                                        title="Send Email"
+                                    >
+                                        <i className="fas fa-envelope"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <h5>{tharkirahMember.name}</h5>
+                            <p className="role">{tharkirahMember.role}</p>
+                            <p className="bio">{tharkirahMember.bio}</p>
+                        </div>
                     </div>
                 </div>
 
