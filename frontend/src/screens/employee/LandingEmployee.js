@@ -9,7 +9,7 @@ import employeesIcon from "../../assets/employees.png";
 import servicesIcon from "../../assets/services.png";
 import performanceIcon from "../../assets/performance.png";
 
-import logo from "../../assets/logo.jpg";
+
 import heroCarwash from "../../assets/hero-carwash.jpg";
 
 const LandingEmployee = () => {
@@ -41,7 +41,7 @@ const LandingEmployee = () => {
 
             {/* Features Section */}
             <section className="employee-actions-section">
-                <h2 className="employee-section-heading">What You Can Do</h2>
+                <h1 className="section-heading">What You Can Do</h1>
                 <div className="employee-actions-grid">
                     <div className="employee-action-card">
                         <div className="feature-icon">

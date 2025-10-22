@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"; // external CSS file
+import image1 from '../../assets/image-1.png';
+import image2 from '../../assets/image-2.png';
+import image3 from '../../assets/image-3.png';
+import interior from '../../assets/interior.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,6 +12,17 @@ const Login = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState("success"); // 'success' or 'error'
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [image1, image2, image3, interior];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -79,10 +94,151 @@ const Login = () => {
           </p>
         </div>
         <div className="illustration">
-          <img
-            src="https://images.unsplash.com/photo-1607860108855-78658b11f80b?auto=format&fit=crop&w=700&q=80"
-            alt="Car wash illustration"
-          />
+          <div className="image-slider" style={{ overflow: 'hidden', width: '100%', height: '100%', position: 'relative', borderRadius: '15px' }}>
+            <div
+              className="slider-track"
+              style={{
+                display: 'flex',
+                width: `${images.length * 100}%`,
+                height: '100%',
+                transform: `translateX(-${currentImageIndex * (100 / images.length)}%)`,
+                transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
+              {images.map((image, index) => (
+                <div key={index} style={{ width: `${100 / images.length}%`, height: '100%', position: 'relative', flexShrink: 0 }}>
+                  <img
+                    src={image}
+                    alt={`Car wash illustration ${index + 1}`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                  <div className="slide-overlay" style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <div className="slide-content" style={{
+                      textAlign: 'center',
+                      color: 'white',
+                      padding: '20px',
+                      borderRadius: '10px',
+                      background: 'rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255,255,255,0.2)'
+                    }}>
+                      <h3 style={{ margin: '0 0 10px 0', fontSize: '24px', fontWeight: 'bold' }}>
+                        {index === 0 && 'Rim Detailing Excellence'}
+                        {index === 1 && 'Complete Exterior Bath'}
+                        {index === 2 && 'Thorough Wheel Care'}
+                        {index === 3 && 'Interior Perfection'}
+                      </h3>
+                      <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
+                        {index === 0 && 'Precision cleaning for sparkling wheel rims'}
+                        {index === 1 && 'Luxurious exterior coverage for deep cleaning'}
+                        {index === 2 && 'Expert tire and rim restoration service'}
+                        {index === 3 && 'Immaculate interior polishing and care'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Navigation Arrows */}
+            <button
+              onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
+              style={{
+                position: 'absolute',
+                left: '20px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.2)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '50px',
+                height: '50px',
+                color: 'white',
+                fontSize: '20px',
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.4)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+            >
+              ‹
+            </button>
+            <button
+              onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
+              style={{
+                position: 'absolute',
+                right: '20px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.2)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '50px',
+                height: '50px',
+                color: 'white',
+                fontSize: '20px',
+                cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.4)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+            >
+              ›
+            </button>
+          </div>
+
+          {/* Enhanced Dots */}
+          <div className="dots-container" style={{
+            position: 'absolute',
+            bottom: '30px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '15px',
+            background: 'rgba(0,0,0,0.3)',
+            padding: '10px 20px',
+            borderRadius: '25px',
+            backdropFilter: 'blur(10px)'
+          }}>
+            {images.map((_, index) => (
+              <span
+                key={index}
+                onClick={() => setCurrentImageIndex(index)}
+                style={{
+                  width: currentImageIndex === index ? '16px' : '12px',
+                  height: currentImageIndex === index ? '16px' : '12px',
+                  borderRadius: '50%',
+                  backgroundColor: currentImageIndex === index ? '#fff' : 'rgba(255, 255, 255, 0.5)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  border: currentImageIndex === index ? '2px solid rgba(255,255,255,0.8)' : 'none',
+                  boxShadow: currentImageIndex === index ? '0 0 10px rgba(255,255,255,0.5)' : 'none'
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

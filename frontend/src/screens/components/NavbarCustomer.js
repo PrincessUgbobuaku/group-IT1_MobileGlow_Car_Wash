@@ -27,6 +27,7 @@ const NavbarCustomer = () => {
       <div className="app-content navbar-inner">
         <div className="navbar-left">
           <img src={logo} alt="Mobile Car Wash Logo" className="logo-img" />
+          <a href = "LandingCustomer" className="logo-img"></a>
         </div>
 
         <div className="nav-links">

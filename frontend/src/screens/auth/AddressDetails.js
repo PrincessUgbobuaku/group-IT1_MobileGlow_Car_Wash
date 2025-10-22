@@ -303,7 +303,7 @@ const AddressDetails = () => {
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <p>By creating an account you are allowing our terms and conditions</p>
+                        <p>You have successfully created an account!</p>
                         <div className="modal-buttons">
                             <button className="confirm-btn" onClick={handleConfirm}>
                                 Confirm

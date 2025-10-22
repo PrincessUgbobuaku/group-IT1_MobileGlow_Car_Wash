@@ -100,7 +100,6 @@ const CleaningServiceManagement = () => {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleteType, setDeleteType] = useState('single');
-    const [serviceDescriptions, setServiceDescriptions] = useState(new Map());
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     const [errorDetails, setErrorDetails] = useState({ title: '', message: '', type: 'error' });
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
@@ -110,8 +109,7 @@ const CleaningServiceManagement = () => {
         category: '',
         newCategory: '',
         priceOfService: '',
-        duration: '',
-        description: ''
+        duration: ''
     });
 
     // ========================================
@@ -218,8 +216,7 @@ const CleaningServiceManagement = () => {
             category: '',
             newCategory: '',
             priceOfService: '',
-            duration: '',
-            description: ''
+            duration: ''
         });
         setEditingService(null);
         setShowForm(false);
@@ -248,7 +245,7 @@ const CleaningServiceManagement = () => {
             }
 
             // Convert string values to proper types for backend
-            const { description, newCategory, ...backendData } = formData;
+            const { newCategory, ...backendData } = formData;
             const processedData = {
                 ...backendData,
                 category: formData.category === 'new' ? formData.newCategory : formData.category,
@@ -270,10 +267,6 @@ const CleaningServiceManagement = () => {
                 // Update existing service
                 await cleaningServiceService.updateCleaningService(editingService.cleaningServiceId, processedData);
 
-                // Save description locally
-                if (description.trim()) {
-                    setServiceDescriptions(prev => new Map(prev).set(editingService.cleaningServiceId, description));
-                }
 
                 setError(null);
                 resetForm();
@@ -284,10 +277,6 @@ const CleaningServiceManagement = () => {
                 const result = await cleaningServiceService.createCleaningService(processedData);
 
                 if (result.success) {
-                    // Save description locally for the new service
-                    if (description.trim() && result.data?.cleaningServiceId) {
-                        setServiceDescriptions(prev => new Map(prev).set(result.data.cleaningServiceId, description));
-                    }
 
                     setError(null);
                     resetForm();
@@ -343,14 +332,12 @@ const CleaningServiceManagement = () => {
     // ========================================
     const handleEdit = (service) => {
         setEditingService(service);
-        const savedDescription = serviceDescriptions.get(service.cleaningServiceId);
         setFormData({
             serviceName: service.serviceName || '',
             category: service.category || '',
             newCategory: '',
             priceOfService: service.priceOfService || '',
-            duration: service.duration || '',
-            description: savedDescription || 'A thorough top-to-bottom cleaning service that includes...'
+            duration: service.duration || ''
         });
         setShowForm(true);
     };
@@ -521,18 +508,6 @@ const CleaningServiceManagement = () => {
                         )}
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="description">Description</label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            placeholder="Describe what this service includes..."
-                            rows="3"
-                            className="form-textarea"
-                        />
-                    </div>
 
                     <div className="form-row">
                         <div className="form-group">
@@ -600,7 +575,6 @@ const CleaningServiceManagement = () => {
                         <tr>
                             <th>Service Name</th>
                             <th>Category</th>
-                            <th>Description</th>
                             <th>Duration</th>
                             <th>Price</th>
                             <th>Actions</th>
@@ -609,7 +583,7 @@ const CleaningServiceManagement = () => {
                     <tbody>
                         {filteredServices.length === 0 ? (
                             <tr>
-                                <td colSpan="6" style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
+                                <td colSpan="5" style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
                                     No services match your search.
                                 </td>
                             </tr>
@@ -623,11 +597,6 @@ const CleaningServiceManagement = () => {
                                     </td>
                                     <td>
                                         <span className="service-category">{service.category || 'N/A'}</span>
-                                    </td>
-                                    <td>
-                                        <div className="service-description">
-                                            {serviceDescriptions.get(service.cleaningServiceId) || 'A thorough top-to-bottom cleaning service that includes...'}
-                                        </div>
                                     </td>
                                     <td>
                                         <div className="service-duration">{service.duration} hours</div>

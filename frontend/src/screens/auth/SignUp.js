@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import image1 from '../../assets/image-1.png';
 
 const styles = {
     pageContainer: {
@@ -53,6 +54,7 @@ const SignUp = () => {
     const [phoneError, setPhoneError] = useState('');
     const [employeeError, setEmployeeError] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+    const [strength, setStrength] = useState('');
 
     useEffect(() => {
         // Reset manager state to empty when component mounts or selectedRole changes
@@ -91,8 +93,19 @@ const SignUp = () => {
         setManager(updatedManager);
     };
 
+    const checkStrength = (value) => {
+        if (value.length < 6) return "Very weak";
+        if (value.match(/[A-Z]/) && value.match(/[0-9]/) && value.length >= 8)
+          return "Strong";
+        if (value.length >= 8) return "Medium";
+        return "Weak";
+    };
+
     const handleLoginChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'password') {
+            setStrength(checkStrength(value));
+        }
         setManager({
             ...manager,
             login: {
@@ -211,6 +224,19 @@ const SignUp = () => {
                             />
                         </div>
 
+                        {selectedRole === 'Customer' && (
+                            <div className="form-group">
+                                <label>Date of Birth</label>
+                                <input
+                                    type="date"
+                                    name="customerDOB"
+                                    value={manager.customerDOB}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )}
+
                         {selectedRole === 'Employee' && (
                             <>
                                 <div className="form-group">
@@ -277,6 +303,9 @@ const SignUp = () => {
                                 placeholder="Enter password"
                                 required
                             />
+                            <div className={`strength ${strength.toLowerCase()}`}>
+                                {strength && <span>{strength}</span>}
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -306,7 +335,7 @@ const SignUp = () => {
                 </div>
                 <div style={styles.rightContainer}>
                     <img
-                        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+                        src={image1}
                         alt="Car wash"
                         style={styles.image}
                     />
@@ -350,6 +379,27 @@ const SignUp = () => {
           display: flex;
           gap: 15px;
           margin-top: 6px;
+        }
+
+        .strength {
+          margin-top: 5px;
+          font-size: 13px;
+        }
+
+        .strength.very {
+          color: #e74c3c;
+        }
+
+        .strength.weak {
+          color: #e67e22;
+        }
+
+        .strength.medium {
+          color: #f1c40f;
+        }
+
+        .strength.strong {
+          color: #2ecc71;
         }
 
         .submit-btn {

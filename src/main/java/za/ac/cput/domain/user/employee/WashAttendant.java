@@ -12,6 +12,7 @@ import za.ac.cput.domain.generic.Contact;
 import za.ac.cput.domain.user.Login;
 import za.ac.cput.domain.user.User;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Entity
@@ -19,6 +20,7 @@ public class WashAttendant extends User {
     private boolean isFullTime;
     private int shiftHours;
     private String employeeType;
+    private LocalDate hireDate;
 
     protected WashAttendant() {
         super();
@@ -33,6 +35,7 @@ public class WashAttendant extends User {
         this.employeeType = builder.employeeType;
         this.isFullTime = builder.isFullTime;
         this.shiftHours = builder.shiftHours;
+        this.hireDate = builder.hireDate;
         this.imageName = builder.imageName;
         this.imageType = builder.imageType;
         this.imageData = builder.imageData;
@@ -53,12 +56,17 @@ public class WashAttendant extends User {
         return employeeType;
     }
 
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
     @Override
     public String toString() {
         return "WashAttendant{" +
                 "isFullTime=" + isFullTime +
                 ", shiftHours=" + shiftHours +
                 ", employeeType='" + employeeType + '\'' +
+                ", hireDate=" + hireDate +
                 ", userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", userSurname='" + userSurname + '\'' +
@@ -82,6 +90,7 @@ public class WashAttendant extends User {
         private String employeeType;
         private boolean isFullTime;
         private int shiftHours;
+        private LocalDate hireDate;
         private String imageName;
         private String imageType;
         private byte[] imageData;
@@ -129,6 +138,11 @@ public class WashAttendant extends User {
             return this;
         }
 
+        public Builder setHireDate(LocalDate hireDate) {
+            this.hireDate = hireDate;
+            return this;
+        }
+
         public Builder setImageName(String imageName) {
             this.imageName = imageName;
             return this;
@@ -168,6 +182,7 @@ public class WashAttendant extends User {
             this.employeeType = washAttendant.employeeType;
             this.isFullTime = washAttendant.isFullTime;
             this.shiftHours = washAttendant.shiftHours;
+            this.hireDate = washAttendant.hireDate;
             this.imageName = washAttendant.imageName;
             this.imageType = washAttendant.imageType;
             this.imageData = washAttendant.imageData;

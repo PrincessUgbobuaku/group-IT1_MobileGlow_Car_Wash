@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Booking from './screens/customer/booking/Booking';
 import BookingVehicle from "./screens/customer/booking/BookingVehicle";
 import BookingTwo from "./screens/customer/booking/BookingTwo";
@@ -31,6 +31,10 @@ import DeactivateAccount from "./screens/auth/DeactivateAccount";
 import ExteriorWash from "./screens/customer/single-services/ExteriorWashService";
 import CustomerCardsPage from "./screens/customer/booking/CustomerCardPage";
 import BookingHistory from "./screens/customer/booking/BookingHistory"
+import FullDetailing from "./screens/customer/single-services/FullDetailing";
+import InteriorCare from "./screens/customer/single-services/InteriorCare";
+import ProtectionService from "./screens/customer/single-services/ProtectionService";
+
 function App()  {
   return (
     <Router>
@@ -70,6 +74,9 @@ function App()  {
 
           <Route path="/exterior-wash" element={<ExteriorWash />} />
     <Route path="/my-cards" element={<CustomerCardsPage />} />
+          <Route path="/partner-with-us" element={<FullDetailing />} />
+          <Route path="/corporate-packages" element={<InteriorCare/>} />
+          <Route path="/franchise" element={<ProtectionService/>} />
 
 
       </Routes>

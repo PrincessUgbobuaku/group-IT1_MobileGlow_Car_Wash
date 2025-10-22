@@ -31,6 +31,77 @@ const VehiclePage = () => {
         customerId: parseInt(localStorage.getItem('userId') || '1')
     });
 
+    // Vehicle makes and models data
+    const vehicleMakes = [
+        'Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen',
+        'Nissan', 'Hyundai', 'Kia', 'Mazda', 'Subaru', 'Lexus', 'Infiniti', 'Acura',
+        'Volvo', 'Jaguar', 'Land Rover', 'Porsche', 'Tesla', 'Genesis', 'Lincoln', 'Cadillac',
+        'Buick', 'Chrysler', 'Dodge', 'Jeep', 'Ram', 'GMC', 'Mitsubishi', 'Suzuki',
+        'Isuzu', 'Fiat', 'Alfa Romeo', 'Maserati', 'Bentley', 'Rolls-Royce', 'Aston Martin',
+        'McLaren', 'Ferrari', 'Lamborghini', 'Bugatti', 'Koenigsegg', 'Pagani'
+    ];
+
+    const vehicleModels = {
+        'Toyota': ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Prius', 'Avalon', 'Sienna', 'Tacoma', 'Tundra', '4Runner', 'Sequoia', 'Land Cruiser', 'Yaris', 'C-HR', 'Venza', 'RunX'],
+        'Honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'HR-V', 'Passport', 'Ridgeline', 'Insight', 'Fit', 'Odyssey', 'Element', 'S2000', 'NSX'],
+        'Ford': ['F-150', 'Escape', 'Explorer', 'Expedition', 'Mustang', 'Focus', 'Fusion', 'Edge', 'Bronco', 'Ranger', 'Transit', 'EcoSport', 'Flex'],
+        'Chevrolet': ['Silverado', 'Equinox', 'Traverse', 'Tahoe', 'Suburban', 'Camaro', 'Corvette', 'Malibu', 'Cruze', 'Sonic', 'Spark', 'Trax', 'Blazer'],
+        'BMW': ['3 Series', '5 Series', '7 Series', 'X1', 'X3', 'X5', 'X7', 'Z4', 'i3', 'i8', 'M2', 'M3', 'M4', 'M5', 'M8'],
+        'Mercedes-Benz': ['C-Class', 'E-Class', 'S-Class', 'A-Class', 'CLA', 'CLS', 'GLA', 'GLC', 'GLE', 'GLS', 'G-Class', 'SL', 'AMG GT', 'Sprinter'],
+        'Audi': ['A3', 'A4', 'A6', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'TT', 'R8', 'e-tron', 'RS3', 'RS4', 'RS5', 'RS6', 'RS7'],
+        'Volkswagen': ['Jetta', 'Passat', 'Golf', 'Tiguan', 'Atlas', 'Beetle', 'CC', 'Arteon', 'ID.4', 'Touareg', 'Golf R', 'GTI'],
+        'Nissan': ['Altima', 'Sentra', 'Maxima', 'Rogue', 'Murano', 'Pathfinder', 'Armada', 'Frontier', 'Titan', '370Z', 'GT-R', 'Leaf', 'Versa'],
+        'Hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Palisade', 'Kona', 'Venue', 'Veloster', 'Genesis', 'Ioniq', 'Nexo'],
+        'Kia': ['Forte', 'Optima', 'Sorento', 'Telluride', 'Sportage', 'Soul', 'Stinger', 'Niro', 'Cadenza', 'Sedona', 'Rio'],
+        'Mazda': ['Mazda3', 'Mazda6', 'CX-3', 'CX-5', 'CX-9', 'MX-5 Miata', 'CX-30', 'Mazda2', 'RX-7', 'RX-8'],
+        'Subaru': ['Impreza', 'Legacy', 'Outback', 'Forester', 'Ascent', 'WRX', 'BRZ', 'Crosstrek', 'Tribeca', 'Baja'],
+        'Lexus': ['ES', 'IS', 'GS', 'LS', 'NX', 'RX', 'GX', 'LX', 'LC', 'RC', 'CT', 'HS', 'SC'],
+        'Infiniti': ['Q50', 'Q60', 'Q70', 'QX50', 'QX60', 'QX80', 'G37', 'M37', 'FX35', 'EX35', 'JX35'],
+        'Acura': ['ILX', 'TLX', 'RLX', 'RDX', 'MDX', 'NSX', 'TSX', 'TL', 'RL', 'RSX', 'Integra', 'Legend'],
+        'Volvo': ['S60', 'S90', 'V60', 'V90', 'XC40', 'XC60', 'XC90', 'C30', 'C70', 'S40', 'S80', 'V40', 'V70'],
+        'Jaguar': ['XE', 'XF', 'XJ', 'F-PACE', 'E-PACE', 'I-PACE', 'F-TYPE', 'XK', 'S-TYPE', 'X-TYPE'],
+        'Land Rover': ['Range Rover', 'Range Rover Sport', 'Range Rover Evoque', 'Range Rover Velar', 'Discovery', 'Discovery Sport', 'Defender'],
+        'Porsche': ['911', 'Cayenne', 'Macan', 'Panamera', 'Taycan', 'Boxster', 'Cayman', '718', '918 Spyder', 'Carrera GT'],
+        'Tesla': ['Model S', 'Model 3', 'Model X', 'Model Y', 'Roadster', 'Cybertruck', 'Semi'],
+        'Genesis': ['G70', 'G80', 'G90', 'GV70', 'GV80', 'Coupe'],
+        'Lincoln': ['Continental', 'MKZ', 'MKX', 'MKC', 'Navigator', 'Aviator', 'Corsair', 'Town Car'],
+        'Cadillac': ['ATS', 'CTS', 'XTS', 'CT6', 'XT4', 'XT5', 'XT6', 'Escalade', 'SRX', 'XLR'],
+        'Buick': ['Encore', 'Envision', 'Enclave', 'LaCrosse', 'Regal', 'Verano', 'Cascada', 'Century'],
+        'Chrysler': ['300', 'Pacifica', 'Voyager', 'Town & Country', 'Sebring', 'Crossfire', 'PT Cruiser'],
+        'Dodge': ['Challenger', 'Charger', 'Durango', 'Journey', 'Grand Caravan', 'Dart', 'Avenger', 'Caliber'],
+        'Jeep': ['Wrangler', 'Grand Cherokee', 'Cherokee', 'Compass', 'Renegade', 'Gladiator', 'Commander', 'Liberty'],
+        'Ram': ['1500', '2500', '3500', 'ProMaster', 'ProMaster City', 'Dakota'],
+        'GMC': ['Sierra', 'Canyon', 'Acadia', 'Terrain', 'Yukon', 'Savana', 'Envoy', 'Denali'],
+        'Mitsubishi': ['Outlander', 'Eclipse Cross', 'Mirage', 'Lancer', 'Galant', 'Endeavor', 'Montero', 'Diamante'],
+        'Suzuki': ['Swift', 'SX4', 'Grand Vitara', 'Kizashi', 'Equator', 'XL7', 'Aerio', 'Forenza'],
+        'Isuzu': ['D-Max', 'MU-X', 'Trooper', 'Rodeo', 'Ascender', 'i-Series', 'Axiom'],
+        'Fiat': ['500', '500L', '500X', 'Panda', 'Tipo', 'Doblo', 'Ducato', '124 Spider'],
+        'Alfa Romeo': ['Giulia', 'Stelvio', '4C', 'Spider', 'GTV', '156', '147', '159'],
+        'Maserati': ['Ghibli', 'Quattroporte', 'Levante', 'GranTurismo', 'GranCabrio', 'MC20'],
+        'Bentley': ['Continental', 'Flying Spur', 'Bentayga', 'Mulsanne', 'Azure', 'Arnage'],
+        'Rolls-Royce': ['Phantom', 'Ghost', 'Wraith', 'Dawn', 'Cullinan', 'Silver Shadow'],
+        'Aston Martin': ['DB11', 'Vantage', 'DBS', 'Rapide', 'Vanquish', 'DB9', 'V8 Vantage'],
+        'McLaren': ['720S', '570S', '600LT', 'GT', 'Senna', 'P1', '650S', '540C'],
+        'Ferrari': ['488', 'F8', 'SF90', 'Roma', 'Portofino', '812', 'LaFerrari', 'California'],
+        'Lamborghini': ['Huracán', 'Aventador', 'Urus', 'Gallardo', 'Murciélago', 'Countach'],
+        'Bugatti': ['Chiron', 'Veyron', 'Divo', 'Centodieci', 'La Voiture Noire'],
+        'Koenigsegg': ['Regera', 'Jesko', 'Gemera', 'CCX', 'CCR', 'Agera'],
+        'Pagani': ['Huayra', 'Zonda', 'Utopia', 'Imola', 'C10']
+    };
+
+    // Vehicle colors data
+    const vehicleColors = [
+        'White', 'Black', 'Silver', 'Gray', 'Red', 'Blue', 'Green', 'Brown', 'Beige', 'Gold',
+        'Yellow', 'Orange', 'Purple', 'Pink', 'Maroon', 'Navy', 'Turquoise', 'Cream', 'Tan',
+        'Champagne', 'Pearl White', 'Metallic Black', 'Metallic Silver', 'Metallic Gray',
+        'Metallic Blue', 'Metallic Red', 'Metallic Green', 'Metallic Brown', 'Metallic Gold',
+        'Matte Black', 'Matte Gray', 'Matte Blue', 'Carbon Black', 'Jet Black', 'Arctic White',
+        'Alpine White', 'Mineral White', 'Space Gray', 'Midnight Blue', 'Deep Blue', 'Royal Blue',
+        'Electric Blue', 'Bright Red', 'Crimson Red', 'Fire Red', 'Racing Green', 'Forest Green',
+        'Emerald Green', 'British Racing Green', 'Champagne Gold', 'Rose Gold', 'Copper',
+        'Bronze', 'Gunmetal', 'Titanium', 'Platinum', 'Pearl', 'Iridescent', 'Chrome'
+    ];
+
     // ========================================
     // API CONFIGURATION
     // ========================================
@@ -238,10 +309,19 @@ const VehiclePage = () => {
     // ========================================
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => {
+            const newData = {
+                ...prev,
+                [name]: value
+            };
+            
+            // If make changes, reset model
+            if (name === 'make') {
+                newData.model = '';
+            }
+            
+            return newData;
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -467,44 +547,76 @@ const VehiclePage = () => {
     );
 
 
-    const renderVehicleCard = (vehicle) => (
-        <div 
-            className={`vehicle-card ${editingVehicle && editingVehicle.vehicleID === vehicle.vehicleID ? 'editing' : ''}`} 
-            key={vehicle.vehicleID}
-        >
-            <div className="vehicle-info">
-                <div className="vehicle-info-item">
-                    <span className="vehicle-info-label">Plate Number:</span>
-                    <span className="vehicle-info-value">{vehicle.carPlateNumber}</span>
-                </div>
-                <div className="vehicle-info-item">
-                    <span className="vehicle-info-label">Make:</span>
-                    <span className="vehicle-info-value">{vehicle.carMake}</span>
-                </div>
-                <div className="vehicle-info-item">
-                    <span className="vehicle-info-label">Model:</span>
-                    <span className="vehicle-info-value">{vehicle.carModel}</span>
-                </div>
-                <div className="vehicle-info-item">
-                    <span className="vehicle-info-label">Colour:</span>
-                    <span className="vehicle-info-value">{vehicle.carColour}</span>
+    const renderVehicleTable = () => (
+        <div className="em-table-container">
+            <div className="em-table-header">
+                <h2>Vehicle List</h2>
+                <div className="em-table-actions">
+                    <button
+                        className="em-secondary-btn"
+                        onClick={fetchVehicles}
+                    >
+                        Refresh List
+                    </button>
                 </div>
             </div>
-            <div className="vehicle-actions">
-                <button
-                    className="vehicle-page-edit-btn"
-                    onClick={() => handleEdit(vehicle)}
-                    title="Edit vehicle"
-                >
-                    Edit
-                </button>
-                <button
-                    className="vehicle-page-delete-btn"
-                    onClick={() => handleDelete(vehicle.vehicleID)}
-                    title="Delete vehicle"
-                >
-                    Delete
-                </button>
+
+            <div className="table-wrapper">
+                <table className="em-table">
+                    <thead>
+                        <tr>
+                            <th>Plate Number</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Color</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {vehicles.length === 0 ? (
+                            <tr>
+                                <td colSpan="5" style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
+                                    No vehicles found. Add your first vehicle above.
+                                </td>
+                            </tr>
+                        ) : (
+                            vehicles.map(vehicle => (
+                                <tr key={vehicle.vehicleID} className={editingVehicle && editingVehicle.vehicleID === vehicle.vehicleID ? 'editing' : ''}>
+                                    <td>
+                                        <div className="vehicle-plate">
+                                            <strong>{vehicle.carPlateNumber}</strong>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span className="vehicle-make">{vehicle.carMake || 'N/A'}</span>
+                                    </td>
+                                    <td>
+                                        <div className="vehicle-model">{vehicle.carModel || 'N/A'}</div>
+                                    </td>
+                                    <td>
+                                        <div className="vehicle-color">{vehicle.carColour || 'N/A'}</div>
+                                    </td>
+                                    <td>
+                                        <div className="vehicle-actions">
+                                            <button
+                                                className="edit-btn"
+                                                onClick={() => handleEdit(vehicle)}
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() => handleDelete(vehicle.vehicleID)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
@@ -614,41 +726,60 @@ const VehiclePage = () => {
 
                     <div className="form-group">
                         <label htmlFor="make">Make *</label>
-                        <input
-                            type="text"
+                        <select
                             id="make"
                             name="make"
                             value={formData.make}
                             onChange={handleInputChange}
                             required
-                            placeholder="Enter car make"
-                        />
+                            className="form-select"
+                        >
+                            <option value="">Select a make...</option>
+                            {vehicleMakes.map(make => (
+                                <option key={make} value={make}>
+                                    {make}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="model">Model *</label>
-                        <input
-                            type="text"
+                        <select
                             id="model"
                             name="model"
                             value={formData.model}
                             onChange={handleInputChange}
                             required
-                            placeholder="Enter car model"
-                        />
+                            className="form-select"
+                            disabled={!formData.make}
+                        >
+                            <option value="">Select a model...</option>
+                            {formData.make && vehicleModels[formData.make] && vehicleModels[formData.make].map(model => (
+                                <option key={model} value={model}>
+                                    {model}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="colour">Color *</label>
-                        <input
-                            type="text"
+                        <select
                             id="colour"
                             name="colour"
                             value={formData.colour}
                             onChange={handleInputChange}
                             required
-                            placeholder="Enter car color"
-                        />
+                            className="form-select"
+                        >
+                            <option value="">Select a color...</option>
+                            {vehicleColors.map(color => (
+                                <option key={color} value={color}>
+                                    {color}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="form-actions">
@@ -708,16 +839,7 @@ const VehiclePage = () => {
 
             {/* Main Content */}
             <div className="vehicle-main-content">
-                {vehicles.length === 0 ? (
-                    <div className="no-data">
-                        <p>No vehicles found. Add your first vehicle above.</p>
-                    </div>
-                ) : (
-                    <div className="vehicle-cards-grid">
-                        {vehicles.map(renderVehicleCard)}
-                    </div>
-                )}
-
+                {renderVehicleTable()}
                 {showForm && renderVehicleForm()}
             </div>
             

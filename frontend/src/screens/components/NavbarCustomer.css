@@ -1,22 +1,12 @@
-/* .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #ffffff !important;
-    color: white;
-    padding: 1rem 2rem;
-    height: 70px;
-} */
 
 /* Make sure navbar still spans full width */
 .customer-navbar {
     position: sticky;
   top: 0;
   width: 100%;
-  background-color: #fff;
+  background-color: #0C2D48 !important;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  position: relative;
-  z-index: 1000;
+    z-index: 1000;
 }
 
 /* Optional if you want internal layout control */

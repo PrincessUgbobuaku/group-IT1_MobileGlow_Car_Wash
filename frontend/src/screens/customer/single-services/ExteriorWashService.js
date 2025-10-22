@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Navbar from '../../components/NavbarCustomer';
+import Navbar from '../../components/Navbar';
 import butterfly from '../../../assets/butterfly.png'; // Adjust path if needed
 import './ExteriorWashService.css';
 import Footer from '../../components/Footer';
+
+import waxing from '../../../assets/waxing.png';
+import tire from '../../../assets/tire.png';
+import luxury from '../../../assets/luxury.png';
+import hero from '../../../assets/hero-carwash.jpg';
+import fleet from '../../../assets/fleet.png';
 
 // Custom hook to handle scroll-based animation
 const useScrollAnimation = () => {
@@ -50,27 +56,28 @@ function ExteriorWash() {
       title: 'Basic Exterior Wash',
       description:
         'A thorough hand wash, wheel clean, and dry to remove dirt, grime, and road salt. Perfect for regular vehicle maintenance.',
-      image: butterfly,
+      image: luxury,
     },
     {
       title: 'Wax and Polish',
       description:
         'Protect and enhance your car’s finish with our premium wax and polish. Adds shine and shields paint from environmental wear.',
-      image: butterfly,
+      image: waxing,
     },
     {
       title: 'Tire and Wheel Detailing',
       description:
         'Deep clean and dress your tires and wheels for a showroom-ready appearance that lasts.',
-      image: butterfly,
+      image: tire,
     },
     {
       title: 'Fleet Bulk Service',
       description:
         'Discounted rates and scheduled service for business fleets. Efficient, convenient, and professional exterior care.',
-      image: butterfly,
+      image: fleet,
     },
   ];
+
 
   const faqs = [
     {
@@ -98,7 +105,7 @@ function ExteriorWash() {
       <section
         className="exterior-hero"
         style={{
-          backgroundImage: `url(${butterfly})`,
+          backgroundImage: `url(${hero})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           padding: '120px 20px',
@@ -127,6 +134,17 @@ function ExteriorWash() {
             </div>
           </div>
         ))}
+      </section>
+
+      <section className="book-now-container">
+        <div className="book-now-container">
+          <button
+              onClick={() => (window.location.href = "/login")}
+              className="cta-button primary"
+          >
+            BOOK NOW
+          </button>
+        </div>
       </section>
 
       <section className="faq-section app-content">
