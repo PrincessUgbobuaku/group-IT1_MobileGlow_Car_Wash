@@ -3,7 +3,6 @@ import Navbar from '../../components/Navbar';
 import './ExteriorWashService.css';
 import Footer from '../../components/Footer';
 
-import tire from '../../../assets/tire.png';
 import hero from '../../../assets/hero-carwash.jpg';
 import vacuum from '../../../assets/vacuum.png';
 import leather from '../../../assets/leather.png';
