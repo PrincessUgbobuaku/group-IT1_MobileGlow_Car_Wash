@@ -332,47 +332,6 @@ export default function LandingCustomer() {
       </section>
 
 
-      {/*/!*What we wash section *!/*/}
-      {/*<div className="what-we-wash app-content">*/}
-      {/*  <div className="what-we-wash-text">*/}
-      {/*    <h1 className="section-heading"> No Car Left Dirty.</h1>*/}
-      {/*    <p>*/}
-      {/*      We clean all types of vehicles — from everyday sedans to luxury*/}
-      {/*      cars, SUVs, and work trucks. Our mobile service brings professional*/}
-      {/*      care right to your doorstep, saving you time and effort. Using*/}
-      {/*      eco-friendly products and precision techniques, we ensure every*/}
-      {/*      detail shines. Whether it's a quick wash or full detailing, quality*/}
-      {/*      is always our priority. At MobileGlow, we treat every car like it’s*/}
-      {/*      our own.*/}
-      {/*    </p>*/}
-      {/*  </div>*/}
-      {/*  <section className="wash-cards-section">*/}
-      {/*    <div*/}
-      {/*        className="wash-card"*/}
-      {/*        style={{*/}
-      {/*          backgroundImage: `url(${SEDUN})`,*/}
-      {/*        }}*/}
-      {/*    >*/}
-      {/*      <div className="card-text">Sedans</div>*/}
-      {/*    </div>*/}
-      {/*    <div*/}
-      {/*        className="wash-card"*/}
-      {/*        style={{*/}
-      {/*          backgroundImage: `url(${SUV})`,*/}
-      {/*        }}*/}
-      {/*    >*/}
-      {/*      <div className="card-text">SUVs</div>*/}
-      {/*    </div>*/}
-      {/*    <div*/}
-      {/*        className="wash-card"*/}
-      {/*        style={{*/}
-      {/*          backgroundImage: `url(${MOTORCYCLES})`,*/}
-      {/*        }}*/}
-      {/*    >*/}
-      {/*      <div className="card-text">Motorcycles</div>*/}
-      {/*    </div>*/}
-      {/*  </section>*/}
-      {/*</div>*/}
 
 
         {/* Categories Section - UPDATED WITH NAVY BACKGROUND */}

@@ -14,6 +14,19 @@
   animation: glowPulse 2.5s ease-in-out infinite;
 }
 
+.hero-section {
+  height: 60vh; /* Try 60% of the viewport height — adjust as needed */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 2rem; /* Reduce padding if needed */
+}
+
+
 /* Keyframes for glowing and scaling */
 @keyframes glowPulse {
   0%, 100% {
@@ -507,8 +520,8 @@
 
 
 .zoom-image {
-  width: 100%;
-  max-width: 500px;
+  width: 200%;
+  max-width: 600px;
   border-radius: 20px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   transform: scale(1);

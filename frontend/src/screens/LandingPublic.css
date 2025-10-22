@@ -455,6 +455,38 @@
     font-weight: 400;
 }
 
+
+
+.category-card img {
+    width: 80%;        /* Reduce width — adjust to 70%, 60%, etc. */
+    height: auto;      /* Keeps image proportions */
+    border-radius: 12px;
+    object-fit: cover; /* Ensures image scales nicely */
+    margin: 0 auto;    /* Centers the image */
+    display: block;
+    background-size: cover
+}
+
+.category-card {
+    background-color: transparent; /* Remove white background */
+    background-size: cover;        /* Fill the card area */
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    height: 220px; /* Adjust as needed */
+    transition: transform 0.3s ease-in-out;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+}
+
+.categories-section{
+    padding: 20px 0;
+}
+
+
+
 /* Default section headings for other sections */
 .section-heading {
     font-size: 3rem;
@@ -669,8 +701,10 @@
     }
 
     .stats-container {
-        flex-direction: column;
-        gap: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 50px; /* space between each stat */
     }
 
     .zoom-container {
