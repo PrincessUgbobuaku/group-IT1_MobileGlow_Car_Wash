@@ -7,22 +7,12 @@ import { useScrollReveal } from "../../hooks/useScrollReveal"; // adjust path
 import butterfly from "../../assets/about-us.png";
 import React, { useState, useEffect, useRef } from "react";
 
-// // Import images correctly
-// import qualityServiceIcon from "../../assets/quality-service.png";
-// import locationsIcon from "../../assets/variety-of-locations.png";
-// import loadSheddingIcon from "../../assets/operational-during-load-shedding.png";
-// import professionalTeamIcon from "../../assets/professional-team.png";
 
 import FULL_WASH_IMAGE from "../../assets/full-wash.png";
 import DETAILING_IMAGE from "../../assets/detailing.png";
 import WAXING_IMAGE from "../../assets/waxing.png";
 import INTERIOR_IMAGE from "../../assets/interior.png";
 import HERO_IMAGE from "../../assets/hero-carwash.jpg";
-
-import SEDUN from "../../assets/sedan.png"
-import SUV from "../../assets/suv.png"
-import MOTORCYCLES from "../../assets/motorcycle.png"
-import LUXURY from "../../assets/luxury.png"
 
 
 import ReviewCarousel from "../components/ReviewCarousel";
