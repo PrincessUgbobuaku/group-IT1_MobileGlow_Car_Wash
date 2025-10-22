@@ -1,5 +1,6 @@
 package za.ac.cput.controller.booking;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,40 +19,42 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.time.temporal.ChronoUnit;
-import org.slf4j.Logger;
 
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
 
+    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
+
     private final BookingService bookingService;
     private final WashAttendantService washAttendantService;
-    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
-    @Autowired
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public BookingController(BookingService bookingService, WashAttendantService washAttendantService) {
+    public BookingController(BookingService bookingService,
+                             WashAttendantService washAttendantService,
+                             PaymentService paymentService) {
         this.bookingService = bookingService;
         this.washAttendantService = washAttendantService;
+        this.paymentService = paymentService;
     }
 
-    // CREATE - POST /api/bookings
+    // -------------------------------
+    // CRUD Endpoints
+    // -------------------------------
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Booking> create(@RequestBody Booking booking) {
         Booking created = bookingService.create(booking);
         return ResponseEntity.ok(created);
     }
 
-    // READ - GET /api/bookings/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Booking> read(@PathVariable Long id) {
         Booking found = bookingService.read(id);
         return found != null ? ResponseEntity.ok(found) : ResponseEntity.notFound().build();
     }
 
-    // UPDATE - PUT /api/bookings/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Booking> update(@PathVariable Long id, @RequestBody Booking booking) {
         if (!id.equals(booking.getBookingId())) {
@@ -61,80 +64,73 @@ public class BookingController {
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE - DELETE /api/bookings/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = bookingService.delete(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // GET ALL - GET /api/bookings
     @GetMapping
     public ResponseEntity<List<Booking>> getAll() {
         List<Booking> bookings = bookingService.getAll();
         return ResponseEntity.ok(bookings);
     }
 
-    // Existing: Return all time slots with at least one booking
+    // -------------------------------
+    // Functional Endpoints
+    // -------------------------------
+
+    // Get all booked time slots for a specific date
     @GetMapping("/booked-timeslots")
     public ResponseEntity<List<LocalTime>> getBookedTimeSlots(@RequestParam String date) {
-        LocalDate bookingDate;
         try {
-            bookingDate = LocalDate.parse(date);
-        } catch (DateTimeParseException e) {
-            return ResponseEntity.badRequest().build();
-        }
+            LocalDate bookingDate = LocalDate.parse(date);
 
-        List<Booking> bookings = bookingService.getAll().stream()
-                .filter(b -> b.getBookingDateTime().toLocalDate().equals(bookingDate))
-                .toList();
+            List<LocalTime> bookedTimes = bookingService.getAll().stream()
+                    .filter(b -> b.getBookingDateTime().toLocalDate().equals(bookingDate))
+                    .map(b -> b.getBookingDateTime().toLocalTime())
+                    .toList();
 
-        List<LocalTime> bookedTimes = bookings.stream()
-                .map(b -> b.getBookingDateTime().toLocalTime())
-                .toList();
-
-        return ResponseEntity.ok(bookedTimes);
-    }
-
-    // New: Return only fully booked time slots (based on attendant count)
-    @GetMapping("/unavailable-timeslots")
-    public ResponseEntity<List<LocalTime>> getUnavailableSlots(@RequestParam String date) {
-        LocalDate bookingDate;
-        try {
-            bookingDate = LocalDate.parse(date);
-            logger.info("Fetching unavailable slots for date: {}", bookingDate);
+            return ResponseEntity.ok(bookedTimes);
         } catch (DateTimeParseException e) {
             logger.error("Invalid date format: {}", date);
             return ResponseEntity.badRequest().build();
         }
-
-        int totalAttendants = washAttendantService.getAllWashAttendants().size();
-        logger.info("Total wash attendants: {}", totalAttendants);
-
-        List<Booking> bookings = bookingService.getAll().stream()
-                .filter(b -> b.getBookingDateTime().toLocalDate().equals(bookingDate))
-                .collect(Collectors.toList());
-
-        logger.info("Bookings on {}: {}", bookingDate, bookings.size());
-        bookings.forEach(b -> logger.info("Booking time: {}", b.getBookingDateTime().toLocalTime()));
-
-        Map<LocalTime, Long> bookingsPerSlot = bookings.stream()
-                .collect(Collectors.groupingBy(
-                        b -> b.getBookingDateTime().toLocalTime().truncatedTo(ChronoUnit.MINUTES),
-                        Collectors.counting()));
-
-        bookingsPerSlot.forEach((time, count) -> logger.info("Time slot: {}, Bookings count: {}", time, count));
-
-        List<LocalTime> fullyBookedSlots = bookingsPerSlot.entrySet().stream()
-                .filter(e -> e.getValue() >= totalAttendants)
-                .map(Map.Entry::getKey)
-                .toList();
-
-        logger.info("Fully booked slots: {}", fullyBookedSlots);
-
-        return ResponseEntity.ok(fullyBookedSlots);
     }
 
+    // Get unavailable (fully booked) time slots
+    @GetMapping("/unavailable-timeslots")
+    public ResponseEntity<List<LocalTime>> getUnavailableSlots(@RequestParam String date) {
+        try {
+            LocalDate bookingDate = LocalDate.parse(date);
+            logger.info("Fetching unavailable slots for date: {}", bookingDate);
+
+            int totalAttendants = washAttendantService.getAllWashAttendants().size();
+            logger.info("Total wash attendants: {}", totalAttendants);
+
+            List<Booking> bookings = bookingService.getAll().stream()
+                    .filter(b -> b.getBookingDateTime().toLocalDate().equals(bookingDate))
+                    .toList();
+
+            Map<LocalTime, Long> bookingsPerSlot = bookings.stream()
+                    .collect(Collectors.groupingBy(
+                            b -> b.getBookingDateTime().toLocalTime().truncatedTo(ChronoUnit.MINUTES),
+                            Collectors.counting()));
+
+            List<LocalTime> fullyBookedSlots = bookingsPerSlot.entrySet().stream()
+                    .filter(e -> e.getValue() >= totalAttendants)
+                    .map(Map.Entry::getKey)
+                    .toList();
+
+            return ResponseEntity.ok(fullyBookedSlots);
+
+        } catch (DateTimeParseException e) {
+            logger.error("Invalid date format: {}", date);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Check if a vehicle has a booking conflict
     @GetMapping("/check-conflict")
     public ResponseEntity<Boolean> checkVehicleConflict(
             @RequestParam("vehicleId") Long vehicleId,
@@ -144,11 +140,12 @@ public class BookingController {
             boolean hasConflict = bookingService.hasBookingConflict(vehicleId, bookingDateTime);
             return ResponseEntity.ok(hasConflict);
         } catch (Exception e) {
+            logger.error("Error checking conflict: {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
 
-    // New endpoint: GET /api/bookings/{id}/payment-status
+    // Get payment status for a booking
     @GetMapping("/{id}/payment-status")
     public ResponseEntity<Boolean> getPaymentStatus(@PathVariable Long id) {
         logger.info("Request for payment status of bookingId {}", id);
@@ -157,4 +154,36 @@ public class BookingController {
         return ResponseEntity.ok(paid);
     }
 
+    // Get bookings by customer
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Booking>> getBookingsByCustomer(@PathVariable Long customerId) {
+        List<Booking> bookings = bookingService.getAll().stream()
+                .filter(b -> b.getVehicle() != null &&
+                        b.getVehicle().getCustomer() != null &&
+                        Objects.equals(b.getVehicle().getCustomer().getUserId(), customerId))
+                .sorted(Comparator.comparing(Booking::getBookingDateTime).reversed())
+                .toList();
+        return ResponseEntity.ok(bookings);
+    }
+
+    // -------------------------------
+    // Cancel Booking Endpoint (NEW)
+    // -------------------------------
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<?> cancelBooking(@PathVariable Long id) {
+        try {
+            logger.info("Request received to cancel booking with ID: {}", id);
+
+            Booking cancelled = bookingService.cancelBooking(id);
+            logger.info("Booking with ID {} successfully cancelled.", id);
+
+            return ResponseEntity.ok(cancelled);
+        } catch (IllegalArgumentException e) {
+            logger.warn("Failed to cancel booking with ID {}: {}", id, e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Unexpected error while cancelling booking: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Internal server error"));
+        }
+    }
 }

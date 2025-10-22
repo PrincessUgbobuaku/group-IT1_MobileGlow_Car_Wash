@@ -25,6 +25,47 @@ public class VehicleController {
         this.customerService = customerService;
     }
 
+    @GetMapping("/{vehicleId}")
+    public ResponseEntity<?> getVehicleWithCustomer(@PathVariable Long vehicleId) {
+        try {
+            Vehicle vehicle = vehicleService.read(vehicleId);
+            if (vehicle == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Customer customer = vehicle.getCustomer();
+
+            // ✅ Force-load the customer (Hibernate Lazy Initialization)
+            if (customer != null) {
+                customer.getUserName(); // Access a field to trigger lazy loading
+                System.out.println("✅ Loaded customer: " + customer.getUserName());
+
+                // ✅ Build a response map that includes both vehicle + customer cleanly
+                Map<String, Object> response = new HashMap<>();
+                response.put("vehicleID", vehicle.getVehicleID());
+                response.put("carPlateNumber", vehicle.getCarPlateNumber());
+                response.put("carMake", vehicle.getCarMake());
+                response.put("carColour", vehicle.getCarColour());
+                response.put("carModel", vehicle.getCarModel());
+
+                Map<String, Object> customerData = new HashMap<>();
+                customerData.put("userId", customer.getUserId());
+                customerData.put("userName", customer.getUserName());
+                customerData.put("userSurname", customer.getUserSurname());
+
+                response.put("customer", customerData);
+
+                return ResponseEntity.ok(response);
+            } else {
+                System.out.println("⚠️ Vehicle found but no linked customer.");
+                return ResponseEntity.ok(vehicle); // fallback
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error fetching vehicle with customer");
+        }
+    }
+
     // CREATE
     @PostMapping("/create")
     public ResponseEntity<Vehicle> create(@RequestBody Map<String, Object> request) {

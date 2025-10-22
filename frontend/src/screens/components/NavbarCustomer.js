@@ -14,6 +14,8 @@ const NavbarCustomer = () => {
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userRoleDescription");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userId");
     navigate("/login");
   };
 
@@ -61,6 +63,12 @@ const NavbarCustomer = () => {
           <li>
             <a href="/bookinghistory">Booking History</a>
           </li>
+
+          {/* ✅ New link for CustomerCardsPage */}
+          <li>
+            <a href="/my-cards">My Cards</a>
+          </li>
+
           <li>
             <a href="/password-reset">Change Password</a>
           </li>

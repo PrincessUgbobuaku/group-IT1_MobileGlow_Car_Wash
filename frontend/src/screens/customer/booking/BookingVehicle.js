@@ -172,6 +172,13 @@ const BookingVehicle = () => {
                 <option disabled>No vehicles available</option>
               )}
             </select>
+
+            <button
+                className="add-vehicle-btn"
+                onClick={() => navigate("/vehicles")}
+              >
+                ➕ Add Vehicle
+              </button>
             {/* <-- Add conflict message here */}
             {hasConflict && (
               <p style={{ color: "red", marginTop: "0.5rem" }}>
@@ -180,6 +187,8 @@ const BookingVehicle = () => {
               </p>
             )}
           </div>
+
+
         </div>
 
         <div className="right-panel">

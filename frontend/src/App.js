@@ -29,8 +29,8 @@ import EditEmployeeProfile from "./screens/EditEmployeeProfile";
 import PasswordReset from "./screens/components/PasswordReset";
 import DeactivateAccount from "./screens/auth/DeactivateAccount";
 import ExteriorWash from "./screens/customer/single-services/ExteriorWashService";
-
-
+import CustomerCardsPage from "./screens/customer/booking/CustomerCardPage";
+import BookingHistory from "./screens/customer/booking/BookingHistory"
 function App()  {
   return (
     <Router>
@@ -66,8 +66,10 @@ function App()  {
           <Route path="/EditEmployeeProfile" element={<EditEmployeeProfile />} />
           <Route path="/password-reset" element={<PasswordReset />} />
           <Route path="/deactivate-account" element={<DeactivateAccount />} />
+<Route path="/bookinghistory" element={<BookingHistory />} />
 
           <Route path="/exterior-wash" element={<ExteriorWash />} />
+    <Route path="/my-cards" element={<CustomerCardsPage />} />
 
 
       </Routes>

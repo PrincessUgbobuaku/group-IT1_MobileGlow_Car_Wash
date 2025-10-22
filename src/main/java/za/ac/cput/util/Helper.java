@@ -1,20 +1,56 @@
 package za.ac.cput.util;
 
-
 import org.apache.commons.validator.routines.EmailValidator;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class Helper {
 
-    public static String generateID(){
+    public static String generateID() {
         return UUID.randomUUID().toString();
+    }
+
+    // Checks that card number is 13 to 19 digits long
+    public static boolean isValidCardNumber(String cardNumber) {
+        return cardNumber != null && cardNumber.matches("\\d{13,19}");
+    }
+
+    // Checks CVV is 3 or 4 digits
+    public static boolean isValidCVV(String cvv) {
+        return cvv != null && cvv.matches("\\d{3,4}");
+    }
+    
+
+    // Checks that expiry date is not null and not in the past
+    public static boolean isValidExpiryDate(YearMonth expiryDate) {
+        return expiryDate != null && !expiryDate.isBefore(YearMonth.now());
+    }
+
+    // Luhn Algorithm: checks if card number is mathematically valid
+    public static boolean passesLuhnCheck(String cardNumber) {
+        if (cardNumber == null || !cardNumber.matches("\\d+"))
+            return false;
+
+        int sum = 0;
+        boolean alternate = false;
+        for (int i = cardNumber.length() - 1; i >= 0; i--) {
+            int n = Integer.parseInt(cardNumber.substring(i, i + 1));
+            if (alternate) {
+                n *= 2;
+                if (n > 9) {
+                    n = (n % 10) + 1;
+                }
+            }
+            sum += n;
+            alternate = !alternate;
+        }
+        return (sum % 10 == 0);
     }
 
     public static boolean isInstanceOf(Object obj, Class<?> clazz) {
@@ -31,7 +67,7 @@ public class Helper {
         }
     }
 
-    //validated the employee hire date.
+    // validated the employee hire date.
     public static boolean isValidHireDate(LocalDate hireDate) {
         if (hireDate == null) {
             return false;
@@ -87,17 +123,21 @@ public class Helper {
         }
     }
 
-    /*public static boolean validateDuration(int durationMinutes) {
-        return durationMinutes > 0;
-    }*/
+    /*
+     * public static boolean validateDuration(int durationMinutes) {
+     * return durationMinutes > 0;
+     * }
+     */
 
-   /* public static boolean isValidEmail(String email){
-        EmailValidator validator = EmailValidator.getInstance();
-        if(validator.isValid(email))
-            return false;
-
-        return true;
-    }*/
+    /*
+     * public static boolean isValidEmail(String email){
+     * EmailValidator validator = EmailValidator.getInstance();
+     * if(validator.isValid(email))
+     * return false;
+     * 
+     * return true;
+     * }
+     */
 
     public static boolean isValidEmail(String email) {
         if (email == null || email.isEmpty()) {
@@ -113,13 +153,13 @@ public class Helper {
         if (password == null || password.isEmpty()) {
             return false;
         }
-        //Checks if Password has at least one digit, one letter and is more than 8 characters long and No Special Characters.
+        // Checks if Password has at least one digit, one letter and is more than 8
+        // characters long and No Special Characters.
         String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
-
 
     public static boolean isValidString(String str) {
         return str != null && !str.trim().isEmpty();
@@ -136,11 +176,12 @@ public class Helper {
     public static boolean isValidDouble(double number) {
         return number > 0;
     }
+
     public static boolean validateDuration(int durationMinutes) {
         return durationMinutes > 0;
     }
-  
-    //the following is related to the customer and vehicle factory classes
+
+    // the following is related to the customer and vehicle factory classes
     public static boolean isValidDate(LocalDate date) {
         return date != null && !date.isAfter(LocalDate.now());
     }
@@ -154,9 +195,8 @@ public class Helper {
         }
     }
 
-
     public static void validateVehicleFields(String vehicleID, String carPlateNumber,
-                                             String carMake, String carModel, String customerID) {
+            String carMake, String carModel, String customerID) {
 
         if (!validateStringDetails(vehicleID) ||
                 !validateStringDetails(carPlateNumber) ||
@@ -168,8 +208,8 @@ public class Helper {
         }
 
     }
-  
-    //Employee Factory Classes
+
+    // Employee Factory Classes
     public static boolean validateDate(Date hireDate) {
         if (hireDate != null) {
             return true;
@@ -179,21 +219,21 @@ public class Helper {
     }
 
     public static boolean validateShiftHours(int shiftHours) {
-        if(shiftHours <0){
+        if (shiftHours < 0) {
             return false;
         }
         return true;
     }
 
     public static boolean validateIsFullTime(boolean isFullTime) {
-        if(isFullTime == true){
+        if (isFullTime == true) {
             return true;
         }
         return false;
     }
 
     public static boolean validateHasTaxFillingAuthority(boolean hasTaxFillingAuthority) {
-        if(hasTaxFillingAuthority == true){
+        if (hasTaxFillingAuthority == true) {
             return true;
         }
         return false;
@@ -210,11 +250,10 @@ public class Helper {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.matches();
-}
+    }
 
     public static boolean isValidRating(int rating) {
         return rating >= 1 && rating <= 5;
-}
+    }
 
 }
-

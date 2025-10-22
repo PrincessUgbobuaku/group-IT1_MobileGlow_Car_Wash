@@ -34,6 +34,39 @@ public class LoginController {
         this.jwtService = new JWTService();
     }
 
+
+
+
+    @GetMapping("/byUser/{userId}")
+    public ResponseEntity<?> getLoginByUserId(@PathVariable Long userId) {
+        Login login = loginService.findLoginByUserId(userId);
+        if (login == null) {
+            return ResponseEntity.status(404).body("Login not found for user ID: " + userId);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("loginId", login.getLoginID());
+        response.put("emailAddress", login.getEmailAddress());
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
+
+
+    @GetMapping("/{loginId}")
+    public ResponseEntity<?> getLoginEmail(@PathVariable Long loginId) {
+        Login login = loginService.read(loginId);
+        if (login == null) {
+            return ResponseEntity.status(404).body("Login not found for ID: " + loginId);
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("emailAddress", login.getEmailAddress());
+        return ResponseEntity.ok(response);
+    } //inspect
+
     @PostMapping("/create")
     public ResponseEntity<Login> create(@RequestBody Login login) {
         Login createdLogin = loginService.create(login);

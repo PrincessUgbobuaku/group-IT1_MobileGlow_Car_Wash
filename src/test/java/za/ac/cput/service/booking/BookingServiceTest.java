@@ -10,7 +10,6 @@ import za.ac.cput.domain.booking.CleaningService;
 import za.ac.cput.domain.booking.Vehicle;
 import za.ac.cput.domain.user.employee.WashAttendant;
 import za.ac.cput.factory.booking.BookingFactory;
-import za.ac.cput.service.booking.VehicleService;
 import za.ac.cput.service.user.employee.WashAttendantService;
 
 import java.time.LocalDateTime;
@@ -49,12 +48,10 @@ class BookingServiceTest {
     @BeforeEach
     @Order(0)
     void setupEntities() {
-        // Fetch an existing vehicle (ensure this ID exists in DB)
         vehicle = vehicleService.read(1L);
         assertNotNull(vehicle, "Vehicle should exist in the database");
         assertNotNull(vehicle.getCustomer(), "Vehicle should have a customer");
 
-        // Fetch an existing wash attendant (ensure this ID exists in DB)
         washAttendant = washAttendantService.read(1L);
         assertNotNull(washAttendant, "WashAttendant should exist in the database");
     }
@@ -64,39 +61,33 @@ class BookingServiceTest {
     @Order(1)
     void testCreate() {
         CleaningService cleaningService_1 = cleaningServiceService.readByServiceName("INTERIOR_STEAM");
-        CleaningService cleaningService_2 = cleaningServiceService.readByServiceName("DEEP_FULL_WASH");
+        CleaningService cleaningService_2 = cleaningServiceService.readByServiceName("JET_WASH");
 
         List<CleaningService> services = new ArrayList<>();
         services.add(cleaningService_1);
         services.add(cleaningService_2);
 
-        // Optional: loop if needed
-        for (CleaningService cs : services) {
-            System.out.println("Loaded cleaning service: " + cs.getServiceName());
-        }
-
         booking = BookingFactory.createBooking(
                 services, vehicle, washAttendant, LocalDateTime.now().plusDays(1),
-                 true, 0.0
+                true, 0.0
         );
 
-        booking = bookingService.create(booking); // persist with ID
+        booking = bookingService.create(booking);
         assertNotNull(booking.getBookingId());
-        System.out.println("Created Booking: " + booking);
+        assertFalse(booking.isCancelled(), "New booking should not be cancelled by default");
+        System.out.println("✅ Created Booking: " + booking);
     }
 
     @Test
-    @Rollback(value = false)
+    @Rollback(false)
     @Transactional
     @Order(2)
     void testRead() {
         assertNotNull(booking, "Booking should be initialized");
-        assertNotNull(booking.getBookingId(), "Booking ID should not be null");
-
         Booking read = bookingService.read(booking.getBookingId());
         assertNotNull(read);
         assertEquals(booking.getBookingId(), read.getBookingId());
-        System.out.println(" Read Booking: " + read);
+        System.out.println("📖 Read Booking: " + read);
     }
 
     @Test
@@ -116,17 +107,16 @@ class BookingServiceTest {
 
         assertNotNull(saved);
         assertTrue(saved.isTipAdd());
-        System.out.println(" Updated Booking: " + saved);
+        System.out.println("🛠️ Updated Booking: " + saved);
     }
 
     @Test
     @Rollback(true)
     @Order(4)
     void testCreateFailsWithNoCleaningServices() {
-
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             BookingFactory.createBooking(
-                    new ArrayList<>(), // empty services list
+                    new ArrayList<>(),
                     vehicle,
                     washAttendant,
                     LocalDateTime.now().plusDays(1),
@@ -142,10 +132,9 @@ class BookingServiceTest {
     @Rollback(true)
     @Order(6)
     void testCreateFailsWithDuplicateVehicleBooking() {
-        // Create a booking at a specific datetime
         LocalDateTime bookingTime = LocalDateTime.now().plusDays(2);
 
-        CleaningService cleaningService = cleaningServiceService.readByServiceName("SURFACE_WIPE");
+        CleaningService cleaningService = cleaningServiceService.readByServiceName("OIL_COATING");
 
         Booking firstBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
@@ -158,11 +147,10 @@ class BookingServiceTest {
 
         bookingService.create(firstBooking);
 
-        // Attempt to create second booking for same vehicle and time - should fail
         Booking duplicateBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
                 vehicle,
-                washAttendantService.read(59L), // different wash attendant if needed
+                washAttendantService.read(13L),
                 bookingTime,
                 false,
                 0.0
@@ -173,9 +161,9 @@ class BookingServiceTest {
         });
 
         Throwable cause = thrown.getCause();
-        assertNotNull(cause, "Exception cause should not be null");
-        assertTrue(cause instanceof IllegalArgumentException, "Cause should be IllegalArgumentException");
-        assertEquals("This vehicle already has a booking at the selected time.", cause.getMessage());
+        assertNotNull(cause);
+        assertTrue(cause instanceof IllegalArgumentException);
+        assertEquals("This vehicle already has an active booking at the selected time.", cause.getMessage());
     }
 
     @Test
@@ -184,11 +172,11 @@ class BookingServiceTest {
     void testCreateFailsWithWashAttendantDoubleBooking() {
         LocalDateTime bookingTime = LocalDateTime.now().plusDays(3);
 
-        CleaningService cleaningService = cleaningServiceService.readByServiceName("SURFACE_WIPE");
+        CleaningService cleaningService = cleaningServiceService.readByServiceName("OIL_COATING");
 
         Booking firstBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                vehicleService.read(62L), // different vehicle if needed
+                vehicleService.read(13L),
                 washAttendant,
                 bookingTime,
                 false,
@@ -199,7 +187,7 @@ class BookingServiceTest {
 
         Booking duplicateBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
-                vehicleService.read(63L), // different vehicle to isolate wash attendant double-booking
+                vehicleService.read(13L),
                 washAttendant,
                 bookingTime,
                 false,
@@ -211,8 +199,8 @@ class BookingServiceTest {
         });
 
         Throwable cause = thrown.getCause();
-        assertNotNull(cause, "Exception cause should not be null");
-        assertTrue(cause instanceof IllegalArgumentException, "Cause should be IllegalArgumentException");
+        assertNotNull(cause);
+        assertTrue(cause instanceof IllegalArgumentException);
         assertEquals("This wash attendant is already booked at the selected time.", cause.getMessage());
     }
 
@@ -220,7 +208,7 @@ class BookingServiceTest {
     @Rollback(true)
     @Order(8)
     void testCreateFailsWithPastBookingDate() {
-        CleaningService cleaningService = cleaningServiceService.readByServiceName("SURFACE_WIPE");
+        CleaningService cleaningService = cleaningServiceService.readByServiceName("WATERLESS_WASH");
 
         Booking pastBooking = BookingFactory.createBooking(
                 List.of(cleaningService),
@@ -236,8 +224,8 @@ class BookingServiceTest {
         });
 
         Throwable cause = thrown.getCause();
-        assertNotNull(cause, "Exception cause should not be null");
-        assertTrue(cause instanceof IllegalArgumentException, "Cause should be IllegalArgumentException");
+        assertNotNull(cause);
+        assertTrue(cause instanceof IllegalArgumentException);
         assertEquals("Booking date must be in the future.", cause.getMessage());
     }
 
@@ -246,11 +234,68 @@ class BookingServiceTest {
     @Transactional
     void testGetAll() {
         List<Booking> bookings = bookingService.getAll();
-        assertNotNull(bookings, "Booking list should not be null");
-        assertTrue(bookings.size() >= 0, "Booking list size should be zero or more");
-
-        System.out.println("✅ All Bookings: " + bookings);
+        assertNotNull(bookings);
+        assertTrue(bookings.size() >= 0);
+        System.out.println("📋 All Bookings: " + bookings);
     }
 
+    // 🆕 NEW TESTS BELOW
+    // ----------------------------------------------------------------------
 
+    @Test
+    @Order(10)
+    @Rollback(false)
+    @Transactional
+    void testCancelBooking() {
+        // Create a new active booking
+        CleaningService cleaningService = cleaningServiceService.readByServiceName("WATERLESS_WASH");
+        Booking newBooking = BookingFactory.createBooking(
+                List.of(cleaningService),
+                vehicle,
+                washAttendant,
+                LocalDateTime.now().plusDays(4),
+                false,
+                100.0
+        );
+
+        Booking savedBooking = bookingService.create(newBooking);
+
+        // Cancel it
+        Booking cancelledBooking = bookingService.cancelBooking(savedBooking.getBookingId());
+
+        assertNotNull(cancelledBooking);
+        assertTrue(cancelledBooking.isCancelled(), "Booking should be marked as cancelled");
+        System.out.println("❌ Cancelled Booking: " + cancelledBooking);
+    }
+
+    @Test
+    @Order(11)
+    @Rollback(true)
+    void testHasBookingConflict() {
+        LocalDateTime bookingTime = LocalDateTime.now().plusDays(5);
+        CleaningService cleaningService = cleaningServiceService.readByServiceName("WATERLESS_WASH");
+
+        Booking conflictBooking = BookingFactory.createBooking(
+                List.of(cleaningService),
+                vehicle,
+                washAttendant,
+                bookingTime,
+                false,
+                120.0
+        );
+
+        // ✅ Save and capture the returned booking with generated ID
+        Booking savedBooking = bookingService.create(conflictBooking);
+
+        // ✅ Verify conflict exists (vehicle/time combination)
+        boolean conflictExists = bookingService.hasBookingConflict(vehicle.getVehicleID(), bookingTime);
+        assertTrue(conflictExists, "Conflict should exist for same vehicle/time");
+
+        // ✅ Cancel using saved booking ID (not the unsaved one)
+        bookingService.cancelBooking(savedBooking.getBookingId());
+
+        // ✅ Check conflict again — should now be false
+        boolean conflictAfterCancel = bookingService.hasBookingConflict(vehicle.getVehicleID(), bookingTime);
+        assertFalse(conflictAfterCancel, "Conflict should no longer exist after cancellation");
+    }
 }
