@@ -100,6 +100,9 @@
     }
 }
 
+.employee-actions-section h1{
+    text-align: center;
+}
 
 /* Actions Section */
 .employee-actions-section {

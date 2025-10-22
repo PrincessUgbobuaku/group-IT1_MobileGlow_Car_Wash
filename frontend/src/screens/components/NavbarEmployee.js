@@ -22,7 +22,7 @@ const NavbarEmployee = () => {
     const userEmail = localStorage.getItem("userEmail");
     const userInitial = userEmail ? userEmail.charAt(0).toUpperCase() : "E";
 
-    const handleLogoClick = () => navigate("/LandingCustomer");
+    const handleLogoClick = () => navigate("/LandingEmployee");
 
     return (
         <nav className="employee-navbar">

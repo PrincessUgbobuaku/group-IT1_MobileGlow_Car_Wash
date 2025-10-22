@@ -132,7 +132,7 @@ function FullDetailing() {
             <section className="book-now-container">
                 <div className="book-now-container">
                     <button
-                        onClick={() => (window.location.href = "/login")}
+                        onClick={() => (window.location.href = "/booking")}
                         className="cta-button primary"
                     >
                         BOOK NOW

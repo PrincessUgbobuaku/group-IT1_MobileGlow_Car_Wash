@@ -63,7 +63,9 @@ const ProfilePage = () => {
             }
           }
         }
-        const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
+        // const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
+        const loggedInUser = users.find(u => u?.login?.emailAddress === userEmail);
+
         if (loggedInUser) {
           setClient(loggedInUser);
           // Fetch image if available
