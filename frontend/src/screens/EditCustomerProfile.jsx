@@ -29,7 +29,7 @@ const EditCustomerProfile = () => {
 
       try {
         const users = await customerService.getAllCustomers();
-        const loggedInUser = users.find(u => u.login.emailAddress === userEmail);
+        const loggedInUser = users.find(u => u?.login?.emailAddress === userEmail);
         if (loggedInUser) {
           setClient(loggedInUser);
         } else {
