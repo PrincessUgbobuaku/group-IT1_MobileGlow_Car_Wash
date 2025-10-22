@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import emailjs from 'emailjs-com';
 import './ContactUs.css';
+import Footer from"./components/Footer";
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -14,13 +15,49 @@ const ContactUs = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [activeFaqIndex, setActiveFaqIndex] = useState(null);
     const navigate = useNavigate();
 
     const EMAILJS_CONFIG = {
-        SERVICE_ID: 'service_t8xcg8k', 
-        TEMPLATE_ID: 'template_8s0ryoj', 
-        USER_ID: 'sqpo7Bji9gBBnZBTW' 
+        SERVICE_ID: 'service_t8xcg8k',
+        TEMPLATE_ID: 'template_8s0ryoj',
+        USER_ID: 'sqpo7Bji9gBBnZBTW'
     };
+
+    // Social media links - replace with your actual social media URLs
+    const socialLinks = {
+        facebook: 'https://www.facebook.com/yourpage',
+        instagram: 'https://www.instagram.com/yourprofile',
+        twitter: 'https://www.twitter.com/yourprofile',
+        linkedin: 'https://www.linkedin.com/company/yourcompany'
+    };
+
+    const faqData = [
+        {
+            question: "What services do you offer?",
+            answer: "We offer comprehensive mobile car detailing services including exterior washing, waxing, interior cleaning, vacuuming, leather conditioning, and specialized treatments for headlights and windows."
+        },
+        {
+            question: "How long does a typical service take?",
+            answer: "Basic wash takes 30-45 minutes, full exterior detail takes 2-3 hours, and complete interior & exterior packages take 3-4 hours depending on vehicle size and condition."
+        },
+        {
+            question: "Do you use eco-friendly products?",
+            answer: "Yes! We prioritize environmentally friendly cleaning products that are biodegradable and safe for your vehicle and the environment."
+        },
+        {
+            question: "Can I schedule recurring appointments?",
+            answer: "Absolutely! We offer flexible scheduling options including one-time, weekly, bi-weekly, and monthly maintenance plans to keep your vehicle looking its best."
+        },
+        {
+            question: "What areas do you serve?",
+            answer: "We currently serve the greater Johannesburg area. Contact us to confirm if we cover your specific location."
+        },
+        {
+            question: "What payment methods do you accept?",
+            answer: "We accept cash, credit/debit cards, EFT payments, and mobile payment solutions like Zapper and SnapScan."
+        }
+    ];
 
     useEffect(() => {
         setVisible(true);
@@ -113,6 +150,15 @@ const ContactUs = () => {
 
     const handleBackToHome = () => {
         navigate('/');
+    };
+
+    const toggleFaq = (index) => {
+        setActiveFaqIndex(activeFaqIndex === index ? null : index);
+    };
+
+    const handleSocialClick = (platform) => {
+        // You can add tracking or analytics here if needed
+        console.log(`Navigating to ${platform}`);
     };
 
     return (
@@ -236,7 +282,7 @@ const ContactUs = () => {
                 {/* Contact information section */}
                 <div className="contact-info-section">
                     <div className="info-card">
-                        <div className="info-icon"></div>
+                        <div className="info-icon">📍</div>
                         <h4>Visit Us</h4>
                         <p>123 Car Care Street<br />Johannesburg, 2000<br />South Africa</p>
                         <a href="#" className="map-link">
@@ -245,7 +291,7 @@ const ContactUs = () => {
                     </div>
 
                     <div className="info-card">
-                        <div className="info-icon"></div>
+                        <div className="info-icon">📞</div>
                         <h4>Call Us</h4>
                         <p>+27 11 123 4567<br />Mon - Fri, 8:00 AM - 6:00 PM</p>
                         <a href="tel:+27111234567" className="contact-link">
@@ -254,7 +300,7 @@ const ContactUs = () => {
                     </div>
 
                     <div className="info-card">
-                        <div className="info-icon">✉</div>
+                        <div className="info-icon">✉️</div>
                         <h4>Email Us</h4>
                         <p>waterlilykid.123@gmail.com<br />support@mobileglow.com</p>
                         <a href="mailto:waterlilykid.123@gmail.com" className="contact-link">
@@ -265,19 +311,85 @@ const ContactUs = () => {
                     <div className="social-section">
                         <h5>Follow Us</h5>
                         <div className="social-links">
-                            <a href="#" aria-label="Facebook">
+                            <a
+                                href={socialLinks.facebook}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Facebook"
+                                onClick={() => handleSocialClick('facebook')}
+                            >
                                 <i className="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" aria-label="Twitter">
-                                <i className="fab fa-twitter"></i>
-                            </a>
-                            <a href="#" aria-label="Instagram">
+                            <a
+                                href={socialLinks.instagram}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Instagram"
+                                onClick={() => handleSocialClick('instagram')}
+                            >
                                 <i className="fab fa-instagram"></i>
                             </a>
-                            <a href="#" aria-label="LinkedIn">
+                            <a
+                                href={socialLinks.twitter}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Twitter"
+                                onClick={() => handleSocialClick('twitter')}
+                            >
+                                <i className="fab fa-twitter"></i>
+                            </a>
+                            <a
+                                href={socialLinks.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="LinkedIn"
+                                onClick={() => handleSocialClick('linkedin')}
+                            >
                                 <i className="fab fa-linkedin-in"></i>
                             </a>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* FAQ Section */}
+            <div className="faq-section">
+                <div className="faq-container">
+                    <div className="faq-header">
+                        <h2>Frequently Asked Questions</h2>
+                        <p>Find quick answers to common questions about our services</p>
+                    </div>
+
+                    <div className="faq-list">
+                        {faqData.map((faq, index) => (
+                            <div
+                                key={index}
+                                className={`faq-item ${activeFaqIndex === index ? 'active' : ''}`}
+                            >
+                                <div
+                                    className="faq-question"
+                                    onClick={() => toggleFaq(index)}
+                                >
+                                    <span>{faq.question}</span>
+                                    <span className="faq-icon">
+                                        {activeFaqIndex === index ? '−' : '+'}
+                                    </span>
+                                </div>
+                                <div className="faq-answer">
+                                    <p>{faq.answer}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="faq-cta">
+                        <p>Still have questions? We're here to help!</p>
+                        <button
+                            className="cta-button"
+                            onClick={() => document.querySelector('.contact-form-section').scrollIntoView({ behavior: 'smooth' })}
+                        >
+                            Contact Us Now
+                        </button>
                     </div>
                 </div>
             </div>
