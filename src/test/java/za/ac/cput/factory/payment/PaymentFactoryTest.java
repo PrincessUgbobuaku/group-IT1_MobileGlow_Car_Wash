@@ -1,9 +1,8 @@
 package za.ac.cput.factory.payment;
 
 import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.booking.Booking;
-import za.ac.cput.domain.booking.CleaningService;
-import za.ac.cput.domain.booking.Vehicle;
+import za.ac.cput.domain.booking.*;
+import za.ac.cput.domain.payment.Card;
 import za.ac.cput.domain.payment.Payment;
 import za.ac.cput.domain.user.Customer;
 import za.ac.cput.domain.user.employee.WashAttendant;
@@ -13,153 +12,131 @@ import za.ac.cput.factory.booking.VehicleFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.YearMonth;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PaymentFactoryTest {
+class PaymentFactoryTest {
 
-    @Test
-    public void testCreatePaymentForExistingBooking() {
-        // Creating cleaning services
-        CleaningService cs_1 = CleaningServiceFactory.createCleaningService(
-                "WAXING_AND_POLISHING",
-                300,
-                1.5,
-                "Exterior Care"
-        );
+    private Booking createTestBooking() {
+        CleaningService cs = CleaningServiceFactory.createCleaningService("Interior Clean", 200, 1.0, "Interior");
 
-        CleaningService cs_2 = CleaningServiceFactory.createCleaningService(
-                "CERAMIC_COATING",
-                700,
-                2.0,
-                "Paint Protection"
-        );
-
-        List<CleaningService> services = List.of(cs_1, cs_2);
-
-        // Dummy customer
+        // ✅ Build a simulated persisted customer
         Customer customer = new Customer.Builder()
-                .setUserName("Brian")
-                .setUserSurname("Kabongo")
-                .setCustomerDOB(LocalDate.of(1990, 1, 1)).build();
-
-
-        Vehicle vehicle = VehicleFactory.createVehicle(
-                "ABC123",
-                "Toyota",
-                "Red",
-                "Corolla",
-                customer
-        );
-
-
-        // Dummy wash attendant
-        WashAttendant washAttendant = new WashAttendant.Builder()
-                .setUserName("John")
-                .setUserSurname("Doe")
+                .setUserId(1L) // simulate saved entity
+                .setUserName("Test")
+                .setUserSurname("User")
+                .setCustomerDOB(LocalDate.of(1995, 1, 1))
                 .build();
 
-        Booking booking = BookingFactory.createBooking(
-                services,
+        Vehicle vehicle = VehicleFactory.createVehicle("TEST123", "Honda", "Blue", "Civic", customer);
+
+        WashAttendant attendant = new WashAttendant.Builder()
+                .setUserName("Cleaner")
+                .setUserSurname("One")
+                .build();
+
+        return BookingFactory.createBooking(
+                List.of(cs),
                 vehicle,
-                washAttendant,
-                LocalDateTime.of(2025, 10, 30, 12, 0),
-                true,
-                500
+                attendant,
+                LocalDateTime.of(2025, 10, 25, 10, 30),
+                false,
+                200
         );
-
-        assertNotNull(booking);
-
-        Payment payment = PaymentFactory.createPayment(
-                booking,
-                500,
-                Payment.PaymentMethod.DEBIT,
-                Payment.PaymentStatus.PAID
-        );
-
-        assertNotNull(payment);
-        // Instead of checking bookingID (which is null), check booking reference equality
-        assertSame(booking, payment.getBooking());
-        assertEquals(500, payment.getPaymentAmount());
-
-        System.out.println("Payment linked to booking:\n" + payment);
     }
 
     @Test
-    public void testCreateMultiplePaymentsForOneBooking() {
-        // Creating cleaning service
-        CleaningService cs_2 = CleaningServiceFactory.createCleaningService(
-                "CERAMIC_COATING",
-                700,
-                2.0,
-                "Paint Protection"
+    void testCreatePaymentWithoutCard() {
+        System.out.println("\n💰 Running testCreatePaymentWithoutCard...");
+
+        Booking booking = createTestBooking();
+
+        Payment payment = PaymentFactory.createPayment(
+                booking,
+                200,
+                Payment.PaymentMethod.CASH,
+                Payment.PaymentStatus.PAID
         );
 
-        List<CleaningService> services = List.of(cs_2);
+        assertNotNull(payment, "Payment should be created");
+        assertEquals(200, payment.getPaymentAmount());
+        assertEquals(Payment.PaymentMethod.CASH, payment.getPaymentMethod());
+        assertNull(payment.getCard(), "No card should be linked for cash payments");
 
-        // Dummy customer
-        Customer cust_001 = new Customer.Builder()
-                .setUserName("Brian")
-                .setUserSurname("Kabongo")
-                .setCustomerDOB(LocalDate.of(1990, 1, 1)).build();
+        System.out.println("✅ Payment created successfully: " + payment);
+    }
 
+    @Test
+    void testCreatePaymentWithCard() {
+        System.out.println("\n💳 Running testCreatePaymentWithCard...");
 
-        Vehicle vehicle = VehicleFactory.createVehicle(
-                "ABC123",
-                "Toyota",
-                "Red",
-                "Corolla",
-                cust_001
-        );
+        Booking booking = createTestBooking();
 
-
-        // Dummy wash attendant
-        WashAttendant washAttendant = new WashAttendant.Builder()
+        // ✅ Build a persisted-like customer directly in builder
+        Customer customer = new Customer.Builder()
+                .setUserId(1L)
                 .setUserName("John")
                 .setUserSurname("Doe")
+                .setCustomerDOB(LocalDate.of(1990, 5, 12))
                 .build();
 
-        Booking booking = BookingFactory.createBooking(
-                services,
-                vehicle,
-                washAttendant,
-                LocalDateTime.of(2025, 10, 30, 12, 0),
-                true,
-                500
+        Card card = CardFactory.createCard(
+                "4111111111111111", // Valid Luhn test number
+                "John Doe",
+                "123",
+                YearMonth.of(2026, 12)
         );
+        assertNotNull(card, "Card should be created successfully");
 
-        assertNotNull(booking);
+        // ✅ Link card to customer
+        card.setCustomer(customer);
+        assertNotNull(card.getCustomer(), "Card should have a linked customer");
 
-        Payment payment1 = PaymentFactory.createPayment(
+        Payment payment = PaymentFactory.createPayment(
                 booking,
-                250,
-                Payment.PaymentMethod.DEBIT,
-                Payment.PaymentStatus.PENDING
+                200,
+                Payment.PaymentMethod.CARD,
+                Payment.PaymentStatus.PAID,
+                card
         );
 
-        Payment payment2 = PaymentFactory.createPayment(
+        assertNotNull(payment, "Payment should not be null");
+        assertEquals(Payment.PaymentMethod.CARD, payment.getPaymentMethod());
+        assertNotNull(payment.getCard(), "Card should be linked in payment");
+        assertEquals(customer.getUserId(), payment.getCard().getCustomer().getUserId(), "Customer ID should match");
+
+        System.out.println("✅ Created Card Payment: " + payment);
+    }
+
+    @Test
+    void testInvalidCardPaymentFails() {
+        System.out.println("\n❌ Running testInvalidCardPaymentFails...");
+
+        Booking booking = createTestBooking();
+
+        Card invalidCard = CardFactory.createCard(
+                "1234567890123456", // Invalid Luhn number
+                "John Doe",
+                "12", // Invalid CVV
+                YearMonth.of(2020, 1) // Expired
+        );
+
+        assertNull(invalidCard, "Invalid card should fail validation");
+
+        // Even if card is invalid, payment can still be made (card=null)
+        Payment payment = PaymentFactory.createPayment(
                 booking,
-                250,
-                Payment.PaymentMethod.PAYPAL,
-                Payment.PaymentStatus.PENDING
+                200,
+                Payment.PaymentMethod.CASH, // ✅ changed to CASH since card is invalid
+                Payment.PaymentStatus.PAID,
+                invalidCard
         );
 
-        List<Payment> payments = new ArrayList<>();
-        payments.add(payment1);
-        payments.add(payment2);
+        assertNotNull(payment, "Payment should still be created");
+        assertNull(payment.getCard(), "Invalid card should not be linked to payment");
 
-        assertNotNull(payment1);
-        assertNotNull(payment2);
-
-        // Assert that both payments reference the same booking instance
-        assertSame(booking, payment1.getBooking());
-        assertSame(booking, payment2.getBooking());
-
-        System.out.println("Multiple payments for a single booking:");
-        for (Payment payment : payments) {
-            System.out.println(payment);
-        }    }
-
+        System.out.println("✅ Invalid card rejected correctly.");
+    }
 }

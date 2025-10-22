@@ -11,7 +11,7 @@ import za.ac.cput.service.payment.PaymentService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/payments") // Matches BookingController pattern
+@RequestMapping("/api/payments")
 public class PaymentController {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
@@ -23,82 +23,100 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    // CREATE - POST /api/payments
+    /**
+     * CREATE PAYMENT
+     * Example: POST /api/payments
+     * Body: {
+     * "booking": { "bookingId": 1 },
+     * "paymentAmount": 200.00,
+     * "paymentMethod": "CARD",
+     * "paymentStatus": "PAID",
+     * "card": { "cardId": 3 } // optional unless method == CARD
+     * }
+     */
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Payment payment) {
-        logger.info("Received payment creation request: {}", payment);
+        logger.info("🟢 Creating payment: {}", payment);
+
         try {
-            // Log the payment method before saving
-            logger.info("Payment method before save: {}", payment.getPaymentMethod());
-
-            // Optional: Validate payment method enum if you have an enum class
-            // If not using enum, skip this block or add your own validation
-            /*
-            try {
-                PaymentMethod.valueOf(payment.getPaymentMethod());
-            } catch (IllegalArgumentException e) {
-                logger.error("Invalid payment method: {}", payment.getPaymentMethod());
-                return ResponseEntity.badRequest().body("Invalid payment method");
-            }
-            */
-
             Payment created = paymentService.create(payment);
-            logger.info("Payment created successfully with ID: {}", created.getPaymentId());
+            logger.info("✅ Payment created successfully (ID: {})", created.getPaymentId());
             return ResponseEntity.ok(created);
+        } catch (IllegalArgumentException e) {
+            logger.warn("⚠️ Invalid payment request: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            logger.error("Error creating payment", e);
-            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+            logger.error("❌ Error creating payment", e);
+            return ResponseEntity.internalServerError().body("Error creating payment: " + e.getMessage());
         }
     }
 
-    // READ - GET /api/payments/{id}
+    /** READ PAYMENT BY ID */
     @GetMapping("/{id}")
     public ResponseEntity<Payment> read(@PathVariable Long id) {
         Payment found = paymentService.read(id);
         return found != null ? ResponseEntity.ok(found) : ResponseEntity.notFound().build();
     }
 
-    // UPDATE - PUT /api/payments/{id}
+    /** UPDATE PAYMENT */
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Payment payment) {
         if (!id.equals(payment.getPaymentId())) {
-            logger.warn("Payment ID in path ({}) does not match ID in body ({})", id, payment.getPaymentId());
+            logger.warn("⚠️ Path ID ({}) does not match body ID ({})", id, payment.getPaymentId());
             return ResponseEntity.badRequest().body("Payment ID mismatch");
         }
         try {
             Payment updated = paymentService.update(payment);
-            logger.info("Payment updated successfully with ID: {}", updated.getPaymentId());
+            logger.info("✅ Payment updated (ID: {})", updated.getPaymentId());
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
-            logger.error("Error updating payment", e);
-            return ResponseEntity.status(500).body("Internal Server Error: " + e.getMessage());
+            logger.error("❌ Error updating payment", e);
+            return ResponseEntity.internalServerError().body("Error updating payment: " + e.getMessage());
         }
     }
 
-    // DELETE - DELETE /api/payments/{id}
+    /** DELETE PAYMENT */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = paymentService.delete(id);
         if (deleted) {
-            logger.info("Payment deleted with ID: {}", id);
+            logger.info("🗑️ Payment deleted (ID: {})", id);
             return ResponseEntity.noContent().build();
         } else {
-            logger.warn("Payment to delete not found with ID: {}", id);
+            logger.warn("⚠️ Payment not found for delete (ID: {})", id);
             return ResponseEntity.notFound().build();
         }
     }
 
-    // GET ALL - GET /api/payments
+    /** GET ALL PAYMENTS */
     @GetMapping
     public ResponseEntity<List<Payment>> getAll() {
         List<Payment> payments = paymentService.getAll();
         return ResponseEntity.ok(payments);
     }
 
-    // GET payments by booking ID - GET /api/payments/booking/{bookingId}
+    /** GET PAYMENTS BY BOOKING ID */
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<List<Payment>> getPaymentsByBookingID(@PathVariable Long bookingId) {
         List<Payment> payments = paymentService.getPaymentsByBookingId(bookingId);
         return ResponseEntity.ok(payments);
+    }
+
+    /**
+     * CREATE PAYMENT FOR BOOKING WITH TIP
+     * Example: POST /api/payments/booking/{bookingId}/tip?method=CARD
+     */
+    @PostMapping("/booking/{bookingId}/tip")
+    public ResponseEntity<?> createPaymentWithTip(
+            @PathVariable Long bookingId,
+            @RequestParam Payment.PaymentMethod method) {
+        try {
+            Payment created = paymentService.createPaymentForBookingWithTip(bookingId, method);
+            logger.info("💳 Payment with tip created for booking ID {}", bookingId);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            logger.error("❌ Error creating payment with tip", e);
+            return ResponseEntity.internalServerError().body("Error creating payment with tip: " + e.getMessage());
+        }
     }
 }

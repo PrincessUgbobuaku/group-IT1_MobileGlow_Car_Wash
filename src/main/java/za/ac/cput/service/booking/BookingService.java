@@ -1,5 +1,6 @@
 package za.ac.cput.service.booking;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.booking.Booking;
@@ -21,13 +22,14 @@ public class BookingService implements IBookingService {
 
     @Autowired
     public BookingService(IBookingRepository bookingRepository,
-            CleaningServiceService cleaningServiceService,
-            VehicleService vehicleService) { // 👈 added
+                          CleaningServiceService cleaningServiceService,
+                          VehicleService vehicleService) {
         this.bookingRepository = bookingRepository;
         this.cleaningServiceService = cleaningServiceService;
-        this.vehicleService = vehicleService; // 👈 assigned
+        this.vehicleService = vehicleService;
     }
 
+    @Override
     public Booking create(Booking booking) {
 
         System.out.println("Received cleaning services: " + booking.getCleaningServices());
@@ -42,15 +44,12 @@ public class BookingService implements IBookingService {
 
         List<CleaningService> validatedServices = new ArrayList<>();
 
-        // checking to see if requested service exists in cleaningservice db
+        // ✅ Validate cleaning services from DB
         for (CleaningService service : booking.getCleaningServices()) {
-            // Read the real service from DB using ID
             CleaningService validatedService = cleaningServiceService.read(service.getCleaningServiceId());
-
             if (validatedService == null) {
                 throw new IllegalArgumentException("Invalid cleaning service ID: " + service.getCleaningServiceId());
             }
-
             validatedServices.add(validatedService);
         }
 
@@ -59,28 +58,14 @@ public class BookingService implements IBookingService {
             throw new IllegalArgumentException("Booking must include a vehicle.");
         }
 
-        // ✅ Validate Vehicle
-        long vehicleID = booking.getVehicle().getVehicleID();
-        Vehicle validatedVehicle = vehicleService.read(vehicleID);
-
+        Vehicle validatedVehicle = vehicleService.read(booking.getVehicle().getVehicleID());
         if (validatedVehicle == null) {
-            throw new IllegalArgumentException("Invalid vehicle ID: " + vehicleID);
+            throw new IllegalArgumentException("Invalid vehicle ID: " + booking.getVehicle().getVehicleID());
         }
 
         // ✅ Rule 3: Booking must have a wash attendant
         if (booking.getWashAttendant() == null || booking.getWashAttendant().getUserId() == null) {
             throw new IllegalArgumentException("Booking must have an assigned wash attendant.");
-        }
-
-        // ✅ Rule 6: Prevent duplicate bookings for the same vehicle
-        if (bookingRepository.existsByVehicleAndBookingDateTime(validatedVehicle, booking.getBookingDateTime())) {
-            throw new IllegalArgumentException("This vehicle already has a booking at the selected time.");
-        }
-
-        // ✅ Rule 6: Prevent wash attendant from being double-booked
-        if (bookingRepository.existsByWashAttendantAndBookingDateTime(booking.getWashAttendant(),
-                booking.getBookingDateTime())) {
-            throw new IllegalArgumentException("This wash attendant is already booked at the selected time.");
         }
 
         // ✅ Rule 4: Booking date must be in the future
@@ -89,23 +74,35 @@ public class BookingService implements IBookingService {
             throw new IllegalArgumentException("Booking date must be in the future.");
         }
 
-        // ✅ Rule 5: Calculate total cost from services
+        // ✅ Rule 5a: Check wash attendant conflict FIRST
+        if (bookingRepository.existsByWashAttendantAndBookingDateTimeAndCancelledFalse(
+                booking.getWashAttendant(), booking.getBookingDateTime())) {
+            throw new IllegalArgumentException("This wash attendant is already booked at the selected time.");
+        }
+
+        // ✅ Rule 5b: Then check vehicle conflict
+        if (bookingRepository.existsByVehicleAndBookingDateTimeAndCancelledFalse(
+                validatedVehicle, booking.getBookingDateTime())) {
+            throw new IllegalArgumentException("This vehicle already has an active booking at the selected time.");
+        }
+
+        // ✅ Rule 6: Calculate total cost
         double totalCost = validatedServices.stream()
                 .mapToDouble(CleaningService::getPriceOfService)
                 .sum();
 
-        // Use factory to create booking (payments null, booking cost calculated)
-        Booking created = BookingFactory.createBooking(
-                validatedServices,
-                validatedVehicle,
-                booking.getWashAttendant(),
-                booking.getBookingDateTime(),
-                booking.isTipAdd(),
-                totalCost);
-
-        if (created == null) {
-            throw new IllegalArgumentException("Invalid Booking data");
-        }
+        // ✅ Create booking and ensure it's not cancelled by default
+        Booking created = new Booking.Builder()
+                .copy(BookingFactory.createBooking(
+                        validatedServices,
+                        validatedVehicle,
+                        booking.getWashAttendant(),
+                        booking.getBookingDateTime(),
+                        booking.isTipAdd(),
+                        totalCost
+                ))
+                .setCancelled(false)
+                .build();
 
         return bookingRepository.save(created);
     }
@@ -125,7 +122,7 @@ public class BookingService implements IBookingService {
 
         Booking existingBooking = existingBookings.get(0);
 
-        // Use builder to copy and update fields
+        // ✅ Copy and update including cancellation status
         Booking updatedBooking = new Booking.Builder()
                 .copy(existingBooking)
                 .setBookingDateTime(booking.getBookingDateTime())
@@ -134,6 +131,7 @@ public class BookingService implements IBookingService {
                 .setWashAttendant(booking.getWashAttendant())
                 .setTipAdd(booking.isTipAdd())
                 .setBookingCost(booking.getBookingCost())
+                .setCancelled(booking.isCancelled())
                 .build();
 
         return bookingRepository.save(updatedBooking);
@@ -158,7 +156,30 @@ public class BookingService implements IBookingService {
         if (vehicle == null) {
             throw new IllegalArgumentException("Invalid vehicle ID: " + vehicleId);
         }
-        return bookingRepository.existsByVehicleAndBookingDateTime(vehicle, bookingDateTime);
+        // ✅ Only check for non-cancelled bookings
+        return bookingRepository.existsByVehicleAndBookingDateTimeAndCancelledFalse(vehicle, bookingDateTime);
     }
 
+    @Transactional
+    public Booking cancelBooking(Long bookingId) {
+        if (bookingId == null) {
+            throw new IllegalArgumentException("Booking ID cannot be null when cancelling a booking.");
+        }
+
+        Booking booking = read(bookingId);
+        if (booking == null) {
+            throw new IllegalArgumentException("Booking not found with id: " + bookingId);
+        }
+
+        if (booking.isCancelled()) {
+            throw new IllegalStateException("Booking is already cancelled.");
+        }
+
+        Booking cancelledBooking = new Booking.Builder()
+                .copy(booking)
+                .setCancelled(true)
+                .build();
+
+        return bookingRepository.save(cancelledBooking);
+    }
 }

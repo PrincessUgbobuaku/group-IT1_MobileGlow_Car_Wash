@@ -6,18 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import za.ac.cput.domain.booking.Booking;
-import za.ac.cput.domain.booking.CleaningService;
+import za.ac.cput.domain.payment.Card;
 import za.ac.cput.domain.payment.Payment;
-import za.ac.cput.domain.booking.Vehicle;
-import za.ac.cput.domain.user.employee.WashAttendant;
-import za.ac.cput.factory.payment.PaymentFactory;
+import za.ac.cput.domain.user.Customer;
+import za.ac.cput.factory.payment.CardFactory;
 import za.ac.cput.service.booking.BookingService;
-import za.ac.cput.service.booking.CleaningServiceService;
-import za.ac.cput.service.booking.VehicleService;
-import za.ac.cput.service.user.employee.WashAttendantService;
-import za.ac.cput.service.payment.PaymentService;
 
-import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,18 +29,11 @@ class PaymentServiceTest {
     private BookingService bookingService;
 
     @Autowired
-    private CleaningServiceService cleaningServiceService;
-
-    @Autowired
-    private VehicleService vehicleService;
-
-    @Autowired
-    private WashAttendantService washAttendantService;
+    private CardService cardService;
 
     private static Payment savedPayment;
     private static Booking booking;
-    private static Vehicle vehicle;
-    private static WashAttendant washAttendant;
+    private static Card testCard;
 
     @BeforeAll
     static void init() {
@@ -53,119 +41,166 @@ class PaymentServiceTest {
     }
 
     @Test
-    @Rollback(value = false)
-    @Order(0)
-    void setupEntities() {
-//        // Fetch an existing vehicle from DB (ensure this ID exists in your database)
-//        vehicle = vehicleService.read(64L);  // Assuming ID 62 exists in the DB
-//        assertNotNull(vehicle, "Vehicle should exist in the database");
-//
-//        // Fetch an existing wash attendant (ensure this ID exists in DB)
-//        washAttendant = washAttendantService.read(59L);  // Assuming ID 59 exists in the DB
-//        assertNotNull(washAttendant, "WashAttendant should exist in the database");
+    @Order(1)
+    @Rollback(false)
+    void testSetupBookingAndCard() {
+        System.out.println("⚙️ Setting up Booking and Card...");
+
+        booking = bookingService.read(6L); // ✅ Ensure booking with ID 6 exists
+        assertNotNull(booking, "Booking should exist in the DB for test setup.");
+
+        // Ensure booking has a customer
+        Customer customer = booking.getVehicle().getCustomer();
+        assertNotNull(customer, "Booking must have an associated customer.");
+
+        // Force-load related collections
+        assertNotNull(booking.getCleaningServices());
+        booking.getCleaningServices().size();
+
+        // ✅ Create and link valid card
+        testCard = CardFactory.createCard(
+                "4242424242424242",
+                customer.getUserName() + " " + customer.getUserSurname(),
+                "123",
+                YearMonth.of(2026, 12));
+        assertNotNull(testCard, "Card should be created via factory.");
+
+        // ✅ Link card to booking’s customer
+        testCard.setCustomer(customer);
+
+        // ✅ Persist the card
+        testCard = cardService.create(testCard);
+        assertNotNull(testCard.getCardId(), "Card should be saved and have an ID.");
+
+        System.out.println("📇 Card created and linked to Customer: " + testCard);
     }
 
     @Test
-    @Rollback(value = false)
-    @Order(1)
-    void testCreatePaymentWithExistingBooking() {
-        // Fetch an existing booking from DB
-        booking = bookingService.read(1L); // Use real booking ID
-        assertNotNull(booking, "Booking should exist");
+    @Order(2)
+    @Rollback(false)
+    void testCreatePaymentWithTipAndCard() {
+        System.out.println("💳 Creating Payment with Card...");
 
-        // 💡 Force loading of cleaning services (avoids lazy init errors)
-        assertNotNull(booking.getCleaningServices());
-        booking.getCleaningServices().size(); // Initializes the collection
+        assertNotNull(booking, "Booking must be initialized.");
+        assertNotNull(testCard, "Card must be initialized.");
 
-        // Now create the payment
-        Payment payment = paymentService.createPaymentForBookingWithTip(booking.getBookingId());
-        assertNotNull(payment);
-        assertEquals(booking.getBookingId(), payment.getBooking().getBookingId());
-
-        double expectedAmount = booking.isTipAdd()
+        double tipAmount = booking.isTipAdd()
                 ? booking.getBookingCost() * 1.10
                 : booking.getBookingCost();
 
-        assertEquals(expectedAmount, payment.getPaymentAmount(), 0.01);
-        savedPayment = payment;
+        Payment payment = new Payment.Builder()
+                .setBooking(booking)
+                .setPaymentMethod(Payment.PaymentMethod.CARD)
+                .setPaymentStatus(Payment.PaymentStatus.PAID)
+                .setPaymentAmount(tipAmount)
+                .setCard(testCard)
+                .build();
 
-        System.out.println("Created Payment: " + payment);  // Safe to log now
+        Payment result = paymentService.create(payment);
+
+        assertNotNull(result, "Payment should be created.");
+        assertEquals(tipAmount, result.getPaymentAmount(), 0.01);
+        assertEquals(booking.getBookingId(), result.getBooking().getBookingId());
+        assertEquals(testCard.getCardId(), result.getCard().getCardId(), "Card ID must match.");
+
+        savedPayment = result;
+        System.out.println("💰 Payment with card created successfully: " + result);
     }
 
     @Test
-    @Rollback(value = false)
-    @Order(2)
-    void testCreate() {
-        assertNotNull(savedPayment, "Payment should have been created in the previous test");
+    @Order(7)
+    @Rollback(false)
+    void testDuplicatePaymentCreationAllowed() {
+        assertNotNull(savedPayment, "Saved payment should exist");
 
-        // Save the payment again to confirm successful creation
-        Payment result = paymentService.create(savedPayment);
-        assertNotNull(result);
-        assertEquals(savedPayment.getBooking().getBookingId(), result.getBooking().getBookingId());
+        // ✅ Use the existing Card from DB (ID = 2)
+        Card existingCard = cardService.read(2L);
+        assertNotNull(existingCard, "Existing card must be found in the database");
 
-        System.out.println("Created Payment (again): " + result);
+        Payment duplicate = new Payment.Builder()
+                .setBooking(savedPayment.getBooking())
+                .setPaymentMethod(Payment.PaymentMethod.CARD)
+                .setPaymentStatus(Payment.PaymentStatus.PAID)
+                .setPaymentAmount(savedPayment.getPaymentAmount())
+                .setCard(existingCard)
+                .build();
+
+        Payment result = paymentService.create(duplicate);
+
+        assertNotNull(result, "Duplicate payment should still be created");
+        assertNotEquals(savedPayment.getPaymentId(), result.getPaymentId(),
+                "Each payment should have a unique ID");
+
+        System.out.println("✅ Duplicate payment created successfully: " + result);
     }
 
     @Test
-    @Rollback(value = false)
-    @Order(3)
-    void testRead() {
-        assertNotNull(savedPayment, "Payment should have been created in the previous test");
-
-        // Read the payment and check if it's the same
-        Payment readPayment = paymentService.read(savedPayment.getPaymentId());
-        assertNotNull(readPayment);
-        assertEquals(savedPayment.getPaymentId(), readPayment.getPaymentId());
-
-        System.out.println("Read Payment: " + readPayment);
-    }
-
-    @Test
-    @Rollback(value = false)
     @Order(4)
-    void testUpdate() {
-        assertNotNull(savedPayment, "Payment should have been created in the previous test");
+    void testReadPayment() {
+        System.out.println("📖 Reading Payment...");
 
-        // Update the payment (e.g., changing the amount or status)
+        assertNotNull(savedPayment, "Saved payment must exist.");
+        Payment readPayment = paymentService.read(savedPayment.getPaymentId());
+
+        assertNotNull(readPayment, "Read Payment should not be null.");
+        assertEquals(savedPayment.getPaymentId(), readPayment.getPaymentId(), "Payment IDs must match.");
+        assertNotNull(readPayment.getBooking(), "Read Payment must contain booking info.");
+
+        System.out.println("📘 Read Payment successfully: " + readPayment);
+    }
+
+    @Test
+    @Order(5)
+    @Rollback(false)
+    void testUpdatePayment() {
+        System.out.println("🛠️ Updating Payment...");
+
+        assertNotNull(savedPayment, "Saved payment must exist.");
+
         Payment updatedPayment = new Payment.Builder()
                 .copy(savedPayment)
-                .setPaymentAmount(150.00)  // Adjusted amount for the update
+                .setPaymentAmount(savedPayment.getPaymentAmount() + 50.0)
                 .setPaymentStatus(Payment.PaymentStatus.PAID)
-                .setPaymentMethod(Payment.PaymentMethod.CREDIT)// Changed status
+                .setPaymentMethod(Payment.PaymentMethod.CARD)
                 .build();
 
         Payment result = paymentService.update(updatedPayment);
-        assertNotNull(result);
-        assertEquals(150.00, result.getPaymentAmount());
-        assertEquals(Payment.PaymentStatus.PAID, result.getPaymentStatus()); //
 
-        System.out.println(" Updated Payment: " + result);
+        assertNotNull(result);
+        assertEquals(savedPayment.getPaymentId(), result.getPaymentId(), "Payment ID should not change.");
+        assertEquals(savedPayment.getPaymentAmount() + 50.0, result.getPaymentAmount(), 0.01);
+        assertEquals(Payment.PaymentStatus.PAID, result.getPaymentStatus());
+
+        System.out.println("✅ Payment updated successfully: " + result);
     }
 
     @Test
-    @Rollback(value = false)
-    @Order(5)
-    void testGetAll() {
-        // Fetch all payments
-        List<Payment> payments = paymentService.getAll();
-        assertNotNull(payments, "Payment list should not be null");
-        assertFalse(payments.isEmpty(), "There should be at least one payment");
+    @Order(6)
+    void testGetAllPayments() {
+        System.out.println("📦 Fetching all Payments...");
 
-        System.out.println("All Payments: " + payments);
+        List<Payment> payments = paymentService.getAll();
+        assertNotNull(payments, "List of payments should not be null.");
+        assertFalse(payments.isEmpty(), "Payments list should not be empty.");
+
+        System.out.println("✅ Total Payments found: " + payments.size());
+        payments.forEach(p -> System.out.println("➡️ " + p));
     }
 
-//    @Test
-//    @Order(6)
-//    void testDelete() {
-//        assertNotNull(savedPayment, "Payment should have been created in the previous test");
-//
-//        // Delete the payment
-//        boolean deleted = paymentService.delete(savedPayment.getPaymentID());
-//        assertTrue(deleted);
-//
-//        // Verify it has been deleted
-//        Payment afterDelete = paymentService.read(savedPayment.getPaymentID());
-//        assertNull(afterDelete);
-//        System.out.println(" Payment deleted successfully");
-//    }
+    @Test
+    @Order(7)
+    @Rollback(false)
+    void testDeletePayment() {
+        System.out.println("🗑️ Deleting Payment...");
+
+        assertNotNull(savedPayment, "Saved payment must exist.");
+
+        boolean deleted = paymentService.delete(savedPayment.getPaymentId());
+        assertTrue(deleted, "Payment should be deleted.");
+
+        Payment afterDelete = paymentService.read(savedPayment.getPaymentId());
+        assertNull(afterDelete, "Deleted payment should not be found.");
+
+        System.out.println("✅ Payment deleted successfully.");
+    }
 }

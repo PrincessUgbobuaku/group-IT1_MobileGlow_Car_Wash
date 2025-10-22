@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import emailjs from "emailjs-com";
 import "./ConfirmBookingPage.css";
 
 function ConfirmBookingPage() {
@@ -14,18 +15,32 @@ function ConfirmBookingPage() {
     serviceIds,
   } = location.state || {};
 
+  // 🧾 Booking Data
   const [washAttendant, setWashAttendant] = useState(null);
   const [loadingAttendant, setLoadingAttendant] = useState(true);
   const [attendantError, setAttendantError] = useState(null);
 
+  // 👤 Customer + Address
   const [customer, setCustomer] = useState(null);
   const [customerError, setCustomerError] = useState(null);
-
   const [address, setAddress] = useState(null);
   const [addressError, setAddressError] = useState(null);
 
+  // 💳 Card Info
+  const [cards, setCards] = useState([]);
+  const [selectedCardId, setSelectedCardId] = useState("");
+  const [cardError, setCardError] = useState(null);
+
+  // 📧 Login Email
+  const [customerEmail, setCustomerEmail] = useState("");
+
+  // 💰 Payment Option
+  const [paymentOption, setPaymentOption] = useState("PREPAID");
+
+  // ✅ Popup
   const [showPopup, setShowPopup] = useState(false);
 
+  // 🧍 Fetch a random wash attendant
   useEffect(() => {
     fetch("http://localhost:8080/mobileglow/wash-attendants/random")
       .then((response) => {
@@ -42,8 +57,10 @@ function ConfirmBookingPage() {
       });
   }, []);
 
+  // 👤 Fetch logged-in customer
   useEffect(() => {
-    fetch("http://localhost:8080/mobileglow/api/customers/read/5")
+    const userId = localStorage.getItem("userId") || "5";
+    fetch(`http://localhost:8080/mobileglow/api/customers/read/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch customer");
         return res.json();
@@ -52,10 +69,11 @@ function ConfirmBookingPage() {
       .catch((error) => setCustomerError(error.message));
   }, []);
 
+  // 🏠 Fetch address
   useEffect(() => {
     if (customer?.address?.addressID) {
       fetch(
-        `http://localhost:8080/api/address/read/${customer.address.addressID}`
+        `http://localhost:8080/mobileglow/api/address/read/${customer.address.addressID}`
       )
         .then((res) => {
           if (!res.ok) throw new Error("Failed to fetch address");
@@ -66,10 +84,94 @@ function ConfirmBookingPage() {
     }
   }, [customer]);
 
+  // 💳 Fetch customer cards
+  useEffect(() => {
+    const userId = localStorage.getItem("userId") || "5";
+    fetch(`http://localhost:8080/mobileglow/api/cards/customer/${userId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch cards");
+        return res.json();
+      })
+      .then((data) => setCards(Array.isArray(data) ? data : []))
+      .catch((err) => setCardError(err.message));
+  }, []);
+
+  // 📧 Fetch email from login
+  useEffect(() => {
+    const userId = localStorage.getItem("userId") || "5";
+    fetch(`http://localhost:8080/mobileglow/Login/byUser/${userId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch login email");
+        return res.json();
+      })
+      .then((data) => {
+        if (data?.emailAddress) {
+          setCustomerEmail(data.emailAddress);
+        }
+      })
+      .catch((err) => console.error("❌ Login email fetch error:", err));
+  }, []);
+
+  // 📨 EmailJS configuration
+  const EMAILJS_CONFIG = {
+    SERVICE_ID: "service_w4p7dmi",
+    TEMPLATE_ID: "template_j6sgwxj",
+    PUBLIC_KEY: "skFnK8AxbQ2kQ_6CI",
+  };
+
+  // 📨 Send booking confirmation email
+  const sendBookingConfirmation = (bookingData) => {
+    if (!customerEmail) return;
+
+    const emailParams = {
+      to_name: `${customer?.userName || ""} ${
+        customer?.userSurname || ""
+      }`.trim(),
+      email: customerEmail,
+      booking_date: new Date(selectedDateTime).toLocaleDateString(),
+      booking_time: new Date(selectedDateTime).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      vehicle: `${selectedVehicle?.carMake || ""} ${
+        selectedVehicle?.carModel || ""
+      }`.trim(),
+      total_price: `R ${totalPrice || "0.00"}`,
+      attendant_name: washAttendant
+        ? `${washAttendant.userName} ${washAttendant.userSurname}`
+        : "Assigned at service time",
+      services: cart.map((s) => s.serviceName).join(", "),
+    };
+
+    emailjs
+      .send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        emailParams,
+        EMAILJS_CONFIG.PUBLIC_KEY
+      )
+      .then(() => console.log("✅ Booking confirmation email sent"))
+      .catch((err) => console.error("❌ Email failed:", err));
+  };
+
+  // 💾 Save booking
+  // 💾 Save booking
   const saveBooking = async () => {
     if (!washAttendant || !selectedVehicle || !selectedDateTime) {
       alert("Missing booking information");
       return;
+    }
+
+    // 🧠 Validation logic depending on payment option
+    if (paymentOption === "PREPAID") {
+      if (cards.length === 0) {
+        alert("You must add a payment card before confirming your booking.");
+        return;
+      }
+      if (!selectedCardId) {
+        alert("Please select a card before confirming your booking.");
+        return;
+      }
     }
 
     const cleaningServicesPayload =
@@ -89,30 +191,56 @@ function ConfirmBookingPage() {
         userId:
           washAttendant.userId || washAttendant.userID || washAttendant.id,
       },
-      bookingDateTime: selectedDateTime, // send local datetime string as-is
+      bookingDateTime: selectedDateTime,
+      card: paymentOption === "PREPAID" ? { cardId: selectedCardId } : null,
       tipAdd: false,
+      paymentOption,
+      paymentStatus: paymentOption === "PREPAID" ? "PAID" : "PENDING",
     };
 
     try {
+      // 🧾 Save booking first
       const res = await fetch("http://localhost:8080/mobileglow/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText);
-      }
+      if (!res.ok) throw new Error(await res.text());
 
       const result = await res.json();
-      console.log("Booking saved:", result);
+      console.log("✅ Booking saved:", result);
 
-      // ✅ Clean up sessionStorage
-      sessionStorage.removeItem("bookingData");
+      // 💳 If prepaid, record payment in the DB
+      if (paymentOption === "PREPAID") {
+        try {
+          const paymentPayload = {
+            booking: { bookingId: result.bookingId },
+            paymentAmount: totalPrice,
+            paymentMethod: "CARD",
+            paymentStatus: "PAID",
+            card: { cardId: selectedCardId },
+          };
 
-      // ✅ Show confirmation popup
+          const payRes = await fetch(
+            "http://localhost:8080/mobileglow/api/payments",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(paymentPayload),
+            }
+          );
+
+          if (!payRes.ok) throw new Error(await payRes.text());
+
+          console.log("💰 Payment successfully recorded in database");
+        } catch (payErr) {
+          console.error("❌ Failed to record payment:", payErr);
+        }
+      }
+
       setShowPopup(true);
+      sendBookingConfirmation(result);
     } catch (err) {
       alert("Failed to save booking: " + err.message);
     }
@@ -129,56 +257,79 @@ function ConfirmBookingPage() {
           Select a service
         </a>
         <span className="dot">•</span>
-        <a
-          href="/bookingtwo"
-          className="breadcrumb-link"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/bookingtwo", {
-              state: {
-                cart,
-                totalPrice,
-                serviceIds,
-              },
-            });
-          }}
-        >
-          Select a date and time
-        </a>
-        <span className="dot">•</span>
-        <a
-          href="/bookingvehicle"
-          className="breadcrumb-link"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/bookingvehicle", {
-              state: {
-                cart,
-                totalPrice,
-                selectedDateTime,
-                serviceIds,
-              },
-            });
-          }}
-        >
-          Select vehicle
-        </a>
-        <span className="dot">•</span>
         <strong>Review & Confirm</strong>
       </div>
-      <h1>Review and confirm</h1>
+
+      <h1>Review and Confirm</h1>
 
       <div className="confirm-content">
         {/* LEFT PANEL */}
         <div className="confirm-left">
           <div className="confirm-form-section">
-            <h3>Payment method</h3>
-            <button className="payment-button">
-              <span role="img" aria-label="store">
-                🏪
-              </span>{" "}
-              Pay at venue
-            </button>
+            <h3>Payment Method</h3>
+            <div className="payment-option">
+              <label>
+                <input
+                  type="radio"
+                  name="paymentOption"
+                  value="PREPAID"
+                  checked={paymentOption === "PREPAID"}
+                  onChange={() => setPaymentOption("PREPAID")}
+                />
+                Pay Now (Secure Online Payment)
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="paymentOption"
+                  value="ON_SITE"
+                  checked={paymentOption === "ON_SITE"}
+                  onChange={() => setPaymentOption("ON_SITE")}
+                />
+                Pay at Premises
+              </label>
+            </div>
+
+            {/* 💳 Only show card section if Pay Now selected */}
+            {paymentOption === "PREPAID" && (
+              <>
+                {cardError ? (
+                  <p className="error-text">Error loading card info</p>
+                ) : cards.length > 0 ? (
+                  <div className="payment-section">
+                    <label>Select a saved card:</label>
+                    <select
+                      value={selectedCardId}
+                      onChange={(e) => setSelectedCardId(e.target.value)}
+                      className="card-select"
+                    >
+                      <option value="">-- Select Card --</option>
+                      {cards.map((card) => (
+                        <option key={card.cardId} value={card.cardId}>
+                          {card.cardHolderName} •••• {card.cardNumber.slice(-4)}{" "}
+                          (Exp {card.expiryDate})
+                        </option>
+                      ))}
+                    </select>
+                    <p style={{ marginTop: "8px" }}>
+                      <a href="/my-cards" className="add-card-link">
+                        ➕ Add another card
+                      </a>
+                    </p>
+                  </div>
+                ) : (
+                  <div className="add-card-section">
+                    <p>No saved cards found.</p>
+                    <button
+                      className="add-card-btn"
+                      onClick={() => navigate("/my-cards")}
+                    >
+                      Add Card
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           <div className="confirmation-extra-info">
@@ -195,10 +346,7 @@ function ConfirmBookingPage() {
                 You may be held accountable for expenses incurred for changes
                 less than 24 hours prior to your booking time.
               </p>
-              <p>
-                This is a Therapeutic service and no lewd behavior will be
-                tolerated.
-              </p>
+              <p>This is a therapeutic service — no lewd behavior tolerated.</p>
             </div>
           </div>
         </div>
@@ -226,7 +374,6 @@ function ConfirmBookingPage() {
 
           <hr />
 
-          {/* Vehicle Info */}
           <div className="vehicle-info">
             <p>
               <strong>Vehicle:</strong>{" "}
@@ -236,7 +383,6 @@ function ConfirmBookingPage() {
             </p>
           </div>
 
-          {/* Wash Attendant Info */}
           {washAttendant && !loadingAttendant && (
             <div className="attendant-info">
               <p>
@@ -246,7 +392,6 @@ function ConfirmBookingPage() {
             </div>
           )}
 
-          {/* Services List */}
           <div className="services-list">
             <h4>Services</h4>
             {cart.map((service) => (
@@ -258,9 +403,6 @@ function ConfirmBookingPage() {
             ))}
           </div>
 
-          {customerError && <p className="error">Error: {customerError}</p>}
-          {addressError && <p className="error">Error: {addressError}</p>}
-
           <div className="price-row">
             <span>Subtotal</span>
             <span>R {totalPrice}</span>
@@ -271,13 +413,21 @@ function ConfirmBookingPage() {
           <div className="total">
             <div>
               <div>Total</div>
-              <div className="pay-at-venue">Pay at venue</div>
+              <div className="pay-at-venue">
+                {paymentOption === "PREPAID"
+                  ? "Pay with Card"
+                  : "Pay at Premises"}
+              </div>
             </div>
             <div className="total-price">R {totalPrice}</div>
           </div>
 
-          <button className="confirm-btn" onClick={saveBooking}>
-            Confirm
+          <button
+            className={`confirm-btn ${showPopup ? "confirm-btn-booked" : ""}`}
+            onClick={saveBooking}
+            disabled={showPopup}
+          >
+            {showPopup ? "Booking Made!" : "Confirm Booking"}
           </button>
         </div>
       </div>

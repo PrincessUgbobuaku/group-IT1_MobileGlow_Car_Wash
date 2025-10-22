@@ -9,7 +9,9 @@ import bookingImage1 from "../../../assets/booking-interface-tire-clean-water-pr
 import bookingImage2 from "../../../assets/booking-interface-wash-attendant-washing-tire.png";
 import { FaStar, FaTrash } from "react-icons/fa";
 
+
 const Booking = () => {
+
   const categories = [
     "Exterior Wash",
     "Interior Care",
@@ -134,8 +136,6 @@ const Booking = () => {
           </a>
         </div>
 
-       
-
         <h2 className="services-title">Services</h2>
       </div>
 
@@ -168,7 +168,7 @@ const Booking = () => {
               filteredServices.map((service) => (
                 <div key={service.id} className="service-card">
                   <div className="service-info">
-                    <h4>{service.serviceName.replace(/_/g, " ")}</h4>
+                    <h5>{service.serviceName.replace(/_/g, " ")}</h5>
                     <p className="duration">
                       Duration: {service.duration} <strong>hours</strong>
                     </p>
@@ -218,8 +218,7 @@ const Booking = () => {
                     className="cart-item"
                   >
                     <span className="cart-service-name">
-                      {item.serviceName.replace(/_/g, " ")} - R{" "}
-                      {item.priceOfService}
+                      {item.serviceName.replace(/_/g, " ")} - R {item.priceOfService}
                     </span>
                     <button
                       className="remove-btn"
@@ -244,6 +243,7 @@ const Booking = () => {
               Continue
             </button>
           </div>
+
         </div>
       </div>
     </div>

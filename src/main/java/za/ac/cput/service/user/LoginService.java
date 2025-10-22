@@ -40,6 +40,24 @@ public class LoginService implements ILoginService {
         return loginRepository.save(login);
     }
 
+
+
+
+
+    public Login findLoginByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null && user.getLogin() != null) {
+            return user.getLogin(); // directly return the associated Login
+        }
+        return null;
+    }
+
+
+
+
+
+
+
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
