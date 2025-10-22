@@ -10,7 +10,7 @@
 
 /* Make sure navbar still spans full width */
 .navbar {
-    /*position: sticky;*/
+    position: sticky;
     top: 0;
     width: 100%;
     background-color: #0C2D48 !important;
