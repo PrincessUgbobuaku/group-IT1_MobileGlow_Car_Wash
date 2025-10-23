@@ -1,9 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "./CustomerCard.css";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavbarCustomer from "../../../screens/components/NavbarCustomer";
 import Footer from "../../components/Footer";
+import "./CustomerCard.css";
 
 const CustomerCardsPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // 🧾 Recover booking data (from confirm page or session)
+  const storedState = sessionStorage.getItem("confirmBookingState");
+  const bookingState =
+    location.state && Object.keys(location.state).length > 0
+      ? location.state
+      : storedState
+      ? JSON.parse(storedState)
+      : null;
+
+  // Debugging info
+  console.log("📦 Booking State:", bookingState);
+
+  // 💳 Card data
   const [cards, setCards] = useState([]);
   const [cardDetails, setCardDetails] = useState({
     cardNumber: "",
@@ -19,10 +36,7 @@ const CustomerCardsPage = () => {
 
   // ✅ Fetch user's saved cards
   const fetchCards = async () => {
-    if (!userId) {
-      console.error("❌ No userId found in localStorage");
-      return;
-    }
+    if (!userId) return;
 
     try {
       setLoading(true);
@@ -48,6 +62,11 @@ const CustomerCardsPage = () => {
       setLoading(false);
     }
   };
+
+  // Fetch cards on mount
+  useEffect(() => {
+    fetchCards();
+  }, []);
 
   // ✅ Save new card
   const saveCard = async () => {
@@ -93,39 +112,52 @@ const CustomerCardsPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCards();
-  }, []);
+  // ✅ Back to Confirm Page (with restored booking details)
+  const handleBackToConfirm = () => {
+    if (bookingState) {
+      console.log("🔁 Returning to Confirm with booking:", bookingState);
+      navigate("/confirm", { state: bookingState });
+    } else {
+      console.warn("⚠️ No booking state found — redirecting to booking start");
+      navigate("/booking");
+    }
+  };
 
   return (
     <>
-      {/* ✅ Navbar stays on top */}
       <NavbarCustomer />
-
       <div className="customer-cards-page">
         <h2>My Saved Cards</h2>
 
         <button onClick={() => setShowModal(true)}>Add New Card</button>
 
-        {loading && <p>Loading...</p>}
+        {loading && <p>Loading cards...</p>}
 
         <ul>
           {cards.length > 0 ? (
-            cards.map((c) => (
-              <li key={c.cardId}>
-                {c.cardHolderName} •••• {c.cardNumber.slice(-4)} (Exp{" "}
-                {c.expiryDate})
+            cards.map((card) => (
+              <li key={card.cardId}>
+                {card.cardHolderName} •••• {card.cardNumber.slice(-4)} (Exp{" "}
+                {card.expiryDate})
               </li>
             ))
           ) : (
-            <p>No saved cards yet.</p>
+            <p>No saved cards found.</p>
           )}
         </ul>
 
+        {/* 🔙 Back to Confirm Button */}
+        <div style={{ marginTop: "20px" }}>
+          <button className="btn back-btn" onClick={handleBackToConfirm}>
+            ⬅️ Back to Confirm Page
+          </button>
+        </div>
+
+        {/* ➕ Add Card Modal */}
         {showModal && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h3>Add Card</h3>
+              <h3>Add New Card</h3>
 
               <input
                 type="text"
@@ -159,18 +191,19 @@ const CustomerCardsPage = () => {
 
               <input
                 type="month"
-                placeholder="Expiry"
+                placeholder="Expiry Date"
                 value={cardDetails.expiryDate}
                 onChange={(e) =>
                   setCardDetails({ ...cardDetails, expiryDate: e.target.value })
                 }
               />
 
-              <button onClick={saveCard} disabled={loading}>
-                {loading ? "Saving..." : "Save Card"}
-              </button>
-
-              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <div className="modal-buttons">
+                <button onClick={saveCard} disabled={loading}>
+                  {loading ? "Saving..." : "Save Card"}
+                </button>
+                <button onClick={() => setShowModal(false)}>Cancel</button>
+              </div>
             </div>
           </div>
         )}
