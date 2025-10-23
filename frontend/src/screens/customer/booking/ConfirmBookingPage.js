@@ -7,45 +7,48 @@ function ConfirmBookingPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // ✅ Booking data (passed from previous pages)
   const {
     cart = [],
     totalPrice = 0,
     selectedDateTime,
     selectedVehicle,
     serviceIds,
+    selectedService = null,
+    otherDetails = "",
   } = location.state || {};
 
-  // 🧾 Booking Data
+  // 🧾 Booking state
   const [washAttendant, setWashAttendant] = useState(null);
   const [loadingAttendant, setLoadingAttendant] = useState(true);
   const [attendantError, setAttendantError] = useState(null);
 
-  // 👤 Customer + Address
+  // 👤 Customer info
   const [customer, setCustomer] = useState(null);
   const [customerError, setCustomerError] = useState(null);
   const [address, setAddress] = useState(null);
   const [addressError, setAddressError] = useState(null);
 
-  // 💳 Card Info
+  // 💳 Card info
   const [cards, setCards] = useState([]);
   const [selectedCardId, setSelectedCardId] = useState("");
   const [cardError, setCardError] = useState(null);
 
-  // 📧 Login Email
+  // 📧 Email
   const [customerEmail, setCustomerEmail] = useState("");
 
-  // 💰 Payment Option
+  // 💰 Payment
   const [paymentOption, setPaymentOption] = useState("PREPAID");
 
   // ✅ Popup
   const [showPopup, setShowPopup] = useState(false);
 
-  // 🧍 Fetch a random wash attendant
+  // 🧍 Fetch wash attendant
   useEffect(() => {
     fetch("http://localhost:8080/mobileglow/wash-attendants/random")
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to fetch wash attendant");
-        return response.json();
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch wash attendant");
+        return res.json();
       })
       .then((data) => {
         setWashAttendant(data);
@@ -57,7 +60,7 @@ function ConfirmBookingPage() {
       });
   }, []);
 
-  // 👤 Fetch logged-in customer
+  // 👤 Fetch customer
   useEffect(() => {
     const userId = localStorage.getItem("userId") || "5";
     fetch(`http://localhost:8080/mobileglow/api/customers/read/${userId}`)
@@ -84,7 +87,7 @@ function ConfirmBookingPage() {
     }
   }, [customer]);
 
-  // 💳 Fetch customer cards
+  // 💳 Fetch cards
   useEffect(() => {
     const userId = localStorage.getItem("userId") || "5";
     fetch(`http://localhost:8080/mobileglow/api/cards/customer/${userId}`)
@@ -96,7 +99,7 @@ function ConfirmBookingPage() {
       .catch((err) => setCardError(err.message));
   }, []);
 
-  // 📧 Fetch email from login
+  // 📧 Fetch email
   useEffect(() => {
     const userId = localStorage.getItem("userId") || "5";
     fetch(`http://localhost:8080/mobileglow/Login/byUser/${userId}`)
@@ -105,21 +108,18 @@ function ConfirmBookingPage() {
         return res.json();
       })
       .then((data) => {
-        if (data?.emailAddress) {
-          setCustomerEmail(data.emailAddress);
-        }
+        if (data?.emailAddress) setCustomerEmail(data.emailAddress);
       })
       .catch((err) => console.error("❌ Login email fetch error:", err));
   }, []);
 
-  // 📨 EmailJS configuration
+  // 📨 EmailJS setup
   const EMAILJS_CONFIG = {
     SERVICE_ID: "service_w4p7dmi",
     TEMPLATE_ID: "template_j6sgwxj",
     PUBLIC_KEY: "skFnK8AxbQ2kQ_6CI",
   };
 
-  // 📨 Send booking confirmation email
   const sendBookingConfirmation = (bookingData) => {
     if (!customerEmail) return;
 
@@ -155,14 +155,12 @@ function ConfirmBookingPage() {
   };
 
   // 💾 Save booking
-  // 💾 Save booking
   const saveBooking = async () => {
     if (!washAttendant || !selectedVehicle || !selectedDateTime) {
       alert("Missing booking information");
       return;
     }
 
-    // 🧠 Validation logic depending on payment option
     if (paymentOption === "PREPAID") {
       if (cards.length === 0) {
         alert("You must add a payment card before confirming your booking.");
@@ -199,7 +197,6 @@ function ConfirmBookingPage() {
     };
 
     try {
-      // 🧾 Save booking first
       const res = await fetch("http://localhost:8080/mobileglow/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -207,11 +204,9 @@ function ConfirmBookingPage() {
       });
 
       if (!res.ok) throw new Error(await res.text());
-
       const result = await res.json();
       console.log("✅ Booking saved:", result);
 
-      // 💳 If prepaid, record payment in the DB
       if (paymentOption === "PREPAID") {
         try {
           const paymentPayload = {
@@ -232,7 +227,6 @@ function ConfirmBookingPage() {
           );
 
           if (!payRes.ok) throw new Error(await payRes.text());
-
           console.log("💰 Payment successfully recorded in database");
         } catch (payErr) {
           console.error("❌ Failed to record payment:", payErr);
@@ -249,13 +243,9 @@ function ConfirmBookingPage() {
   return (
     <div className="confirm-container app-content">
       <div className="breadcrumb">
-        <a href="/" className="breadcrumb-link">
-          Home
-        </a>
+        <a href="/" className="breadcrumb-link">Home</a>
         <span className="dot">•</span>
-        <a href="/booking" className="breadcrumb-link">
-          Select a service
-        </a>
+        <a href="/booking" className="breadcrumb-link">Select a service</a>
         <span className="dot">•</span>
         <strong>Review & Confirm</strong>
       </div>
@@ -290,7 +280,7 @@ function ConfirmBookingPage() {
               </label>
             </div>
 
-            {/* 💳 Only show card section if Pay Now selected */}
+            {/* 💳 Card Section */}
             {paymentOption === "PREPAID" && (
               <>
                 {cardError ? (
@@ -306,25 +296,50 @@ function ConfirmBookingPage() {
                       <option value="">-- Select Card --</option>
                       {cards.map((card) => (
                         <option key={card.cardId} value={card.cardId}>
-                          {card.cardHolderName} •••• {card.cardNumber.slice(-4)}{" "}
-                          (Exp {card.expiryDate})
+                          {card.cardHolderName} •••• {card.cardNumber.slice(-4)} (Exp {card.expiryDate})
                         </option>
                       ))}
                     </select>
                     <p style={{ marginTop: "8px" }}>
-                      <a href="/my-cards" className="add-card-link">
-                        ➕ Add another card
-                      </a>
+                      <button
+                        className="add-card-link"
+                        onClick={() =>
+                          navigate("/my-cards", {
+                            state: {
+                              cart,
+                              totalPrice,
+                              selectedDateTime,
+                              selectedVehicle,
+                              serviceIds,
+                              selectedService,
+                              otherDetails,
+                            },
+                          })
+                        }
+                      >
+                        ➕ Manage Payment Methods
+                      </button>
                     </p>
                   </div>
                 ) : (
                   <div className="add-card-section">
                     <p>No saved cards found.</p>
                     <button
-                      className="add-card-btn"
-                      onClick={() => navigate("/my-cards")}
+                      onClick={() =>
+                        navigate("/my-cards", {
+                          state: {
+                            cart,
+                            totalPrice,
+                            selectedDateTime,
+                            selectedVehicle,
+                            serviceIds,
+                            selectedService,
+                            otherDetails,
+                          },
+                        })
+                      }
                     >
-                      Add Card
+                      Manage Payment Methods
                     </button>
                   </div>
                 )}
@@ -335,10 +350,7 @@ function ConfirmBookingPage() {
           <div className="confirmation-extra-info">
             <div className="cancellation-policy">
               <h3>Cancellation Policy</h3>
-              <p>
-                Please cancel within <strong>24 hours</strong> of your
-                appointment.
-              </p>
+              <p>Please cancel within <strong>24 hours</strong> of your appointment.</p>
             </div>
             <div className="important-info">
               <p>24-hour cancellation policy.</p>
@@ -359,9 +371,7 @@ function ConfirmBookingPage() {
           {selectedDateTime && (
             <>
               <p>
-                <strong>
-                  {new Date(selectedDateTime).toLocaleDateString()}
-                </strong>
+                <strong>{new Date(selectedDateTime).toLocaleDateString()}</strong>
               </p>
               <p>
                 {new Date(selectedDateTime).toLocaleTimeString([], {
