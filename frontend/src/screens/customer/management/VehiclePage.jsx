@@ -847,7 +847,7 @@ const VehiclePage = () => {
             <div className="continue-booking-section">
                 <button
                     className="btn continue-booking-btn"
-                    onClick={() => navigate('/bookingvehicle')}
+                    onClick={() => navigate('/booking')}
                 >
                     Continue Booking
                 </button>
