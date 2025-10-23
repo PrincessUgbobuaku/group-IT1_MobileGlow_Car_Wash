@@ -29,8 +29,8 @@ const NavbarCustomer = () => {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
-  const handleAboutUs = () => navigate("/AboutUs");
-  const handleContactUs = () => navigate("/ContactUs");
+  const handleAboutUs = () => navigate("/AboutUsCustomer");
+  const handleContactUs = () => navigate("/ContactUsCustomer");
   const handleLogoClick = () => navigate("/LandingCustomer");
   return (
     <nav className="customer-navbar">

@@ -100,7 +100,7 @@ const Booking = () => {
       {/* Header */}
       <div className="booking-header">
         <div className="breadcrumb">
-          <Link to="/" className="breadcrumb-link">
+          <Link to="/LandingCustomer" className="breadcrumb-link">
             Home
           </Link>
           <span className="dot">•</span>
