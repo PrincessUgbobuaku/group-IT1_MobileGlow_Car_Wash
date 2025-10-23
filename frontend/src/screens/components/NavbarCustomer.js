@@ -22,24 +22,33 @@ const NavbarCustomer = () => {
   const userEmail = localStorage.getItem("userEmail");
   const userInitial = userEmail ? userEmail.charAt(0).toUpperCase() : "P";
 
+  // ✅ Scroll smoothly to "Our Services" section
+  const handleServices = () => {
+    const section = document.getElementById("our-services");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  const handleAboutUs = () => navigate("/AboutUs");
+  const handleContactUs = () => navigate("/ContactUs");
+  const handleLogoClick = () => navigate("/LandingCustomer");
   return (
     <nav className="customer-navbar">
       <div className="app-content navbar-inner">
-        <div className="navbar-left">
+        <div className="navbar-left" onClick={handleLogoClick} style={{ cursor: "pointer" }}>
           <img src={logo} alt="Mobile Car Wash Logo" className="logo-img" />
-          <a href = "LandingCustomer" className="logo-img"></a>
         </div>
 
         <div className="nav-links">
-          <a href="#our-services" className="nav-btn">
+          <button className="nav-btn" onClick={handleServices}>
             Our Services
-          </a>
-          <a href="/about" className="nav-btn">
+          </button>
+          <button className="nav-btn" onClick={handleAboutUs}>
             About Us
-          </a>
-          <a href="/Contact Us" className="nav-btn">
+          </button>
+          <button className="nav-btn" onClick={handleContactUs}>
             Contact Us
-          </a>
+          </button>
 
           {/* Hamburger/X Button */}
           <button

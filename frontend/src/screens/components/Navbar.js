@@ -10,11 +10,19 @@ const Navbar = () => {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-    const handleAboutUs = () => navigate("/about");
-    const handleContactUs = () => navigate("/contact-us");
-    const handleServices = () => navigate("#our-services");
+    const handleAboutUs = () => navigate("/AboutUs");
+    const handleContactUs = () => navigate("/ContactUs");
+
     const handleSignUp = () => navigate("/roleselection");
     const handleLogIn = () => navigate("/login");
+
+    // ✅ Scroll smoothly to "Our Services" section
+    const handleServices = () => {
+        const section = document.getElementById("our-services");
+        if (section) {
+            section.scrollIntoView({ behavior: "smooth" });
+        }
+    };
 
     return (
         <nav className="navbar">
@@ -42,6 +50,8 @@ const Navbar = () => {
                     >
                         <span></span>
                         <span></span>
+
+
                     </button>
                 </div>
             </div>

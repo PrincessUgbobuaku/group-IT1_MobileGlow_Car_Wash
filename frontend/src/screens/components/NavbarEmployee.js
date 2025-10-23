@@ -22,12 +22,13 @@ const NavbarEmployee = () => {
     const userEmail = localStorage.getItem("userEmail");
     const userInitial = userEmail ? userEmail.charAt(0).toUpperCase() : "E";
 
+    const handleLogoClick = () => navigate("/LandingEmployee");
+
     return (
         <nav className="employee-navbar">
             <div className="app-content navbar-inner">
-                <div className="navbar-left">
+                <div className="navbar-left" onClick={handleLogoClick} style={{ cursor: "pointer" }}>
                     <img src={logo} alt="Mobile Car Wash Logo" className="logo-img" />
-                    {/*<span className="logo-text">Mobile Car Wash</span>*/}
                 </div>
 
                 <div className="nav-links">
