@@ -1,26 +1,19 @@
-/* .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #ffffff !important;
-    color: white;
-    padding: 1rem 2rem;
-    height: 70px;
-} */
+/* ============================
+   🌟 NAVBAR STYLES
+   ============================ */
 
-/* Make sure navbar still spans full width */
+/* Main navbar */
 .navbar {
     position: sticky;
     top: 0;
     width: 100%;
     background-color: #0C2D48 !important;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: fixed;
     z-index: 1000;
-
 }
 
-/* Optional if you want internal layout control */
+/* Internal layout */
 .navbar-inner {
     display: flex;
     justify-content: space-between;
@@ -28,23 +21,21 @@
     padding: 1rem 0;
 }
 
-/* 🔹 Container for logo image and text */
+/* Left side (logo + text) */
 .navbar-left {
     display: flex;
     align-items: center;
 }
 
-/* 🔹 Logo image styling */
+/* Logo image */
 .logo-img {
     width: auto;
     margin-right: 10px;
-    border-radius: 50%; /* Optional: round edges slightly */
-    /*width: 65px;*/
+    border-radius: 50%; /* Rounded edges */
     height: 65px;
 }
 
-
-/* 🔹 Navigation links */
+/* Navigation links container */
 .nav-links {
     display: flex;
     align-items: center;
@@ -52,28 +43,32 @@
     background: #0C2D48;
 }
 
-/* 🔹 Navigation buttons */
+/* Navigation buttons */
 .nav-btn {
     color: white;
     border: none;
-    /*padding: 0.5rem 1rem;*/
-    /*border-radius: 20px;*/
     cursor: pointer;
     font-weight: bold;
     background: #0C2D48;
     font-size: 16px;
+    transition: all 0.3s ease; /* Smooth hover transition */
 }
 
+/* Hover effect for nav buttons */
 .nav-btn:hover {
     background: #ddd;
+    color: black; /* 👈 turns text black on hover */
 }
 
-/* 🔹 Dropdown section */
+/* ============================
+   🔽 DROPDOWN MENU
+   ============================ */
+
 .dropdown {
     position: relative;
 }
 
-/* 🔹 Dropdown toggle button */
+/* Dropdown toggle */
 .menu-btn {
     color: #004aad;
     border: none;
@@ -83,7 +78,7 @@
     font-weight: bold;
 }
 
-/* 🔹 Dropdown menu itself */
+/* Dropdown menu itself */
 .dropdown-menu {
     position: absolute;
     right: 0;
@@ -96,18 +91,17 @@
     padding: 0.5rem 0;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     min-width: 150px;
-
-    /* Ensure it's visible */
     z-index: 1000;
     display: block;
+    transition: all 0.3s ease;
 }
 
-/* 🔹 Dropdown list items */
+/* Dropdown list items */
 .dropdown-menu li {
     padding: 0.5rem 1rem;
 }
 
-/* 🔹 Dropdown links */
+/* Dropdown links */
 .dropdown-menu li a,
 .dropdown-menu li button {
     text-decoration: none;
@@ -120,14 +114,23 @@
     cursor: pointer;
     font-family: inherit;
     font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
-/* 🔹 Hover effect */
+/* Hover effects for dropdown items */
 .dropdown-menu li:hover {
     background: #f0f0f0;
 }
 
-/* 🔹 Hamburger Button Styles */
+.dropdown-menu li a:hover,
+.dropdown-menu li button:hover {
+    color: black; /* 👈 text turns black on hover */
+}
+
+/* ============================
+   🍔 HAMBURGER MENU
+   ============================ */
+
 .hamburger {
     width: 30px;
     height: 14px;
@@ -137,6 +140,7 @@
     cursor: pointer;
     padding: 0;
     z-index: 1001;
+    margin: 0 50px;
 }
 
 .hamburger span {
@@ -150,12 +154,10 @@
     transition: 0.3s;
 }
 
-/* Top line */
+/* Top and bottom bars */
 .hamburger span:first-child {
     top: 0;
 }
-
-/* Bottom line */
 .hamburger span:last-child {
     bottom: 0;
 }
@@ -171,7 +173,10 @@
     bottom: 5px;
 }
 
-/* 🔹 Slide-in side menu */
+/* ============================
+   📱 SIDE MENU
+   ============================ */
+
 .side-menu {
     position: fixed;
     top: 0;
@@ -200,6 +205,7 @@
     border-bottom: 1px solid #eee;
 }
 
+/* Side menu links/buttons */
 .side-menu li a,
 .side-menu li button {
     text-decoration: none;
@@ -211,9 +217,20 @@
     width: 100%;
     text-align: left;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* 🔹 Optional overlay for click-outside */
+/* Hover effect for side menu */
+.side-menu li:hover {
+    background: #f0f0f0;
+}
+
+.side-menu li a:hover,
+.side-menu li button:hover {
+    color: black; /* 👈 text turns black on hover */
+}
+
+/* Optional overlay for click-outside */
 .overlay {
     position: fixed;
     top: 0;
