@@ -1,20 +1,29 @@
-.booking-vehicle-container {
+.booking-vehicle-page {
+  width: 100%;
+  padding-top: 100px; /* ✅ ensures content is visible under sticky header */
+  background-color: #f9f9f9;
+  min-height: 100vh;
   display: flex;
-  padding: 32px 0;
-  margin: auto;
-  flex-wrap: wrap;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-.booking-vehicle-container .booking-page-heading {
-  width: 100%;
-  font-size: 60px;
+.booking-vehicle-container {
+  width: 80%;
+  margin: 0 auto;
+  padding-bottom: 80px;
+  flex: 1;
+}
+
+/* ====== Header Text + Breadcrumb ====== */
+.booking-page-heading {
+  font-size: 2.8rem;
   margin-bottom: 1.5rem;
 }
 
 .breadcrumb {
   font-size: 0.95rem;
   color: #666;
+  margin-bottom: 1rem;
 }
 
 .breadcrumb-link {
@@ -34,38 +43,31 @@
   top: 2px;
 }
 
+/* ====== Main Flex Layout ====== */
 .left-right-panel-container {
-        width: 100%;
-        display: flex;
-        gap: 40px;
+  display: flex;
+  gap: 40px;
+  flex-wrap: nowrap; /* ✅ keeps both sides on one row */
+  align-items: flex-start;
 }
 
-.left-right-panel-container .left-panel {
-  width: 60%;
+.left-panel {
+  flex: 1 1 55%;
 }
 
-.left-right-panel-container .right-panel {
-  width: 40%;
+.right-panel {
+  flex: 1 1 45%;
   border: 1px solid #ddd;
   border-radius: 10px;
-  padding: 40px;
+  padding: 30px;
   background-color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  align-self: flex-start;
   position: sticky;
-  top: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  top: 100px; /* ✅ matches header height */
+  align-self: flex-start;
 }
 
-.vehicle-selection {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 1rem;
-}
-
+/* ====== Vehicle Dropdown ====== */
 .vehicle-selection select {
   padding: 10px 12px;
   border-radius: 8px;
@@ -74,30 +76,54 @@
   width: 100%;
 }
 
-.vehicle-business-info h3 {
-  font-size: 30px;
-  margin: 0;
+.add-vehicle-btn {
+  margin-top: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.summary-section {
+.add-vehicle-btn:hover {
+  background-color: #1e3a8a;
+}
+
+.conflict-message {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+/* ====== Summary + Date stacked vertically ====== */
+.summary-date-wrapper {
+  display: flex;
+  flex-direction: column; /* ✅ stack everything vertically */
+  gap: 25px; /* nice spacing between sections */
+}
+
+.summary-section,
+.date-section {
+  width: 100%;
+}
+
+.date-section {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
 }
 
 .summary-section ul {
   list-style: none;
   padding: 0;
-  margin: 0;
-}
-
-.summary-section li {
-  margin-bottom: 0.5rem;
 }
 
 .total-price {
-  margin-top: 1.2rem;
+  margin-top: 1rem;
   font-weight: bold;
-  font-size: 1.1rem;
 }
 
+/* ====== Continue Button ====== */
 .right-panel-continue {
   margin-top: 30px;
 }
@@ -121,4 +147,13 @@
 .continue-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* ====== Footer (full width) ====== */
+footer {
+  width: 100%;
+  background-color: #111827;
+  color: #fff;
+  padding: 40px 0;
+  text-align: center;
 }
