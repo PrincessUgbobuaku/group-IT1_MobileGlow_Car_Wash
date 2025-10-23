@@ -34,6 +34,8 @@ import BookingHistory from "./screens/customer/booking/BookingHistory"
 import FullDetailing from "./screens/customer/single-services/FullDetailing";
 import InteriorCare from "./screens/customer/single-services/InteriorCare";
 import ProtectionService from "./screens/customer/single-services/ProtectionService";
+import ContactUsCustomer from "./screens/ContactUsCustomer";
+import AboutUsCustomer from "./screens/AboutUsCustomer";
 
 function App()  {
   return (
@@ -77,6 +79,9 @@ function App()  {
           <Route path="/partner-with-us" element={<FullDetailing />} />
           <Route path="/corporate-packages" element={<InteriorCare/>} />
           <Route path="/franchise" element={<ProtectionService/>} />
+
+          <Route path={"/AboutUsCustomer"} element={<AboutUsCustomer/>} />
+          <Route path={"/ContactUsCustomer"} element={<ContactUsCustomer/>} />
 
 
       </Routes>

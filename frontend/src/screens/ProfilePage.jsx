@@ -205,18 +205,21 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className="address-item">
-              <div className="icon work-icon">💼</div>
-              <div>
-                <strong>Work</strong>
-                <p>Add a work address</p>
-              </div>
-            </div>
-          </div>
-
-          <button className="add-btn">+ Add</button>
-        </div>
-      </div>
+            {false && (
+              <>
+                <div className="address-item">
+                  <div className="icon work-icon">💼</div>
+                  <div>
+                    <strong>Work</strong>
+                    <p>Add a work address</p>
+                  </div>
+                </div>
+                <button className="add-btn">+ Add</button>
+              </>
+            )}
+          </div> {/* <-- close address-list */}
+        </div> {/* <-- close address-card */}
+      </div> {/* <-- close profile-container */}
 
       {/* Modal for full-size image */}
       {isModalOpen && (

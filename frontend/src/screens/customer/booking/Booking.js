@@ -58,23 +58,28 @@ const Booking = () => {
   };
 
   return (
-    <>
-      <NavbarCustomer />
-      <main className="bookingpage-wrapper">
-        {/* Header */}
-        <section className="bookingpage-header">
-          <div className="bookingpage-breadcrumb">
-            <Link to="/" className="bookingpage-link">
-              Home
-            </Link>
-            <span className="bookingpage-separator">›</span>
-            <strong>Select a Service</strong>
-          </div>
+    <div className="booking-layout app-content">
+      {/* Header */}
+      <div className="booking-header">
+        <div className="breadcrumb">
+          <Link to="/LandingCustomer" className="breadcrumb-link">
+            Home
+          </Link>
+          <span className="dot">•</span>
+          <strong>Select a service</strong>
+        </div>
 
-          <h1 className="bookingpage-title">Choose Your Wash</h1>
-          <div className="bookingpage-info">
-            <span className="bookingpage-rating">
-              <FaStar className="bookingpage-star" /> 4.8 (288)
+        <h1 className="main-title">Select a service</h1>
+
+        <div className="business-info-inline">
+          <span className="rating">
+            <strong>4.8</strong>
+            <span className="stars">
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
             </span>
             <span>•</span>
             <span>Open until 17:00</span>
