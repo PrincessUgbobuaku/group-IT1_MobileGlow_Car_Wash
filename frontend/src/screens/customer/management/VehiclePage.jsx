@@ -1451,18 +1451,34 @@ const navigate = useNavigate();
         </button>
       </div>
 
-      <Footer />
-
-      {/* Error Popup */}
-      {showErrorPopup && renderErrorPopup()}
-
-      {/* Success Popup */}
-      {showSuccessPopup && renderSuccessPopup()}
-
-      {/* Delete Confirmation Popup */}
-      {showDeletePopup && renderDeletePopup()}
-    </div>
-  );
+            {/* Main Content */}
+            <div className="vehicle-main-content">
+                {renderVehicleTable()}
+                {showForm && renderVehicleForm()}
+            </div>
+            
+            {/* Continue Booking Section */}
+            <div className="continue-booking-section">
+                <button
+                    className="btn continue-booking-btn"
+                    onClick={() => navigate('/booking')}
+                >
+                    Continue Booking
+                </button>
+            </div>
+            
+            <Footer />
+            
+            {/* Error Popup */}
+            {showErrorPopup && renderErrorPopup()}
+            
+            {/* Success Popup */}
+            {showSuccessPopup && renderSuccessPopup()}
+            
+            {/* Delete Confirmation Popup */}
+            {showDeletePopup && renderDeletePopup()}
+        </div>
+    );
 };
 
 export default VehiclePage;
